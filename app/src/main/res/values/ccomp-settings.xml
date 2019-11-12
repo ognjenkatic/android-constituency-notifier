@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<certapp xmlns="http://www.certrs.org/certapp"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.certrs.org/certapp https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/master/schema/ccomp.xsd" >
+<certapp xmlns="http://www.certrs.org/certapp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.certrs.org/certapp https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/master/schema/ccomp.xsd">
 	<settings>
 		<MOTD is_url="false">
 		Hello World MOTD
