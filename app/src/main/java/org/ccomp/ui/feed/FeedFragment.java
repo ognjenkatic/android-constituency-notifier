@@ -2,6 +2,7 @@ package org.ccomp.ui.feed;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccomp.R;
+import org.ccomp.factory.ViewModelFactory;
 
-public class FeedFragment extends Fragment {
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
+
+public class FeedFragment extends DaggerFragment {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     private FeedViewModel mViewModel;
 
@@ -31,8 +40,25 @@ public class FeedFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
-        // TODO: Use the ViewModel
+
+        initialiseViewModel();
+    }
+
+    private void initialiseViewModel() {
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FeedViewModel.class);
+        /*
+        movieListViewModel.getMoviesLiveData().observe(this, resource -> {
+            if(resource.isLoading()) {
+                displayLoader();
+
+            } else if(!resource.data.isEmpty()) {
+                updateMoviesList(resource.data);
+
+            } else handleErrorResponse();
+        });
+
+        movieListViewModel.loadMoreMovies();
+        */
     }
 
 }

@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,12 +22,23 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import org.ccomp.factory.ViewModelFactory;
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);

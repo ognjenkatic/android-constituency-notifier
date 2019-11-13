@@ -4,13 +4,17 @@ import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 
 
-import org.ccomp.data.database.dao.FeedDAO;
+import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.domain.feed.Feed;
+import org.ccomp.data.domain.feed.FeedItem;
 import org.ccomp.data.network.NetworkBoundResource;
 import org.ccomp.data.network.Resource;
-import org.ccomp.service.feed.FeedService;
+import org.ccomp.service.feed.FeedParserService;
 import org.ccomp.service.feed.FeedServiceResponse;
+import org.ccomp.task.FeedFetchTask;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,21 +26,23 @@ import io.reactivex.Flowable;
 @Singleton
 public class FeedRepository {
 
-    private FeedDAO feedDAO;
-    private FeedService feedService;
+    private FeedItemDAO feedItemDAO;
+    //private FeedParserService feedParserService;
 
-    public FeedRepository(FeedDAO feedDAO,
-                           FeedService feedService) {
-        this.feedDAO = feedDAO;
-        this.feedService = feedService;
+    public FeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService) {
+        this.feedItemDAO = feedItemDAO;
+        //this.feedParserService = feedParserService;
     }
 
-    public Observable<Object> loadFeeds(){
-        return new NetworkBoundResource<List<Feed>, FeedServiceResponse>() {
+    public Observable<Object> loadFeedItems(){
+        return new NetworkBoundResource<List<FeedItem>, FeedServiceResponse>() {
 
             @Override
             protected void saveCallResult(@NonNull FeedServiceResponse item) {
-                feedDAO.insert(item.getFeed());
+                for(FeedItem feedItem : item.getFeedItemList()){
+                    feedItemDAO.insert(feedItem);
+                }
+
             }
 
             @Override
@@ -46,22 +52,36 @@ public class FeedRepository {
 
             @NonNull
             @Override
-            protected Flowable<List<Feed>> loadFromDb() {
-                List<Feed> feedEntries = Arrays.asList(feedDAO.selectAll());
-                if(feedEntries == null || feedEntries.isEmpty()) {
+            protected Flowable<List<FeedItem>> loadFromDb() {
+                List<FeedItem> feedItems = Arrays.asList(feedItemDAO.selectAll());
+                if(feedItems == null || feedItems.isEmpty()) {
                     return Flowable.empty();
                 }
 
-                return Flowable.just(feedEntries);
+                return Flowable.just(feedItems);
             }
 
             @NonNull
             @Override
             protected Observable<Resource<FeedServiceResponse>> createCall() {
-                return feedService.fetchFeeds()
-                        .flatMap(movieApiResponse -> Observable.just((movieApiResponse == null)
-                                ? Resource.error("", new FeedServiceResponse())
-                                : Resource.success(movieApiResponse)));
+                Observable<FeedServiceResponse> fos = Observable.empty();
+                try {
+                    List<FeedItem> feedItems = new FeedFetchTask().execute(new URL("https://certrs.org/rss")).get();
+
+                    FeedServiceResponse feedServiceResponse = new FeedServiceResponse();
+                    feedServiceResponse.setFeedItemList(feedItems);
+
+                    fos = Observable.fromArray(feedServiceResponse);
+
+                } catch(MalformedURLException mex){
+
+
+                } finally {
+                    return fos.flatMap(feedServiceResponseInstance -> Observable.just((feedServiceResponseInstance == null)
+                            ? Resource.error("", new FeedServiceResponse())
+                            : Resource.success(feedServiceResponseInstance)));
+                }
+
             }
         }.getAsObservable();
     }
