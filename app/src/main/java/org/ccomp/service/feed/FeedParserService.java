@@ -2,6 +2,7 @@ package org.ccomp.service.feed;
 
 import android.util.Log;
 
+import com.rometools.rome.feed.synd.SyndCategory;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -65,19 +66,25 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
         feedItem.setDescription(syndEntry.getDescription().getValue());
         feedItem.setLink(syndEntry.getLink());
         feedItem.setPublished(syndEntry.getPublishedDate());
-        List<FeedCategory> feedCategories = syndEntry.getCategories().stream().map(category -> {
+        List<FeedCategory> feedCategories = new ArrayList<>();
+        for(SyndCategory category:syndEntry.getCategories()){
             FeedCategory feedCategory = new FeedCategory();
             feedCategory.setName(category.getName());
-            feedCategory.setFeedCategoryImportance(getCategoryImportanceMap().getOrDefault(feedCategory.getName(), FeedCategoryImportance.UNCATEGORIZED));
-            URL taxonomyURL=null;
+            if(getCategoryImportanceMap().containsKey(feedCategory.getName())){
+                feedCategory.setFeedCategoryImportance(getCategoryImportanceMap().get(feedCategory.getName()));
+            }else{
+                feedCategory.setFeedCategoryImportance(FeedCategoryImportance.UNCATEGORIZED);
+            }
             try{
                 feedCategory.setTeaxonomyUrl(new URL(category.getTaxonomyUri()));
             }catch (MalformedURLException e){
                 Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
-            }
+            };
+            feedCategories.add(feedCategory);
+        }
 
-            return feedCategory;
-        }).collect(Collectors.toList());
+
+
         feedItem.setCategories(feedCategories);
         return feedItem;
 
