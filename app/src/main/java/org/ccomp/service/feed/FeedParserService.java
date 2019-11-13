@@ -13,6 +13,7 @@ import org.ccomp.data.domain.feed.FeedCategoryImportance;
 import org.ccomp.data.domain.feed.FeedItem;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,15 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
 
     private SyndFeedInput syndFeedInput = new SyndFeedInput();
     private Map<String, FeedCategoryImportance> categoryImportanceMap = new HashMap<>();
+
+
+    public FeedParserService(){
+
+    }
+
+    public FeedParserService(Map<String,FeedCategoryImportance> categoryImportanceMap){
+        this.categoryImportanceMap=categoryImportanceMap;
+    }
 
     @Override
     public List<FeedItem> parseStream(URL feedURL) {
@@ -52,14 +62,20 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
     public FeedItem convertToFeedItem(final SyndEntry syndEntry) {
         FeedItem feedItem = new FeedItem();
         feedItem.setAuthor(syndEntry.getAuthor());
-        feedItem.setDescription(syndEntry.getDescription());
+        feedItem.setDescription(syndEntry.getDescription().getValue());
         feedItem.setLink(syndEntry.getLink());
         feedItem.setPublished(syndEntry.getPublishedDate());
         List<FeedCategory> feedCategories = syndEntry.getCategories().stream().map(category -> {
             FeedCategory feedCategory = new FeedCategory();
-            feedCategory.setName(category.getName())
+            feedCategory.setName(category.getName());
             feedCategory.setFeedCategoryImportance(getCategoryImportanceMap().getOrDefault(feedCategory.getName(), FeedCategoryImportance.UNCATEGORIZED));
-            feedCategory.setTeaxonomyUrl(new URL(category.getTaxonomyUri()));
+            URL taxonomyURL=null;
+            try{
+                feedCategory.setTeaxonomyUrl(new URL(category.getTaxonomyUri()));
+            }catch (MalformedURLException e){
+                Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
+            }
+
             return feedCategory;
         }).collect(Collectors.toList());
         feedItem.setCategories(feedCategories);
