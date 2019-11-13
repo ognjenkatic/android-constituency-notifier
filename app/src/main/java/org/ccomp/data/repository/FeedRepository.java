@@ -5,7 +5,7 @@ import io.reactivex.Observable;
 
 
 import org.ccomp.data.database.dao.FeedDAO;
-import org.ccomp.data.domain.Feed;
+import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.network.NetworkBoundResource;
 import org.ccomp.data.network.Resource;
 import org.ccomp.service.feed.FeedService;

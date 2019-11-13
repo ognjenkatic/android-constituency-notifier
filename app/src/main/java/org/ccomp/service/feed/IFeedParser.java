@@ -1,4 +1,4 @@
-package org.ccomp.services.feed;
+package org.ccomp.service.feed;
 
 import org.ccomp.data.domain.feed.FeedItem;
 

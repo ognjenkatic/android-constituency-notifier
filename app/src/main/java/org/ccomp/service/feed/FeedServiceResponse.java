@@ -1,6 +1,6 @@
 package org.ccomp.service.feed;
 
-import org.ccomp.data.domain.Feed;
+import org.ccomp.data.domain.feed.Feed;
 
 public class FeedServiceResponse {
     public Feed getFeed() {

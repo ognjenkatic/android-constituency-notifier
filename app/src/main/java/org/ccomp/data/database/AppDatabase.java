@@ -10,7 +10,7 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import org.ccomp.data.database.dao.FeedDAO;
-import org.ccomp.data.domain.Feed;
+import org.ccomp.data.domain.feed.Feed;
 
 @TypeConverters({TimestampConverter.class})
 @Database(entities = {Feed.class}, version = 1,exportSchema = false)

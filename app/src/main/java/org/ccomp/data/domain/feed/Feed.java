@@ -1,4 +1,4 @@
-package org.ccomp.data.domain;
+package org.ccomp.data.domain.feed;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

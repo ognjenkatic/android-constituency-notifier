@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import org.ccomp.data.domain.Feed;
+import org.ccomp.data.domain.feed.Feed;
 
 @Dao
 public interface FeedDAO {
