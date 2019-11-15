@@ -1,7 +1,6 @@
 package org.ccomp.data.repository;
 
 import org.ccomp.data.database.dao.IDAO;
-import org.ccomp.service.IServce;
 import org.ccomp.service.IService;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public abstract class GenericRepository<T,K> {
 
         if(online){
             List<T> tmpList=fetch();
-            save(tmpList.toArray());
+            save(tmpList);
         }
         return load();
     }
