@@ -11,6 +11,21 @@ public class FeedItem {
     private Date published;
     private String link;
     private String author;
+<<<<<<< Updated upstream
+=======
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    private String summary;
+
+    @Ignore
+>>>>>>> Stashed changes
     private List<FeedCategory> categories;
 
 

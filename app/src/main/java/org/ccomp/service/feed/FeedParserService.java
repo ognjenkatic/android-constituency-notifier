@@ -54,7 +54,14 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
                 feedItems.add(feedItem);
             }
         } catch (FeedException | IOException e) {
+<<<<<<< Updated upstream
             Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
+=======
+            //Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
+        } catch (Exception exc){
+            String aa = "bb";
+            //Log.println(Log.ERROR, "FEED PARSING", exc.getMessage());
+>>>>>>> Stashed changes
         }
         return feedItems;
     }
@@ -65,7 +72,13 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
         feedItem.setAuthor(syndEntry.getAuthor());
         feedItem.setDescription(syndEntry.getDescription().getValue());
         feedItem.setLink(syndEntry.getLink());
+<<<<<<< Updated upstream
         feedItem.setPublished(syndEntry.getPublishedDate());
+=======
+        feedItem.setPublished(new Timestamp(syndEntry.getPublishedDate().getTime()));
+        feedItem.setTitle(syndEntry.getTitle());
+        //feedItem.setSummary(syndEntry.g);
+>>>>>>> Stashed changes
         List<FeedCategory> feedCategories = new ArrayList<>();
         for(SyndCategory category:syndEntry.getCategories()){
             FeedCategory feedCategory = new FeedCategory();
