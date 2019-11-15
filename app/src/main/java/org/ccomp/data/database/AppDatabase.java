@@ -15,6 +15,7 @@ import org.ccomp.data.domain.feed.Feed;
 <<<<<<< Updated upstream
 @TypeConverters({TimestampConverter.class})
 @Database(entities = {Feed.class}, version = 1,exportSchema = false)
+=======
 @TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class})
 @Database(entities = {Feed.class, FeedItem.class, FeedCategory.class}, version = 3,exportSchema = false)
 >>>>>>> Stashed changes
