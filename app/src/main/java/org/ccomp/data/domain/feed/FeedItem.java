@@ -1,31 +1,35 @@
 package org.ccomp.data.domain.feed;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+@Entity(tableName = "feed_item",indices = {@Index("id")})
 public class FeedItem {
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String title;
     private String description;
-    private Date published;
+    private Timestamp published;
     private String link;
     private String author;
-<<<<<<< Updated upstream
-=======
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    private String summary;
 
     @Ignore
->>>>>>> Stashed changes
     private List<FeedCategory> categories;
 
 
@@ -45,11 +49,11 @@ public class FeedItem {
         this.description = description;
     }
 
-    public Date getPublished() {
+    public Timestamp getPublished() {
         return published;
     }
 
-    public void setPublished(Date published) {
+    public void setPublished(Timestamp published) {
         this.published = published;
     }
 

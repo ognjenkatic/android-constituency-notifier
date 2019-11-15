@@ -10,18 +10,18 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import org.ccomp.data.database.dao.FeedDAO;
+import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.domain.feed.Feed;
+import org.ccomp.data.domain.feed.FeedCategory;
+import org.ccomp.data.domain.feed.FeedItem;
 
-<<<<<<< Updated upstream
-@TypeConverters({TimestampConverter.class})
-@Database(entities = {Feed.class}, version = 1,exportSchema = false)
-=======
+
 @TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class})
-@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class}, version = 3,exportSchema = false)
->>>>>>> Stashed changes
+@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class}, version = 4,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeedDAO feedDAO();
+    public abstract FeedItemDAO feedItemDAO();
 
     @NonNull
     @Override
@@ -38,5 +38,7 @@ public abstract class AppDatabase extends RoomDatabase {
     @Override
     public void clearAllTables() {
 
+        feedDAO().deleteAll();
+        feedItemDAO().deleteAll();
     }
 }

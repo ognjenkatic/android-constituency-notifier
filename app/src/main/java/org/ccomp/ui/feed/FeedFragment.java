@@ -16,13 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccomp.R;
-<<<<<<< Updated upstream
 
-public class FeedFragment extends Fragment {
-=======
 import org.ccomp.data.adapter.FeedEntryAdapter;
-import org.ccomp.data.domain.feed.FeedItem;
-import org.ccomp.data.network.Resource;
 import org.ccomp.factory.ViewModelFactory;
 
 import java.util.List;
@@ -35,7 +30,7 @@ public class FeedFragment extends DaggerFragment {
 
     @Inject
     ViewModelFactory viewModelFactory;
->>>>>>> Stashed changes
+
 
     private FeedViewModel mViewModel;
 
@@ -55,10 +50,6 @@ public class FeedFragment extends DaggerFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-<<<<<<< Updated upstream
-        mViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
-        // TODO: Use the ViewModel
-=======
 
         initialiseViewModel();
         initialiseView();
@@ -82,7 +73,7 @@ public class FeedFragment extends DaggerFragment {
 
     private void initialiseViewModel() {
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FeedViewModel.class);
->>>>>>> Stashed changes
+
     }
 
 }
