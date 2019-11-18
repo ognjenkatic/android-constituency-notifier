@@ -29,6 +29,7 @@ public class FeedItem {
     private String link;
     private String author;
 
+
     @Ignore
     private List<FeedCategory> categories;
 

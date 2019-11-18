@@ -17,7 +17,7 @@ import org.ccomp.data.domain.feed.FeedItem;
 
 
 @TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class})
-@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class}, version = 4,exportSchema = false)
+@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class}, version = 6,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeedDAO feedDAO();

@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 public class FeedParserService implements IFeedParser<SyndEntry> {
 
 
+    private static final String TAG = "FeedParserService";
+
     private SyndFeedInput syndFeedInput = new SyndFeedInput();
     private Map<String, FeedCategoryImportance> categoryImportanceMap = new HashMap<>();
 
@@ -55,24 +57,21 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
                 feedItems.add(feedItem);
             }
         } catch (FeedException | IOException e) {
-            //Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
-        } catch (Exception exc){
-            String aa = "bb";
-            //Log.println(Log.ERROR, "FEED PARSING", exc.getMessage());
-
+            Log.d(TAG, "parseStream: "+e.getMessage());
         }
+
         return feedItems;
     }
 
     @Override
     public FeedItem convertToFeedItem(final SyndEntry syndEntry) {
+
         FeedItem feedItem = new FeedItem();
         feedItem.setAuthor(syndEntry.getAuthor());
         feedItem.setDescription(syndEntry.getDescription().getValue());
         feedItem.setLink(syndEntry.getLink());
         feedItem.setPublished(new Timestamp(syndEntry.getPublishedDate().getTime()));
         feedItem.setTitle(syndEntry.getTitle());
-        //feedItem.setSummary(syndEntry.g);
         List<FeedCategory> feedCategories = new ArrayList<>();
         for(SyndCategory category:syndEntry.getCategories()){
             FeedCategory feedCategory = new FeedCategory();
@@ -85,8 +84,9 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
             try{
                 feedCategory.setTeaxonomyUrl(new URL(category.getTaxonomyUri()));
             }catch (MalformedURLException e){
-                Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
-            };
+                Log.d(TAG, "convertToFeedItem: "+e.getMessage());
+            }
+
             feedCategories.add(feedCategory);
         }
 

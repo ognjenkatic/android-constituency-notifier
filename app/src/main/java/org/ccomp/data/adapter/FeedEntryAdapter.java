@@ -39,14 +39,13 @@ public class FeedEntryAdapter extends RecyclerView.Adapter<FeedEntryHolder> {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             holder.setTitle(Html.fromHtml(entry.getTitle(), Html.FROM_HTML_MODE_COMPACT).toString());
-            holder.setSummary(Html.fromHtml(entry.getTitle(), Html.FROM_HTML_MODE_LEGACY).toString());
+            holder.setSummary(Html.fromHtml(entry.getDescription(), Html.FROM_HTML_MODE_LEGACY).toString());
         } else {
             holder.setTitle(entry.getTitle());
-            holder.setSummary(Html.fromHtml(entry.getTitle()).toString());
+            holder.setSummary(Html.fromHtml(entry.getDescription()).toString());
         }
 
         holder.setLink(entry.getLink());
-        //holder.setCategories(entry.getCategories());
 
     }
 

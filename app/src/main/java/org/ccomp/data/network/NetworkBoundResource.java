@@ -13,7 +13,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     @MainThread
     protected NetworkBoundResource() {
         result = new MediatorLiveData<>();
-        result.setValue(Resource.loading(null));
+        result.postValue(Resource.loading(null));
 
         LiveData<ResultType> dbSource = loadFromDb();
 
@@ -58,6 +58,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
                     result.addSource(dbSource, (updatedData)->{
                         setResourceValue(Resource.error("Failed loading online data", updatedData));
                     });
+                    break;
                 }
             }
 
@@ -80,7 +81,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     @MainThread
     protected void setResourceValue(Resource<ResultType> value){
         if (result.getValue() != value){
-            result.setValue(value);
+            result.postValue(value);
         }
     }
 
