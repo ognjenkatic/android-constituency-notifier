@@ -7,10 +7,10 @@
 		<xs:complexType>
 			<xs:all>
 				<xs:element name="settings" type="tns:app_settings" />
-				<xs:element name="cert_feeds_settings">
+				<xs:element name="cert_feeds">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="feed_settings" type="tns:feed_settings"
+							<xs:element name="cert_feed" type="tns:feed"
 								maxOccurs="unbounded" />
 						</xs:sequence>
 					</xs:complexType>
@@ -37,9 +37,9 @@
 			<xs:element name="base64_logo"></xs:element>
 		</xs:all>
 	</xs:complexType>
-	<xs:complexType name="feed_settings">
+	<xs:complexType name="feed">
 		<xs:sequence>
-			<xs:element name="link" type="xs:string" />
+			<xs:element name="source" type="xs:string" />
 			<xs:element name="lang" type="xs:string" />
 			<xs:element name="type" type="tns:feed_type" />
 			<xs:element name="version" type="xs:string" />
