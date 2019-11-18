@@ -13,6 +13,8 @@ public class TimestampConverter {
 
     @TypeConverter
     public static Long toLong(Timestamp timestamp){
+        if (timestamp == null)
+            return 1000000L;
         return timestamp.getTime();
     }
 }

@@ -3,57 +3,86 @@ package org.ccomp.data.network;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-
-import io.reactivex.Flowable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 public abstract class NetworkBoundResource<ResultType, RequestType> {
 
-    private Observable<Object> result;
+    private MediatorLiveData<Resource<ResultType>> result;
 
     @MainThread
     protected NetworkBoundResource() {
-        Observable<Object> source;
-        if (shouldFetch()) {
-            source = createCall()
-                    .subscribeOn(Schedulers.io())
-                    .doOnNext(apiResponse -> NetworkBoundResource.this.saveCallResult(NetworkBoundResource.this.processResponse(apiResponse)))
-                    .flatMap((Function<Resource<RequestType>, ObservableSource<?>>) apiResponse -> NetworkBoundResource.this.loadFromDb().toObservable().map(Resource::success))
-                    .doOnError(t -> NetworkBoundResource.this.onFetchFailed())
-                    .onErrorResumeNext(t -> {
-                        return NetworkBoundResource.this.loadFromDb()
-                                .toObservable()
-                                .map((Function<ResultType, Object>) data -> Resource.error(t.getMessage(), data));
+        result = new MediatorLiveData<>();
+        result.setValue(Resource.loading(null));
 
-                    })
-                    .observeOn(AndroidSchedulers.mainThread());
-        } else {
-            source = loadFromDb()
-                    .toObservable()
-                    .map(Resource::success);
-        }
+        LiveData<ResultType> dbSource = loadFromDb();
 
-        result = Observable.concat(
-                loadFromDb()
-                        .toObservable()
-                        .map(Resource::loading)
-                        .take(1),
-                source
-        );
+        result.addSource(dbSource, (data)->{
+            result.removeSource(dbSource);
+            if (shouldFetch()){
+                fetchFromNetwork(dbSource);
+            }else{
+                result.addSource(dbSource, (updatedData)->{
+                    setResourceValue(Resource.success(updatedData));
+                });
+            }
+        });
     }
 
-    public Observable<Object> getAsObservable() {return result;}
+    private void fetchFromNetwork(LiveData<ResultType> dbSource){
+
+        Resource<LiveData<RequestType>> networkSource = createCall();
+
+        result.addSource(dbSource, (newData)->{
+            setResourceValue(Resource.loading(newData));
+        });
+
+
+        result.addSource(networkSource.data, (newData)->{
+            result.removeSource(networkSource.data);
+            result.removeSource(dbSource);
+
+            switch (networkSource.status){
+                case SUCCESS:{
+                    saveCallResult(processResponse(networkSource));
+
+                    LiveData<ResultType> dbSourceUpdated = loadFromDb();
+                    result.addSource(dbSourceUpdated, (updatedData)->{
+                        setResourceValue(Resource.success(updatedData));
+                    });
+                    break;
+                }
+
+                case ERROR:{
+                    onFetchFailed();
+                    result.addSource(dbSource, (updatedData)->{
+                        setResourceValue(Resource.error("Failed loading online data", updatedData));
+                    });
+                }
+            }
+
+
+        });
+
+
+
+
+    }
+    public LiveData<Resource<ResultType>> getAsLiveData() { return result;}
 
     protected void onFetchFailed() {}
 
     @WorkerThread
-    protected RequestType processResponse(Resource<RequestType> response) {return response.data;}
+    protected RequestType processResponse(Resource<LiveData<RequestType>> response) {
+        return response.data.getValue();
+    }
+
+    @MainThread
+    protected void setResourceValue(Resource<ResultType> value){
+        if (result.getValue() != value){
+            result.setValue(value);
+        }
+    }
 
     @WorkerThread
     protected abstract void saveCallResult(@NonNull RequestType item);
@@ -63,9 +92,11 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
     @NonNull
     @MainThread
-    protected abstract Flowable<ResultType> loadFromDb();
+    protected abstract LiveData<ResultType> loadFromDb();
 
     @NonNull
     @MainThread
-    protected abstract Observable<Resource<RequestType>> createCall();
+    protected abstract Resource<LiveData<RequestType>> createCall();
+
+
 }

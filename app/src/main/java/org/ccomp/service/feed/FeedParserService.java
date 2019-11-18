@@ -16,6 +16,7 @@ import org.ccomp.data.domain.feed.FeedItem;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,7 +55,11 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
                 feedItems.add(feedItem);
             }
         } catch (FeedException | IOException e) {
-            Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
+            //Log.println(Log.ERROR, "FEED PARSING", e.getMessage());
+        } catch (Exception exc){
+            String aa = "bb";
+            //Log.println(Log.ERROR, "FEED PARSING", exc.getMessage());
+
         }
         return feedItems;
     }
@@ -65,7 +70,9 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
         feedItem.setAuthor(syndEntry.getAuthor());
         feedItem.setDescription(syndEntry.getDescription().getValue());
         feedItem.setLink(syndEntry.getLink());
-        feedItem.setPublished(syndEntry.getPublishedDate());
+        feedItem.setPublished(new Timestamp(syndEntry.getPublishedDate().getTime()));
+        feedItem.setTitle(syndEntry.getTitle());
+        //feedItem.setSummary(syndEntry.g);
         List<FeedCategory> feedCategories = new ArrayList<>();
         for(SyndCategory category:syndEntry.getCategories()){
             FeedCategory feedCategory = new FeedCategory();
