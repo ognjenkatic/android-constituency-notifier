@@ -27,7 +27,7 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getAll().observe(this,(all)->{
-            TextView textView=root.findViewById(R.id.text_home);
+
             Gson gson=new Gson();
             textView.setText(gson.toJson(all));
 

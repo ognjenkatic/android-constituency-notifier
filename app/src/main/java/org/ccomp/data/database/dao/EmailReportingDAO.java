@@ -1,5 +1,6 @@
 package org.ccomp.data.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
@@ -30,7 +31,7 @@ public abstract class EmailReportingDAO implements IDAO<EmailReporting,String> {
     }
 
     @Query("SELECT * FROM email_reporting_settings")
-    public abstract List<EmailReporting> getAll();
+    public abstract LiveData<List<EmailReporting>> getAll();
 
     @Query("DELETE FROM email_reporting_settings")
     public abstract void deleteAll();
@@ -39,23 +40,26 @@ public abstract class EmailReportingDAO implements IDAO<EmailReporting,String> {
     public abstract EmailReporting get(String key);
 
     @Query("SELECT address FROM email_reporting_settings")
-    public abstract List<String> getKeys();
+    public abstract LiveData<List<String>> getKeys();
 
 
     @Query("SELECT incident_category_id from email_reporting_incident_category_mapping WHERE email_address=:key")
-    public abstract List<String> getCategoriesKeys(String key);
+    public abstract LiveData<List<String>> getCategoriesKeys(String key);
 
 
 
-    @Override
-    public void save(EmailReporting emailReporting){
-        super(emailReporting);
-
-
+    public void saveWithCategories(EmailReporting... emailReportings){
+        for(EmailReporting emailReporting:emailReportings){
+            save(emailReporting);
+            for(IncidentCategory category:emailReporting.getIncidentCategories()){
+                incidentCategoryDAO.save();
+            }
+        }
     }
 
 
-    EmailReporting getWithCategories(String address){
+
+    public EmailReporting getWithCategories(String address){
         EmailReporting reporting=get(address);
         reporting.setIncidentCategories(getCategories(address));
         return reporting;
@@ -63,8 +67,8 @@ public abstract class EmailReportingDAO implements IDAO<EmailReporting,String> {
 
     public List<IncidentCategory> getCategories(String key){
         List<IncidentCategory> categories=new ArrayList<>();
-        List<String> keys=getCategoriesKeys();
-        for(String categoryKey:keys ){
+        LiveData<List<String>> keys=getCategoriesKeys(key);
+        for(String categoryKey:keys.getValue() ){
             IncidentCategory category=incidentCategoryDAO.get(categoryKey);
             if(category!=null){
                 categories.add(category);

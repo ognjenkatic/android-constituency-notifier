@@ -1,5 +1,7 @@
 package org.ccomp.data.repository;
 
+import androidx.lifecycle.LiveData;
+
 import org.ccomp.data.database.dao.IDAO;
 import org.ccomp.service.IService;
 
@@ -20,7 +22,7 @@ public abstract class GenericRepository<T,K> {
         this.service=service;
     }
 
-    public List<T> doWork(boolean online){
+    public LiveData<List<T>> doWork(boolean online){
 
         if(online){
             List<T> tmpList=fetch();
@@ -43,7 +45,7 @@ public abstract class GenericRepository<T,K> {
         }
     }
 
-    public List<T> load(){
+    public LiveData<List<T>> load(){
         if(dao!=null) {
             return dao.getAll();
         }else{

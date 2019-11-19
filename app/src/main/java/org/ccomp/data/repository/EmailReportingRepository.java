@@ -55,7 +55,7 @@ public class EmailReportingRepository {
         }
 
         @Override
-        protected Void doInBackground(EmailReporting... notes) {
+        protected String doInBackground(EmailReporting... notes) {
             emailReportingDAO.insert(notes[0]);
             return null;
         }

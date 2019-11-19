@@ -1,5 +1,6 @@
 package org.ccomp.data.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public interface IncidentCategoryDAO extends IDAO<IncidentCategory,String> {
 
     @Query("SELECT * FROM incident_category")
-    List<IncidentCategory> getAll();
+    LiveData<List<IncidentCategory>> getAll();
 
     @Query("DELETE FROM incident_category")
     void deleteAll();
@@ -21,5 +22,5 @@ public interface IncidentCategoryDAO extends IDAO<IncidentCategory,String> {
     IncidentCategory get(String key);
 
     @Query("SELECT id FROM incident_category")
-    List<String> getKeys();
+    LiveData<List<String>> getKeys();
 }
