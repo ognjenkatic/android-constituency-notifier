@@ -10,7 +10,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
-public interface IDAO<T, K> {
+public interface IDAO<T, K>  {
 
     @Insert
     void insert(T... objects);
@@ -31,8 +31,10 @@ public interface IDAO<T, K> {
     void deleteAll();
 
     @Query("")
-    T get(K key);
+    LiveData<T> get(K key);
 
     @Query("")
     LiveData<List<K>> getKeys();
+
+
 }

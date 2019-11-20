@@ -19,7 +19,7 @@ public interface IncidentCategoryDAO extends IDAO<IncidentCategory,String> {
     void deleteAll();
 
     @Query("SELECT * FROM incident_category WHERE id=:key")
-    IncidentCategory get(String key);
+    LiveData<IncidentCategory> get(String key);
 
     @Query("SELECT id FROM incident_category")
     LiveData<List<String>> getKeys();

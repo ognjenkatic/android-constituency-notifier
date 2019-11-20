@@ -19,14 +19,6 @@ public class HomeViewModel extends AndroidViewModel {
     private LiveData<List<EmailReporting>> all;
 
 
-    /*
-    public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-    }
-
-     */
-
     public HomeViewModel(Application application) {
         super(application);
         mText = new MutableLiveData<>();

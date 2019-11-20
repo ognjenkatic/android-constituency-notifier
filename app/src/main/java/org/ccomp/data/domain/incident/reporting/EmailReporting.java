@@ -29,10 +29,6 @@ public class EmailReporting extends Reporting {
     @ColumnInfo(name = "pgp_key")
     private String pgpKey;
 
-    //@Relation(entity = IncidentCategory.class, parentColumn = "address", entityColumn = "id")
-
-    @Ignore
-    private List<IncidentCategory> incidentCategories;
 
 
     public String getAddress() {
@@ -76,11 +72,5 @@ public class EmailReporting extends Reporting {
     }
 
 
-    public List<IncidentCategory> getIncidentCategories() {
-        return incidentCategories;
-    }
 
-    public void setIncidentCategories(List<IncidentCategory> incidentCategories) {
-        this.incidentCategories = incidentCategories;
-    }
 }

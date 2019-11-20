@@ -19,6 +19,8 @@ import com.google.gson.Gson;
 import org.ccomp.R;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 
+import java.util.Random;
+
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
@@ -49,7 +51,8 @@ public class HomeFragment extends Fragment {
     public void buttonOnClick(View view){
         Toast.makeText(view.getContext(),"Bla bla bla",10).show();
         EmailReporting emailReporting=homeViewModel.getAll().getValue().get(0);
-        emailReporting.setPgpKey("Potpis 2");
+        Random rand=new Random();
+        emailReporting.setPgpKey("Potpis "+rand.nextInt(10));
         homeViewModel.save(emailReporting);
 
 
