@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    card_view:cardBackgroundColor="@color/colorPrimaryDark"
-    card_view:cardCornerRadius="4dp"
+    card_view:cardBackgroundColor="@color/secondaryColor"
     android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    android:elevation="1dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,8 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold"/>
+
+        />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,6 +31,7 @@
             android:layout_below="@+id/entry_title"
             android:layout_marginTop="15dp"
             android:justificationMode="inter_word"
+            android:maxLines="1"
 
             />
 

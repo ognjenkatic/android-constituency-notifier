@@ -8,7 +8,9 @@ import androidx.navigation.Navigator;
 import androidx.room.Room;
 
 import org.ccomp.data.database.AppDatabase;
+import org.ccomp.data.database.dao.FeedCategoryDAO;
 import org.ccomp.data.database.dao.FeedDAO;
+import org.ccomp.data.database.dao.FeedItemCategoryDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 
 import javax.inject.Named;
@@ -39,4 +41,18 @@ public class DatabaseModule {
     FeedItemDAO provideFeedDAO(@NonNull AppDatabase appDatabase){
         return appDatabase.feedItemDAO();
     }
+
+    @Provides
+    @Singleton
+    FeedCategoryDAO provideFeedCategoryDAO(@NonNull AppDatabase appDatabase){
+        return appDatabase.feedCategoryDAO();
+    }
+
+    @Provides
+    @Singleton
+    FeedItemCategoryDAO provideFeedItemCategoryDAO(@NonNull AppDatabase appDatabase){
+        return appDatabase.feedItemCategoryDAO();
+    }
+
+
 }

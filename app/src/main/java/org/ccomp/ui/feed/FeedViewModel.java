@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.ccomp.data.database.dao.FeedCategoryDAO;
+import org.ccomp.data.database.dao.FeedItemCategoryDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.domain.feed.FeedItem;
 import org.ccomp.data.network.Resource;
@@ -33,9 +35,9 @@ public class FeedViewModel extends ViewModel {
     private LiveData<Resource<List<FeedItem>>> feedItems;
 
     @Inject
-    public FeedViewModel(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService) {
+    public FeedViewModel(FeedItemDAO feedItemDAO, FeedItemCategoryDAO feedItemCategoryDAO, FeedCategoryDAO feedCategoryDAO, FeedParserService feedParserService, ExecutorService executorService) {
 
-        feedRepository =  new FeedRepository(feedItemDAO, feedParserService, executorService);
+        feedRepository =  new FeedRepository(feedItemDAO, feedParserService, executorService, feedItemCategoryDAO, feedCategoryDAO);
         feedItems = feedRepository.loadFeedItems("https://certrs.org/feed/atom");
     }
 

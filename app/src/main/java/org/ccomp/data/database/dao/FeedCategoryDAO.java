@@ -16,7 +16,7 @@ import java.util.List;
 @Dao
 public interface FeedCategoryDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(FeedCategory... feedCategories);
+    public long[] insert(FeedCategory... feedCategories);
 
     @Update
     public void update(FeedCategory... feedCategories);
@@ -30,6 +30,12 @@ public interface FeedCategoryDAO {
     @Query("DELETE FROM feed_category")
     public void deleteAll();
 
-    @Query("SELECT * FROM feed_category WHERE id = :id")
+    @Query("SELECT * FROM feed_category WHERE id = :id LIMIT 1")
     public LiveData<FeedCategory> selectAllById(int id);
+
+    @Query("SELECT * FROM feed_category WHERE name = :name LIMIT 1")
+    public FeedCategory selectByName(String name);
+
+    @Query("SELECT COUNT(*) FROM feed_category WHERE name = :name")
+    public int selectCountByName(String name);
 }

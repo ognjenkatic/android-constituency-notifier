@@ -13,16 +13,16 @@ import java.util.List;
 public class FeedItem {
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private String title;
     private String description;
     private Timestamp published;

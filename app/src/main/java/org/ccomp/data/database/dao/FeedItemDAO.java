@@ -17,7 +17,7 @@ import java.util.List;
 public interface FeedItemDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(FeedItem... feedItems);
+    public long[] insert(FeedItem... feedItems);
 
     @Update
     public void update(FeedItem... feedItems);
