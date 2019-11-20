@@ -49,5 +49,8 @@ public class HomeViewModel extends AndroidViewModel {
         return all;
     }
 
+    public void save(EmailReporting emailReporting){
+        repository.save(emailReporting);
+    }
 
 }

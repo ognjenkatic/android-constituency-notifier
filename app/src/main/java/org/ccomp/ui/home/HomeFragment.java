@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.gson.Gson;
 
 import org.ccomp.R;
+import org.ccomp.data.domain.incident.reporting.EmailReporting;
 
 public class HomeFragment extends Fragment {
 
@@ -38,7 +41,18 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        Button button=root.findViewById(R.id.button);
+        button.setOnClickListener(this::buttonOnClick);
         return root;
+    }
+
+    public void buttonOnClick(View view){
+        Toast.makeText(view.getContext(),"Bla bla bla",10).show();
+        EmailReporting emailReporting=homeViewModel.getAll().getValue().get(0);
+        emailReporting.setPgpKey("Potpis 2");
+        homeViewModel.save(emailReporting);
+
+
     }
 }
 

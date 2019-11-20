@@ -46,6 +46,12 @@ public class EmailReportingRepository {
         return allEmailReporting;
     }
 
+    public void save(EmailReporting emailReporting){
+        new InsertNoteAsyncTask(emailReportingDAO).execute(emailReporting);
+
+
+    }
+
     private static class InsertNoteAsyncTask extends AsyncTask<EmailReporting, Void, String> {
         private EmailReportingDAO emailReportingDAO;
 
@@ -56,10 +62,14 @@ public class EmailReportingRepository {
 
         @Override
         protected String doInBackground(EmailReporting... notes) {
-            emailReportingDAO.insert(notes[0]);
+            emailReportingDAO.save(notes[0]);
             return null;
         }
     }
+
+
+
+
 
 
 

@@ -48,6 +48,8 @@ public abstract class EmailReportingDAO implements IDAO<EmailReporting,String> {
 
 
 
+
+
     public void saveWithCategories(EmailReporting... emailReportings){
         for(EmailReporting emailReporting:emailReportings){
             save(emailReporting);
