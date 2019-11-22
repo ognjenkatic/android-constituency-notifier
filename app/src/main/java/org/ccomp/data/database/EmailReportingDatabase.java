@@ -32,9 +32,7 @@ public abstract class EmailReportingDatabase extends RoomDatabase {
 
     private static EmailReportingDatabase instance;
 
-    public abstract EmailReportingDAO emailReportingDAO();
-    public abstract IncidentCategoryDAO incidentCategoryDAO();
-    public abstract MappingDAO mappingDAO();
+
 
 
 
@@ -62,7 +60,7 @@ public abstract class EmailReportingDatabase extends RoomDatabase {
         private EmailReportingDAO emailReportingDAO;
 
         public PopulateDBAsyncTask(EmailReportingDatabase db) {
-            this.emailReportingDAO = db.emailReportingDAO();
+
         }
 
         @Override

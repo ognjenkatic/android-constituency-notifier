@@ -27,6 +27,9 @@ public abstract class EmailReportingDAO implements IDAO<EmailReporting,String>{
     @Query("SELECT * FROM email_reporting_settings")
     public abstract LiveData<List<EmailReporting>> getAll();
 
+    @Query("SELECT * FROM email_reporting_settings WHERE address in (:keys)")
+    public abstract LiveData<List<EmailReporting>> getAll(List<String> keys);
+
     @Query("DELETE FROM email_reporting_settings")
     public abstract void deleteAll();
 

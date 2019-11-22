@@ -15,6 +15,9 @@ public interface IncidentCategoryDAO extends IDAO<IncidentCategory,String> {
     @Query("SELECT * FROM incident_category")
     LiveData<List<IncidentCategory>> getAll();
 
+    @Query("SELECT * FROM incident_category WHERE id in (:keys) ")
+    LiveData<List<IncidentCategory>> getAll(List<String> keys);
+
     @Query("DELETE FROM incident_category")
     void deleteAll();
 

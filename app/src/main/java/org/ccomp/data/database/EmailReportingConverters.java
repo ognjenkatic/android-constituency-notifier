@@ -35,42 +35,7 @@ public class EmailReportingConverters {
             return tlp.toString();
         }
 
-      /*  @TypeConverter
-        public List<IncidentCategory> stringsToIncidentCategories(List<String> keys){
-            List<IncidentCategory> categories=new ArrayList<>();
-            for(String key:keys){
-                IncidentCategory category=incidentCategoryDAO.get(key);
-                if(category!=null){
-                    categories.add(category);
-                }
-            }
 
-            if(categories.isEmpty()){
-                return null;
-
-            }else {
-                return categories;
-            }
-        }
-        @TypeConverter
-        public List<String> incidentCategoriesToStrings(List<IncidentCategory> incidentCategories){
-            List<String> keys=new ArrayList<>();
-            for(IncidentCategory category:incidentCategories){
-                try{
-
-                    incidentCategoryDAO.save(category);
-                    keys.add(category.getId());
-                }catch (Exception e){
-                    Log.println(Log.ERROR,"Room exception",e.getMessage());
-                }
-            }
-            if(keys.isEmpty()){
-                return null;
-            }else{
-                return keys;
-            }
-        }
-*/
 
 
 

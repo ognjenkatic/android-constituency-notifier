@@ -18,48 +18,67 @@ import com.google.gson.Gson;
 
 import org.ccomp.R;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
+import org.ccomp.factory.ViewModelFactory;
+import org.ccomp.ui.feed.FeedViewModel;
 
 import java.util.Random;
 
-public class HomeFragment extends Fragment {
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
+
+public class HomeFragment extends DaggerFragment {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     private HomeViewModel homeViewModel;
+    private TextView textHome;
+    private Button homeButton;
 
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getAll().observe(this,(all)->{
 
-            Gson gson=new Gson();
-            textView.setText(gson.toJson(all));
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        textHome = root.findViewById(R.id.text_home);
+        homeButton=root.findViewById(R.id.button);
+        init();
+        return root;
+    }
+
+    public void init() {
+        homeViewModel =
+                ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
+        homeViewModel.getAll().observe(this, (all) -> {
+
+            Gson gson = new Gson();
+            textHome.setText(gson.toJson(all));
 
         });
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                textHome.setText(s);
             }
         });
-        Button button=root.findViewById(R.id.button);
-        button.setOnClickListener(this::buttonOnClick);
-        return root;
+
+        homeButton.setOnClickListener(this::buttonOnClick);
+
     }
 
-    public void buttonOnClick(View view){
-        Toast.makeText(view.getContext(),"Bla bla bla",10).show();
-        EmailReporting emailReporting=homeViewModel.getAll().getValue().get(0);
-        Random rand=new Random();
-        emailReporting.setPgpKey("Potpis "+rand.nextInt(10));
+
+    public void buttonOnClick(View view) {
+        Toast.makeText(view.getContext(), "Bla bla bla", 10).show();
+        EmailReporting emailReporting = homeViewModel.getAll().getValue().get(0);
+        Random rand = new Random();
+        emailReporting.setPgpKey("Potpis " + rand.nextInt(10));
         homeViewModel.save(emailReporting);
 
 
     }
+
+
 }
 
-/*
-* homeViewModel=new ViewModelProvider(this).get(HomeViewModel.class);
-
-* */

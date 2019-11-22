@@ -1,5 +1,10 @@
 package org.ccomp.di.module;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+
+import org.ccomp.service.NetworkAvailabilityService;
 import org.ccomp.service.feed.FeedParserService;
 
 
@@ -18,5 +23,11 @@ public class ServiceModule {
     @Singleton
     ExecutorService provideExecutorService(){
         return  Executors.newFixedThreadPool(5);
+    }
+
+    @Provides
+    @Singleton
+    public NetworkAvailabilityService provideNetworkAvailabilityService(@NonNull Application app){
+        return  new NetworkAvailabilityService(app.getApplicationContext());
     }
 }

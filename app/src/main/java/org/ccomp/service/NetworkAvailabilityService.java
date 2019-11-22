@@ -1,11 +1,21 @@
-package org.ccomp.util;
+package org.ccomp.service;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 
-public class Util {
+import javax.inject.Inject;
 
-    public boolean isNetworkAvailable(Context context) {
+public class NetworkAvailabilityService {
+
+
+    Context context;
+
+    public NetworkAvailabilityService(Context context){
+        this.context=context;
+
+    }
+
+    public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }

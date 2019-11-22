@@ -13,91 +13,120 @@ import androidx.room.TypeConverter;
 import org.ccomp.data.database.EmailReportingDatabase;
 import org.ccomp.data.database.dao.EmailReportingDAO;
 import org.ccomp.data.database.dao.IncidentCategoryDAO;
+import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMapping;
 import org.ccomp.data.database.dao.mapping.MappingDAO;
 import org.ccomp.data.domain.feed.FeedItem;
+import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.settings.TLP;
 import org.ccomp.data.network.NetworkBoundResource;
 import org.ccomp.data.network.Resource;
+import org.ccomp.service.NetworkAvailabilityService;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class EmailReportingRepository {
 
     EmailReportingDAO emailReportingDAO;
     IncidentCategoryDAO incidentCategoryDAO;
     MappingDAO mappingDAO;
-    LiveData<List<EmailReporting>> allEmailReporting;
     ExecutorService executorService;
+    NetworkAvailabilityService networkAvailabilityService;
 
+
+    LiveData<List<EmailReporting>> allEmailReporting;
     MediatorLiveData<List<EmailReporting>> med = new MediatorLiveData<>();
 
-    private static final String TAG = "EmailReportingRepositor";
+    private static final String TAG = "EmailReportingRepository";
 
-    public EmailReportingRepository(Application application) {
-
-        EmailReportingDatabase database = EmailReportingDatabase.getInstance(application);
-        emailReportingDAO = database.emailReportingDAO();
-        incidentCategoryDAO=database.incidentCategoryDAO();
-        mappingDAO=database.mappingDAO();
-
-        //allEmailReporting = emailReportingDAO.getAll();
-        allEmailReporting = getAllEmailReporting();
-
-       med.addSource(allEmailReporting, (newData)->{
-            List<EmailReporting> emailReportings=allEmailReporting.getValue();
-            EmailReporting reporting=emailReportings.get(0);
-            Log.d(TAG, "EmailReportingRepository: "+reporting.getPgpKey());
-            med.setValue(newData);
-        });
+    @Inject
+    public EmailReportingRepository(EmailReportingDAO emailReportingDAO, IncidentCategoryDAO incidentCategoryDAO,MappingDAO mappingDAO, ExecutorService executorService,NetworkAvailabilityService networkAvailabilityService) {
 
 
-
+        this.emailReportingDAO = emailReportingDAO;
+        this.incidentCategoryDAO = incidentCategoryDAO;
+        this.mappingDAO=mappingDAO;
+        this.executorService = executorService;
+        this.networkAvailabilityService=networkAvailabilityService;
 
 
     }
 
-    public LiveData<List<EmailReporting>> getAllEmailReporting(){
-        LiveData<List<EmailReporting>> emailReportingsLiveData=emailReportingDAO.getAll();
-        MediatorLiveData<List<EmailReporting>> mediatorLiveData=new MediatorLiveData<>();
-        mediatorLiveData.addSource(emailReportingsLiveData,(newData)->{
-            List<EmailReporting> allEmailReportings=emailReportingsLiveData.getValue();
-            for(EmailReporting emailReporting:allEmailReportings){
-                
+    public LiveData<List<EmailReporting>> getAllEmailReporting() {
+        LiveData<List<EmailReporting>> emailReportingsLiveData = emailReportingDAO.getAll();
+        List<EmailReporting> emailReportings=emailReportingsLiveData.getValue();
+        if(emailReportings!=null) {
+            for (EmailReporting emailReporting : emailReportings) {
+                buildEmailReporting(emailReporting);
             }
+        }
+
+        MediatorLiveData<List<EmailReporting>> emailReportingsMediator = new MediatorLiveData<>();
+        emailReportingsMediator.addSource(emailReportingsLiveData, (newData) -> {
+            List<EmailReporting> allEmailReportings = emailReportingsLiveData.getValue();
+            for (EmailReporting emailReporting : newData) {
+                buildEmailReporting(emailReporting);
+            }
+            emailReportingsMediator.setValue(newData);
         });
 
-        return null;
+        return emailReportingsLiveData;
+    }
+    protected EmailReporting buildEmailReporting(EmailReporting emailReporting){
+        List<String> keys = emailReportingDAO.getCategoriesKeys(emailReporting.getAddress()).getValue();
+        LiveData<List<IncidentCategory>> incidentCategoriesLiveData = incidentCategoryDAO.getAll(keys);
+        emailReporting.setIncidentCategories(incidentCategoriesLiveData.getValue());
+        return emailReporting;
     }
 
-    public LiveData<EmailReporting> get(String key){
-        return null;
-    }
-
-    public void save(EmailReporting...emailReportings){
-
-    }
-    public void delete(EmailReporting... emailReportings){
+    public LiveData<EmailReporting> get(String key) {
+        return emailReportingDAO.get(key);
 
     }
 
-    public LiveData<Resource<List<EmailReporting>>> loadEmailReporting(String feedURL, boolean shouldFetch){
+    public void save(@NotNull EmailReporting... emailReportings) {
+        if (emailReportings != null) {
+            executorService.execute(() -> {
+                for (EmailReporting emailReporting : emailReportings) {
+                    emailReportingDAO.save(emailReporting);
+                    if(emailReporting.getIncidentCategories()!=null) {
+                        for (IncidentCategory category : emailReporting.getIncidentCategories()) {
+                            EmailReportingIncidentCategoryMapping mapping = new EmailReportingIncidentCategoryMapping(emailReporting.getAddress(), category.getId());
+                            incidentCategoryDAO.save(category);
+                            mappingDAO.insert(mapping);
+                        }
+                    }
+                }
+            });
+
+        }
+    }
+
+    public void delete(EmailReporting... emailReportings) {
+        if (emailReportings != null) {
+            executorService.execute(() -> {
+                emailReportingDAO.delete(emailReportings);
+            });
+
+        }
+    }
+
+    public LiveData<Resource<List<EmailReporting>>> loadEmailReporting(String URL, boolean shouldFetch) {
 
         return new NetworkBoundResource<List<EmailReporting>, List<EmailReporting>>() {
 
             @Override
             protected void saveCallResult(@NonNull List<EmailReporting> items) {
 
-                executorService.execute(()->{
-
-                    if (items != null)
-                        save(items.toArray(new EmailReporting[items.size()]));
-
-                });
-
+                save(items.toArray(new EmailReporting[items.size()]));
 
 
             }
@@ -120,7 +149,7 @@ public class EmailReportingRepository {
 
                     MutableLiveData<List<EmailReporting>> ld = new MutableLiveData<>();
 
-                    executorService.execute(()->{
+                    executorService.execute(() -> {
                         /*
                         try {
                             List<FeedItem> feedItems = feedParserService.parseStream(new URL(feedURL));
@@ -135,9 +164,9 @@ public class EmailReportingRepository {
 
                     return Resource.success(ld);
 
-                } catch(Exception mex){
+                } catch (Exception mex) {
 
-                    Log.d(TAG, "createCall: "+mex.getMessage());
+                    Log.d(TAG, "createCall: " + mex.getMessage());
                     return null;
                 }
 
@@ -146,44 +175,6 @@ public class EmailReportingRepository {
 
         }.getAsLiveData();
     }
-
-
-
-    public void insert(EmailReporting note) {
-        new InsertNoteAsyncTask(emailReportingDAO).execute(note);
-    }
-
-
-    public LiveData<List<EmailReporting>> getAll() {
-        //return allEmailReporting;
-        return med;
-    }
-
-    public void save(EmailReporting emailReporting){
-        new InsertNoteAsyncTask(emailReportingDAO).execute(emailReporting);
-
-
-    }
-
-    private static class InsertNoteAsyncTask extends AsyncTask<EmailReporting, Void, String> {
-        private EmailReportingDAO emailReportingDAO;
-
-
-        public InsertNoteAsyncTask(EmailReportingDAO emailReportingDAO) {
-            this.emailReportingDAO = emailReportingDAO;
-        }
-
-        @Override
-        protected String doInBackground(EmailReporting... notes) {
-            emailReportingDAO.save(notes[0]);
-            return null;
-        }
-    }
-
-
-
-
-
 
 
 }

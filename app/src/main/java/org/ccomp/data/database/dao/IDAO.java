@@ -26,6 +26,8 @@ public interface IDAO<T, K>  {
 
     @Query("")
     LiveData<List<T>> getAll();
+    @Query("")
+    LiveData<List<T>> getAll(List<K>keys);
 
     @Query("")
     void deleteAll();
