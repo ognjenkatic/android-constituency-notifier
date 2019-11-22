@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.ccomp.di.ViewModelKey;
 import org.ccomp.factory.ViewModelFactory;
+import org.ccomp.ui.category.CategoryViewModel;
 import org.ccomp.ui.feed.FeedViewModel;
 
 import dagger.Binds;
@@ -13,6 +14,7 @@ import dagger.multibindings.IntoMap;
 
 @Module
 public abstract class ViewModelModule {
+
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
 
@@ -20,4 +22,10 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FeedViewModel.class)
     protected abstract ViewModel feedViewModel(FeedViewModel feedViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CategoryViewModel.class)
+    protected abstract ViewModel categoryViewModel(CategoryViewModel categoryViewModel);
+
 }

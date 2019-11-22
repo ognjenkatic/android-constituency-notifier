@@ -17,5 +17,11 @@
         android:label="@string/menu_feed"
         tools:layout="@layout/fragment_feed" />
 
+    <fragment
+        android:id="@+id/nav_category"
+        android:name="org.ccomp.ui.category.CategoryFragment"
+        android:label="@string/menu_category"
+        tools:layout="@layout/fragment_category" />
+
 
 </navigation>

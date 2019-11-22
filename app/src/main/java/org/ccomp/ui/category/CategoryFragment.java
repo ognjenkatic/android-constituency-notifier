@@ -1,6 +1,5 @@
-package org.ccomp.ui.feed;
+package org.ccomp.ui.category;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -16,35 +15,36 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.ccomp.R;
-
+import org.ccomp.data.adapter.CategoryAdapter;
 import org.ccomp.data.adapter.FeedEntryAdapter;
 import org.ccomp.factory.ViewModelFactory;
-
-import java.util.List;
+import org.ccomp.ui.feed.FeedViewModel;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
 
-public class FeedFragment extends DaggerFragment {
+public class CategoryFragment extends DaggerFragment {
 
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private CategoryViewModel mViewModel;
 
-    private FeedViewModel mViewModel;
-
-    public static FeedFragment newInstance() {
-        return new FeedFragment();
+    public static CategoryFragment newInstance() {
+        return new CategoryFragment();
     }
 
     private View view;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_category, container, false);
         this.view = view;
         return view;
+
     }
 
     @Override
@@ -53,15 +53,14 @@ public class FeedFragment extends DaggerFragment {
 
         initialiseViewModel();
         initialiseView();
-
     }
 
     private void initialiseView(){
 
-        mViewModel.getFeedItems().observe(this, listResource -> {
+        mViewModel.getFeedCategories().observe(this, categoryList -> {
 
-            FeedEntryAdapter faa = new FeedEntryAdapter(listResource.data);
-            RecyclerView lv = view.findViewById(R.id.entry_list);
+            CategoryAdapter faa = new CategoryAdapter(categoryList);
+            RecyclerView lv = view.findViewById(R.id.category_entry_list);
 
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
             llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -73,8 +72,9 @@ public class FeedFragment extends DaggerFragment {
     }
 
     private void initialiseViewModel() {
-        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FeedViewModel.class);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
 
     }
+
 
 }

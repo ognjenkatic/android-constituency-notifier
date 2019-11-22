@@ -2,6 +2,7 @@ package org.ccomp;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.StrictMode;
 
 
 import androidx.fragment.app.Fragment;
@@ -34,6 +35,19 @@ public class AppController extends Application implements HasActivityInjector, H
 
     @Override
     public void onCreate() {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()   // or .detectAll() for all detectable problems
+                .penaltyLog()
+                .build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .penaltyDeath()
+                .build());
+
         super.onCreate();
 
 
