@@ -61,31 +61,23 @@ public class EmailReportingRepository {
     }
 
     public LiveData<List<EmailReporting>> getAllEmailReporting() {
-        LiveData<List<EmailReporting>> emailReportingsLiveData = emailReportingDAO.getAll();
-        List<EmailReporting> emailReportings=emailReportingsLiveData.getValue();
-        if(emailReportings!=null) {
-            for (EmailReporting emailReporting : emailReportings) {
-                buildEmailReporting(emailReporting);
-            }
-        }
 
-        MediatorLiveData<List<EmailReporting>> emailReportingsMediator = new MediatorLiveData<>();
-        emailReportingsMediator.addSource(emailReportingsLiveData, (newData) -> {
-            List<EmailReporting> allEmailReportings = emailReportingsLiveData.getValue();
-            for (EmailReporting emailReporting : newData) {
-                buildEmailReporting(emailReporting);
+        MutableLiveData<List<EmailReporting>> emailReportingMutableLiveData=new MediatorLiveData<>();
+        emailReportingMutableLiveData.setValue(emailReportingDAO.getAll().getValue());
+        executorService.execute(()->{
+            List<EmailReporting> all=emailReportingDAO.getAllSync();
+            for(EmailReporting emailReporting: all){
+                List<String> keys=emailReportingDAO.getCategoriesKeysSync(emailReporting.getAddress());
+                emailReporting.setIncidentCategories(incidentCategoryDAO.getAllSync(keys));
             }
-            emailReportingsMediator.setValue(newData);
+            emailReportingMutableLiveData.postValue(all);
+
         });
 
-        return emailReportingsLiveData;
+
+        return emailReportingMutableLiveData;
     }
-    protected EmailReporting buildEmailReporting(EmailReporting emailReporting){
-        List<String> keys = emailReportingDAO.getCategoriesKeys(emailReporting.getAddress()).getValue();
-        LiveData<List<IncidentCategory>> incidentCategoriesLiveData = incidentCategoryDAO.getAll(keys);
-        emailReporting.setIncidentCategories(incidentCategoriesLiveData.getValue());
-        return emailReporting;
-    }
+
 
     public LiveData<EmailReporting> get(String key) {
         return emailReportingDAO.get(key);
