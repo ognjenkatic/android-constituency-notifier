@@ -42,8 +42,6 @@ public class EmailReportingRepository {
     NetworkAvailabilityService networkAvailabilityService;
 
 
-    LiveData<List<EmailReporting>> allEmailReporting;
-    MediatorLiveData<List<EmailReporting>> med = new MediatorLiveData<>();
 
     private static final String TAG = "EmailReportingRepository";
 

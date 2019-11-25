@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<certapp xmlns="http://www.certrs.org/certapp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.certrs.org/certapp https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/master/schema/ccomp.xsd">
+<certapp xmlns="http://www.certrs.org/certapp"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.certrs.org/certapp ccomp.xsd">
 	<settings>
 		<MOTD is_url="false">
 		Hello World MOTD
@@ -32,7 +34,24 @@
 	</cert_feeds_settings>
 	<reporting_email address="cert@certrs.org"
 		default_tlp="AMBER">
-		<incident_category incident_type="" incident_class=""/>
+		<incident_category incident_category_id="ID1"
+			incident_type="Tip1" incident_class="Klasa1" />
+		<incident_category incident_category_id="ID2"
+			incident_type="Tip2" incident_class="Klasa2" />
+		<incident_category incident_category_id="ID3"
+			incident_type="Tip3" incident_class="Klasa3" />
+		<incident_category incident_category_id="ID4"
+			incident_type="Tip4" incident_class="Klasa4">
+			<incident_type_description>Opis tipa 4</incident_type_description>
+			<incident_class_description>Opis klase 4</incident_class_description>
+			<description>Opis4</description>
+		</incident_category>
+		<incident_category incident_category_id="ID5"
+			incident_type="Tip5" incident_class="Klasa5">
+			<incident_type_description>Opis tipa 5</incident_type_description>
+			<incident_class_description>Opis klase 5</incident_class_description>
+			<description>Opis5</description>
+		</incident_category>
 		<pgp_public>
 			<id>0xEE03B7F3</id>
 			<fingerprint>6F1F 1A61 EBA9 50A7 E3FC 5C03 1B5A 3A3B EE03 B7F3</fingerprint>
