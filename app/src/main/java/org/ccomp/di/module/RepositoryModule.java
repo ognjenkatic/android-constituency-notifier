@@ -4,6 +4,9 @@ import org.ccomp.data.database.AppDatabase;
 import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.settings.TLP;
+import org.ccomp.data.domain.settings.lang.Language;
+import org.ccomp.data.domain.settings.lang.Word;
+import org.ccomp.data.repository.EmailReportingRepo;
 import org.ccomp.data.repository.EmailReportingRepository;
 import org.ccomp.service.NetworkAvailabilityService;
 import org.jetbrains.annotations.NotNull;
@@ -49,5 +52,16 @@ public class RepositoryModule {
 
 
         return emailReportingRepository;
+    }
+
+    @Provides
+    @Singleton
+    public EmailReportingRepo provideEmailReportingRepo(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService){
+
+      
+
+
+
+        return new EmailReportingRepo(appDatabase.emailReportingDAO(),appDatabase.incidentCategoryDAO(),appDatabase.emailReportingIncidentCategoryMappingDAO(),executorService);
     }
 }

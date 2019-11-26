@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.network.Resource;
+import org.ccomp.data.repository.EmailReportingRepo;
 import org.ccomp.data.repository.EmailReportingRepository;
 
 import java.util.List;
@@ -17,18 +18,18 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private LiveData<Resource<List<EmailReporting>>> all;
 
-   EmailReportingRepository repository;
+   EmailReportingRepo repository;
 
 
 
 
    @Inject
-    public HomeViewModel(EmailReportingRepository repository) {
+    public HomeViewModel(EmailReportingRepo repository) {
        // super(application);
         setmText(new MutableLiveData<>());
         getmText().setValue("This is home fragment");
         this.repository = repository;
-        this.setAll(repository.loadEmailReportingLocal());
+        this.setAll(repository.load(false,repository.getDefaultPredicate()));
 
 
     }
@@ -46,7 +47,7 @@ public class HomeViewModel extends ViewModel {
 
 
     public void save(EmailReporting emailReporting){
-        getRepository().save(emailReporting);
+        getRepository().save(true,emailReporting);
     }
 
 
@@ -58,16 +59,6 @@ public class HomeViewModel extends ViewModel {
         this.mText = mText;
     }
 
-    public EmailReportingRepository getRepository() {
-        return repository;
-    }
-
-
-    public void setRepository(EmailReportingRepository repository) {
-        this.repository = repository;
-
-
-    }
 
     public LiveData<Resource<List<EmailReporting>>> getAll() {
         return all;
@@ -75,5 +66,13 @@ public class HomeViewModel extends ViewModel {
 
     public void setAll(LiveData<Resource<List<EmailReporting>>> all) {
         this.all = all;
+    }
+
+    public EmailReportingRepo getRepository() {
+        return repository;
+    }
+
+    public void setRepository(EmailReportingRepo repository) {
+        this.repository = repository;
     }
 }

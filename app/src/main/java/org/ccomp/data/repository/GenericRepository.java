@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.ccomp.data.database.dao.IDAO;
-import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.network.NetworkBoundResource;
 import org.ccomp.data.network.Resource;
 import org.ccomp.service.IService;
@@ -20,10 +19,10 @@ import java.util.function.Predicate;
 
 public abstract class GenericRepository<T,K> {
 
-    IDAO<T,K> mainDAO;
-    IService<T> mainService;
-    ExecutorService executorService;
-    Predicate<T> defaultPredicate=new Predicate<T>() {
+    protected IDAO<T,K> mainDAO;
+    protected IService<T> mainService;
+    protected ExecutorService executorService;
+    protected Predicate<T> defaultPredicate=new Predicate<T>() {
         @Override
         public boolean test(T t) {
             return true;
@@ -33,13 +32,13 @@ public abstract class GenericRepository<T,K> {
 
     public LiveData<List<T>> getAll(Predicate<T> predicate){
         MutableLiveData<List<T>> mutableLiveData= new MutableLiveData<>();
-        mutableLiveData.setValue(mainDAO.getAll().getValue());
+        //mutableLiveData.setValue(mainDAO.getAll().getValue());
         executorService.execute(()->{
             List<T> unfiltered=mainDAO.getAllSync();
             List<T> filtered=new ArrayList<>();
             for(T obj : unfiltered){
                 if(predicate.test(obj)){
-                    filtered.add(bulid(obj));
+                    filtered.add(build(obj));
                 }
             }
             mutableLiveData.postValue(filtered);
@@ -48,17 +47,17 @@ public abstract class GenericRepository<T,K> {
         return mutableLiveData;
     }
     public LiveData<List<T>> getAll(){
-        return getAll(defaultPredicate);
+        return getAll(getDefaultPredicate());
     }
 
     public LiveData<T> get(K key){
         LiveData<T> liveData=mainDAO.get(key);
         MutableLiveData<T> mutableLiveData=new MutableLiveData<>();
-        mutableLiveData.postValue(bulid(liveData.getValue()));
+        mutableLiveData.postValue(build(liveData.getValue()));
         return mutableLiveData;
     }
 
-    public abstract T bulid(T in);
+    public abstract T build(T in);
 
     public void delete(T... args){
         if(args!=null){
@@ -138,10 +137,35 @@ public abstract class GenericRepository<T,K> {
     }
 
 
+    public IDAO<T, K> getMainDAO() {
+        return mainDAO;
+    }
 
+    public void setMainDAO(IDAO<T, K> mainDAO) {
+        this.mainDAO = mainDAO;
+    }
 
+    public IService<T> getMainService() {
+        return mainService;
+    }
 
+    public void setMainService(IService<T> mainService) {
+        this.mainService = mainService;
+    }
 
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
 
+    public void setExecutorService(ExecutorService executorService) {
+        this.executorService = executorService;
+    }
 
+    public Predicate<T> getDefaultPredicate() {
+        return defaultPredicate;
+    }
+
+    public void setDefaultPredicate(Predicate<T> defaultPredicate) {
+        this.defaultPredicate = defaultPredicate;
+    }
 }
