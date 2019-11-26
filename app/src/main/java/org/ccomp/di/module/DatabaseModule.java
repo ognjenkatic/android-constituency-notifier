@@ -1,25 +1,17 @@
 package org.ccomp.di.module;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.Navigator;
 import androidx.room.Room;
 
 import org.ccomp.data.database.AppDatabase;
 import org.ccomp.data.database.dao.EmailReportingDAO;
-import org.ccomp.data.database.dao.FeedDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.database.dao.IncidentCategoryDAO;
-import org.ccomp.data.database.dao.mapping.MappingDAO;
-import org.ccomp.data.repository.EmailReportingRepository;
-import org.ccomp.service.NetworkAvailabilityService;
+import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMappingDAO;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ExecutorService;
-
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -32,7 +24,7 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    AppDatabase provideAppDatabase(@NonNull Application application, @Named("db name") String databaseName){
+    AppDatabase provideAppDatabase(@NonNull Application application, @Named("db name") String databaseName) {
         return Room.databaseBuilder(application, AppDatabase.class, databaseName)
                 .fallbackToDestructiveMigration()
                 .build();
@@ -46,27 +38,27 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    FeedItemDAO provideFeedDAO(@NonNull AppDatabase appDatabase){
+    FeedItemDAO provideFeedDAO(@NonNull AppDatabase appDatabase) {
         return appDatabase.feedItemDAO();
     }
 
 
+    @Provides
+    @Singleton
+    public EmailReportingDAO provideEmailReportingDAO(@NotNull AppDatabase appDatabase) {
+        return appDatabase.emailReportingDAO();
+    }
 
     @Provides
     @Singleton
-    public EmailReportingDAO provideEmailReportingDAO(@NotNull AppDatabase appDatabase){
-        return appDatabase.emailReportingDAO();
-    }
-    @Provides
-    @Singleton
-    public IncidentCategoryDAO provideIncidentCategoryDAO(@NotNull AppDatabase appDatabase){
+    public IncidentCategoryDAO provideIncidentCategoryDAO(@NotNull AppDatabase appDatabase) {
         return appDatabase.incidentCategoryDAO();
     }
 
     @Provides
     @Singleton
-    public MappingDAO provideMappingDAO(@NotNull AppDatabase appDatabase){
-        return appDatabase.mappingDAO();
+    public EmailReportingIncidentCategoryMappingDAO provideMappingDAO(@NotNull AppDatabase appDatabase) {
+        return appDatabase.emailReportingIncidentCategoryMappingDAO();
     }
 
 }

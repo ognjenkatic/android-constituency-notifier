@@ -23,7 +23,7 @@ public class RepositoryModule {
     @Provides
     @Singleton
     public EmailReportingRepository provideEmailReportingRepository(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService){
-        EmailReportingRepository emailReportingRepository=new EmailReportingRepository(appDatabase.emailReportingDAO(),appDatabase.incidentCategoryDAO(),appDatabase.mappingDAO(),executorService,networkAvailabilityService);
+        EmailReportingRepository emailReportingRepository=new EmailReportingRepository(appDatabase.emailReportingDAO(),appDatabase.incidentCategoryDAO(),appDatabase.emailReportingIncidentCategoryMappingDAO(),executorService,networkAvailabilityService);
 
         EmailReporting reporting=new EmailReporting();
         reporting.setAddress("cert@certrs.org");

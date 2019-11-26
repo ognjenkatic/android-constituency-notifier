@@ -16,7 +16,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import org.ccomp.data.database.dao.EmailReportingDAO;
 import org.ccomp.data.database.dao.IncidentCategoryDAO;
 import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMapping;
-import org.ccomp.data.database.dao.mapping.MappingDAO;
+
 import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.settings.TLP;

@@ -1,57 +1,145 @@
 package org.ccomp.data.repository;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import org.ccomp.data.database.dao.IDAO;
+import org.ccomp.data.domain.incident.reporting.EmailReporting;
+import org.ccomp.data.network.NetworkBoundResource;
+import org.ccomp.data.network.Resource;
 import org.ccomp.service.IService;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Predicate;
 
 public abstract class GenericRepository<T,K> {
 
-    IDAO dao;
-    IService service;
-
-
-    public GenericRepository(){
-
-    }
-
-    public <T,K>GenericRepository( IDAO<T,K> dao,IService<T> service){
-        this.dao=dao;
-        this.service=service;
-    }
-
-    public LiveData<List<T>> doWork(boolean online){
-
-        if(online){
-            List<T> tmpList=fetch();
-            save(tmpList);
+    IDAO<T,K> mainDAO;
+    IService<T> mainService;
+    ExecutorService executorService;
+    Predicate<T> defaultPredicate=new Predicate<T>() {
+        @Override
+        public boolean test(T t) {
+            return true;
         }
-        return load();
+    };
+    private String TAG="Generic";
+
+    public LiveData<List<T>> getAll(Predicate<T> predicate){
+        MutableLiveData<List<T>> mutableLiveData= new MutableLiveData<>();
+        mutableLiveData.setValue(mainDAO.getAll().getValue());
+        executorService.execute(()->{
+            List<T> unfiltered=mainDAO.getAllSync();
+            List<T> filtered=new ArrayList<>();
+            for(T obj : unfiltered){
+                if(predicate.test(obj)){
+                    filtered.add(bulid(obj));
+                }
+            }
+            mutableLiveData.postValue(filtered);
+
+        });
+        return mutableLiveData;
+    }
+    public LiveData<List<T>> getAll(){
+        return getAll(defaultPredicate);
     }
 
-    public  List<T> fetch(){
-        if(service!=null) {
-            return service.fetch();
-        }else{
-            return null;
-        }
+    public LiveData<T> get(K key){
+        LiveData<T> liveData=mainDAO.get(key);
+        MutableLiveData<T> mutableLiveData=new MutableLiveData<>();
+        mutableLiveData.postValue(bulid(liveData.getValue()));
+        return mutableLiveData;
     }
 
-    public void save( List<T> objects){
-        if(objects!=null && dao!=null) {
-            dao.save(objects.toArray());
+    public abstract T bulid(T in);
+
+    public void delete(T... args){
+        if(args!=null){
+            executorService.execute(()->{
+                mainDAO.delete(args);
+            });
         }
+    }
+    public void save(boolean complexSave, @NotNull T... args){
+        if(args!=null){
+            if(complexSave){
+                for(T obj : args){
+                    dismantle(obj);
+                }
+            }else{
+                mainDAO.save(args);
+            }
+        }
+
     }
 
-    public LiveData<List<T>> load(){
-        if(dao!=null) {
-            return dao.getAll();
-        }else{
-            return null;
-        }
+    public abstract void dismantle(T obj);
+
+    public  abstract void saveCallResults(@NotNull List<T> items);
+
+    public LiveData<Resource<List<T>>> load(boolean shouldFetch, Predicate<T> predicate){
+        return new NetworkBoundResource<List<T>,List<T>>(){
+            @Override
+            protected void saveCallResult(@NonNull List<T> items) {
+                saveCallResults(items);
+            }
+
+            @Override
+            protected boolean shouldFetch() {
+                return shouldFetch;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<T>> loadFromDb() {
+                return getAll(predicate);
+            }
+
+            @NonNull
+            @Override
+            protected Resource<LiveData<List<T>>> createCall() {
+                try {
+
+                    MutableLiveData<List<T>> mutableLiveData = new MutableLiveData<>();
+                    if(mainService!=null) {
+                        executorService.execute(() -> {
+
+                            try {
+                                List<T> items = mainService.fetch();
+                                mutableLiveData.postValue(items);
+                            } catch (Exception ex) {
+                                Log.d(TAG, "createCall: " + ex.getMessage());
+                                ex.printStackTrace();
+                            }
+
+
+                        });
+                    }else {
+                        return null;
+                    }
+
+                    return Resource.success(mutableLiveData);
+
+                } catch (Exception ex) {
+
+                    Log.d(TAG, "createCall: " + ex.getMessage());
+                    return null;
+                }
+
+            }
+        }.getAsLiveData();
     }
+
+
+
+
 
 
 

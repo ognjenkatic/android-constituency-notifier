@@ -5,7 +5,7 @@ import androidx.room.Entity;
 
 import org.jetbrains.annotations.NotNull;
 
-@Entity(tableName = "email_reporting_incident_category_mapping",primaryKeys = {"email_address","incident_category_id"})
+@Entity(tableName = "email_reporting_incident_category_mapping" , primaryKeys = {"email_address","incident_category_id"})
 public class EmailReportingIncidentCategoryMapping {
 
     @ColumnInfo(name = "email_address")

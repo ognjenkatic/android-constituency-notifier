@@ -71,7 +71,7 @@ public class HomeFragment extends DaggerFragment {
 
     public void buttonOnClick(View view) {
         Toast.makeText(view.getContext(), "Bla bla bla", 10).show();
-        EmailReporting emailReporting = homeViewModel.getAll().getValue().get(0);
+        EmailReporting emailReporting = homeViewModel.getAll().getValue().data.get(0);
         Random rand = new Random();
         emailReporting.setPgpKey("Potpis " + rand.nextInt(10));
         homeViewModel.save(emailReporting);

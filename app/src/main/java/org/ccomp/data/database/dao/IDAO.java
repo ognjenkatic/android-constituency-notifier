@@ -25,18 +25,31 @@ public interface IDAO<T, K>  {
     void save(T... objects);
 
     @Query("")
-    LiveData<List<T>> getAll();
-    @Query("")
-    LiveData<List<T>> getAll(List<K>keys);
+    void deleteAll();
 
     @Query("")
-    void deleteAll();
+    LiveData<List<T>> getAll();
+
+    @Query("")
+    LiveData<List<T>> getAll(List<K>keys);
 
     @Query("")
     LiveData<T> get(K key);
 
     @Query("")
     LiveData<List<K>> getKeys();
+
+    @Query("")
+    List<T> getAllSync();
+
+    @Query("")
+    List<T> getAllSync(List<K>keys);
+
+    @Query("")
+    T getSync(K key);
+
+    @Query("")
+    List<K> getKeysSync();
 
 
 }

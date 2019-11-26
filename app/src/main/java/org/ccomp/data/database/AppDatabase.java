@@ -14,7 +14,8 @@ import org.ccomp.data.database.dao.FeedDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.database.dao.IncidentCategoryDAO;
 import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMapping;
-import org.ccomp.data.database.dao.mapping.MappingDAO;
+
+import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMappingDAO;
 import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.feed.FeedCategory;
 import org.ccomp.data.domain.feed.FeedItem;
@@ -31,7 +32,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract EmailReportingDAO emailReportingDAO();
     public abstract IncidentCategoryDAO incidentCategoryDAO();
-    public abstract MappingDAO mappingDAO();
+    public abstract EmailReportingIncidentCategoryMappingDAO emailReportingIncidentCategoryMappingDAO();
 
     @NonNull
     @Override
