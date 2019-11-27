@@ -10,16 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.ccomp.R;
 import org.ccomp.data.domain.feed.FeedCategory;
+import org.ccomp.interfaces.CategoryImportanceChangeListener;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
 
     private List<FeedCategory> feedCategories;
+    private CategoryImportanceChangeListener categoryImportanceChangeListener;
 
-    public CategoryAdapter(List<FeedCategory> feedCategories){
+    public CategoryAdapter(List<FeedCategory> feedCategories, CategoryImportanceChangeListener categoryImportanceChangeListener) {
         this.feedCategories = feedCategories;
+        this.categoryImportanceChangeListener = categoryImportanceChangeListener;
     }
+
     @NonNull
     @Override
     public CategoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,7 +31,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
                 from(parent.getContext()).
                 inflate(R.layout.category_entry, parent, false);
 
-        return new CategoryHolder(itemView);
+        return new CategoryHolder(itemView, categoryImportanceChangeListener);
     }
 
     @Override
@@ -36,10 +40,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
         FeedCategory entry = feedCategories.get(position);
 
         holder.setName(entry.getName());
+        holder.setImportance(entry.getFeedCategoryImportance());
     }
 
     @Override
     public int getItemCount() {
         return feedCategories.size();
     }
+
 }

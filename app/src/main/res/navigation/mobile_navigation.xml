@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
@@ -15,13 +15,30 @@
         android:id="@+id/nav_feed"
         android:name="org.ccomp.ui.feed.FeedFragment"
         android:label="@string/menu_feed"
-        tools:layout="@layout/fragment_feed" />
+        tools:layout="@layout/fragment_feed" >
+        <action
+            android:id="@+id/action_nav_feed_to_nav_feed_item"
+            app:destination="@id/nav_feed_item">
+            <argument
+                android:name="itemId"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        </action>
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_category"
         android:name="org.ccomp.ui.category.CategoryFragment"
         android:label="@string/menu_category"
         tools:layout="@layout/fragment_category" />
+
+    <fragment
+        android:id="@+id/nav_feed_item"
+        android:name="org.ccomp.ui.feed.item.FeedItemFragment"
+        android:label="fragment_feed_item"
+        tools:layout="@layout/fragment_feed_item" >
+    </fragment>
 
 
 </navigation>

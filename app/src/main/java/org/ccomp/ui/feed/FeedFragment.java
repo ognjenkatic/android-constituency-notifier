@@ -44,6 +44,7 @@ public class FeedFragment extends DaggerFragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         this.view = view;
+        
         return view;
     }
 

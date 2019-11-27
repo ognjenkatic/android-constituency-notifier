@@ -45,6 +45,8 @@ public class FeedEntryAdapter extends RecyclerView.Adapter<FeedEntryHolder> {
             holder.setSummary(Html.fromHtml(entry.getDescription()).toString());
         }
 
+        holder.setId((int)entry.getId());
+        holder.setRead(entry.isRead());
         holder.setLink(entry.getLink());
 
     }

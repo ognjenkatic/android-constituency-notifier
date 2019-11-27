@@ -20,7 +20,7 @@ import org.ccomp.data.domain.feed.FeedItemCategory;
 
 
 @TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class})
-@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, FeedItemCategory.class}, version = 9,exportSchema = false)
+@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, FeedItemCategory.class}, version = 11,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeedDAO feedDAO();
@@ -43,9 +43,12 @@ public abstract class AppDatabase extends RoomDatabase {
     @Override
     public void clearAllTables() {
 
-        feedDAO().deleteAll();
+        feedItemCategoryDAO().deleteAll();
         feedItemDAO().deleteAll();
         feedCategoryDAO().deleteAll();
-        feedItemCategoryDAO().deleteAll();
+        feedDAO().deleteAll();
+
     }
+
+    
 }

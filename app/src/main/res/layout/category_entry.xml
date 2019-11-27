@@ -19,7 +19,7 @@
 
 
         <RadioGroup
-            android:id="@+id/daily_weekly_button_view"
+            android:id="@+id/importance_radio_group"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -30,39 +30,45 @@
 
 
             <RadioButton
-                android:id="@+id/radio0"
+                android:id="@+id/cat_hide_radio"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/left_radio_flat_selector"
                 android:button="@android:color/transparent"
                 android:checked="false"
                 android:gravity="center"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text="Hide"
                 android:textColor="@color/secondaryColor" />
 
             <RadioButton
-                android:id="@+id/radio1"
+                android:id="@+id/cat_show_radio"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/middle_radio_flat_selector"
                 android:button="@android:color/transparent"
                 android:gravity="center"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text="Show"
                 android:textColor="@color/secondaryColor" />
 
             <RadioButton
-                android:id="@+id/radio2"
+                android:id="@+id/cat_alert_radio"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/right_radio_flat_selector"
                 android:button="@android:color/transparent"
                 android:gravity="center"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text="Alert"
                 android:textColor="@color/secondaryColor" />
 

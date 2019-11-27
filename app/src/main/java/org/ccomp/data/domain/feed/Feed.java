@@ -67,4 +67,15 @@ public class Feed {
     @ColumnInfo(name = "updated")
     private Timestamp updated;
 
+    public Timestamp getFetched() {
+        return fetched;
+    }
+
+    public void setFetched(Timestamp fetched) {
+        this.fetched = fetched;
+    }
+
+    @ColumnInfo(name = "fetched")
+    private Timestamp fetched;
+
 }

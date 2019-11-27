@@ -17,14 +17,16 @@ import android.view.ViewGroup;
 import org.ccomp.R;
 import org.ccomp.data.adapter.CategoryAdapter;
 import org.ccomp.data.adapter.FeedEntryAdapter;
+import org.ccomp.data.domain.feed.FeedCategoryImportance;
 import org.ccomp.factory.ViewModelFactory;
+import org.ccomp.interfaces.CategoryImportanceChangeListener;
 import org.ccomp.ui.feed.FeedViewModel;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
 
-public class CategoryFragment extends DaggerFragment {
+public class CategoryFragment extends DaggerFragment implements CategoryImportanceChangeListener {
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -59,7 +61,7 @@ public class CategoryFragment extends DaggerFragment {
 
         mViewModel.getFeedCategories().observe(this, categoryList -> {
 
-            CategoryAdapter faa = new CategoryAdapter(categoryList);
+            CategoryAdapter faa = new CategoryAdapter(categoryList, this);
             RecyclerView lv = view.findViewById(R.id.category_entry_list);
 
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -67,6 +69,7 @@ public class CategoryFragment extends DaggerFragment {
 
             lv.setLayoutManager(llm);
             lv.setAdapter(faa);
+
             faa.notifyDataSetChanged();
         });
     }
@@ -77,4 +80,8 @@ public class CategoryFragment extends DaggerFragment {
     }
 
 
+    @Override
+    public void onChange(int position, FeedCategoryImportance importance) {
+        mViewModel.UpdateCategory(position, importance);
+    }
 }

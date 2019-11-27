@@ -12,6 +12,7 @@ import org.ccomp.data.database.dao.FeedCategoryDAO;
 import org.ccomp.data.database.dao.FeedItemCategoryDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.domain.feed.FeedCategory;
+import org.ccomp.data.domain.feed.FeedCategoryImportance;
 import org.ccomp.data.domain.feed.FeedItem;
 import org.ccomp.data.domain.feed.FeedItemCategory;
 import org.ccomp.data.network.NetworkBoundResource;
@@ -47,6 +48,17 @@ public class FeedRepository {
     }
 
 
+    public LiveData<FeedItem> loadFeedItem(int id){
+
+        return feedItemDAO.selectById(id);
+    }
+
+    public void updateFeedItem(FeedItem feedItem){
+
+        executorService.execute(()->{
+            feedItemDAO.update(feedItem);
+        });
+    }
 
     public LiveData<Resource<List<FeedItem>>> loadFeedItems(String feedURL){
 
@@ -57,6 +69,7 @@ public class FeedRepository {
 
                 executorService.execute(()->{
 
+
                     if (items != null)
                         for(FeedItem item: items) {
                             if (feedItemDAO.selectCountByTitle(item.getTitle()) == 0){
@@ -66,6 +79,8 @@ public class FeedRepository {
                                     FeedCategory fc = feedCategoryDAO.selectByName(cat.getName());
                                     if (fc == null){
                                         cat.setId(feedCategoryDAO.insert(cat)[0]);
+                                    } else{
+                                        cat.setId(fc.getId());
                                     }
 
                                     FeedItemCategory fic = new FeedItemCategory();
@@ -94,13 +109,17 @@ public class FeedRepository {
             @NonNull
             @Override
             protected LiveData<List<FeedItem>> loadFromDb() {
-                return feedItemDAO.selectAll();
+                return feedItemDAO.selectAllByCategoryName(FeedCategoryImportance.SHOW);
+
+
+                //return feedItemDAO.selectAll();
             }
 
             @NonNull
             @Override
             protected Resource<LiveData<List<FeedItem>>> createCall() {
                 try {
+
 
                     MutableLiveData<List<FeedItem>> ld = new MutableLiveData<>();
 

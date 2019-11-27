@@ -19,4 +19,10 @@ public class ServiceModule {
     ExecutorService provideExecutorService(){
         return  Executors.newFixedThreadPool(5);
     }
+
+    @Provides
+    @Singleton
+    FeedParserService provideFeedParserService(){
+        return new FeedParserService();
+    }
 }

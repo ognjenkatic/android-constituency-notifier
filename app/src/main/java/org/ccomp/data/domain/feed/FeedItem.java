@@ -1,5 +1,6 @@
 package org.ccomp.data.domain.feed;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -28,6 +29,17 @@ public class FeedItem {
     private Timestamp published;
     private String link;
     private String author;
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    @ColumnInfo(name = "is_read")
+    private boolean isRead;
 
 
     @Ignore
