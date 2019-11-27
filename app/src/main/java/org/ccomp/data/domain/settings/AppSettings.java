@@ -3,7 +3,7 @@ package org.ccomp.data.domain.settings;
 
 import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
-import org.ccomp.data.domain.settings.lang.Language;
+import org.ccomp.data.domain.lang.Language;
 
 import java.util.List;
 
@@ -11,10 +11,11 @@ public class AppSettings {
 
     private String base64Logo;
     private MOTD mOTD;
-    private Feed certFeed;
+    private List<Feed> certFeeds;
     private List<Feed> userFeeds;
-    private EmailReporting emailReporting;
+    private List<EmailReporting> emailReportings;
     private Language defaultLang;
+    private List<Language> supportedLangs;
 
 
     public String getBase64Logo() {
@@ -33,14 +34,6 @@ public class AppSettings {
         this.mOTD = mOTD;
     }
 
-    public Feed getCertFeed() {
-        return certFeed;
-    }
-
-    public void setCertFeed(Feed certFeed) {
-        this.certFeed = certFeed;
-    }
-
     public List<Feed> getUserFeeds() {
         return userFeeds;
     }
@@ -49,13 +42,6 @@ public class AppSettings {
         this.userFeeds = userFeeds;
     }
 
-    public EmailReporting getEmailReporting() {
-        return emailReporting;
-    }
-
-    public void setEmailReporting(EmailReporting emailReporting) {
-        this.emailReporting = emailReporting;
-    }
 
     public Language getDefaultLang() {
         return defaultLang;
@@ -63,5 +49,29 @@ public class AppSettings {
 
     public void setDefaultLang(Language defaultLang) {
         this.defaultLang = defaultLang;
+    }
+
+    public List<EmailReporting> getEmailReportings() {
+        return emailReportings;
+    }
+
+    public void setEmailReportings(List<EmailReporting> emailReportings) {
+        this.emailReportings = emailReportings;
+    }
+
+    public List<Feed> getCertFeeds() {
+        return certFeeds;
+    }
+
+    public void setCertFeeds(List<Feed> certFeeds) {
+        this.certFeeds = certFeeds;
+    }
+
+    public List<Language> getSupportedLangs() {
+        return supportedLangs;
+    }
+
+    public void setSupportedLangs(List<Language> supportedLangs) {
+        this.supportedLangs = supportedLangs;
     }
 }

@@ -1,6 +1,6 @@
 package org.ccomp.data.domain.feed;
 
-import org.ccomp.data.domain.settings.lang.Language;
+import org.ccomp.data.domain.lang.Language;
 
 import java.util.List;
 

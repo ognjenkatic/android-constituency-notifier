@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
 
-import org.ccomp.data.database.dao.IDAO;
 import org.ccomp.data.domain.settings.MOTD;
 
 import java.util.List;
 
 @Dao
-public abstract class MODTDAO implements IDAO<MOTD,String> {
+public abstract class MODTDAO implements IDAO<MOTD, String> {
 
     @Override
     @Query("DELETE FROM motd")
@@ -22,7 +21,7 @@ public abstract class MODTDAO implements IDAO<MOTD,String> {
 
     @Override
     @Query("SELECT * FROM motd WHERE value in (:keys)")
-    public abstract LiveData<List<MOTD>> getAll(List<String>keys);
+    public abstract LiveData<List<MOTD>> getAll(List<String> keys);
 
     @Override
     @Query("SELECT * FROM motd WHERE value=:key")
@@ -35,12 +34,11 @@ public abstract class MODTDAO implements IDAO<MOTD,String> {
 
     @Override
     @Query("SELECT * FROM motd WHERE value in (:keys)")
-    public abstract List<MOTD> getAllSync(List<String>keys);
+    public abstract List<MOTD> getAllSync(List<String> keys);
 
     @Override
     @Query("SELECT * FROM motd WHERE value=:key")
     public abstract MOTD getSync(String key);
-
 
 
 }

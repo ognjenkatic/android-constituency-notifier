@@ -44,14 +44,17 @@ public class EmailReportingRepo extends GenericRepository<EmailReporting,String>
 
     @Override
     public void dismantle(EmailReporting obj) {
-        mainDAO.save(obj);
-        if(obj.getIncidentCategories()!=null){
-            for(IncidentCategory category:obj.getIncidentCategories()){
-                EmailReportingIncidentCategoryMapping mapping=new EmailReportingIncidentCategoryMapping(obj.getAddress(),category.getId());
-                incidentCategoryDAO.save(category);
-                mappingDAO.insert(mapping);
+        executorService.execute(()->{
+            mainDAO.save(obj);
+            if(obj.getIncidentCategories()!=null){
+                for(IncidentCategory category:obj.getIncidentCategories()){
+                    EmailReportingIncidentCategoryMapping mapping=new EmailReportingIncidentCategoryMapping(obj.getAddress(),category.getId());
+                    incidentCategoryDAO.save(category);
+                    mappingDAO.insert(mapping);
+                }
             }
-        }
+        });
+
 
     }
 

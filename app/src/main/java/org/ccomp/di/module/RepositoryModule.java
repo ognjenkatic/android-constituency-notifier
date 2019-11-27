@@ -1,13 +1,17 @@
 package org.ccomp.di.module;
 
 import org.ccomp.data.database.AppDatabase;
+import org.ccomp.data.database.dao.LangDAO;
+import org.ccomp.data.database.dao.WordDAO;
+import org.ccomp.data.database.dao.mapping.TranslationDAO;
 import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
+import org.ccomp.data.domain.lang.Language;
+import org.ccomp.data.domain.lang.Translation;
 import org.ccomp.data.domain.settings.TLP;
-import org.ccomp.data.domain.settings.lang.Language;
-import org.ccomp.data.domain.settings.lang.Word;
 import org.ccomp.data.repository.EmailReportingRepo;
 import org.ccomp.data.repository.EmailReportingRepository;
+import org.ccomp.data.repository.LanguageRepository;
 import org.ccomp.service.NetworkAvailabilityService;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,19 +29,27 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public EmailReportingRepository provideEmailReportingRepository(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService){
-        EmailReportingRepository emailReportingRepository=new EmailReportingRepository(appDatabase.emailReportingDAO(),appDatabase.incidentCategoryDAO(),appDatabase.emailReportingIncidentCategoryMappingDAO(),executorService,networkAvailabilityService);
+    public EmailReportingRepository provideEmailReportingRepository(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
+        EmailReportingRepository emailReportingRepository = new EmailReportingRepository(appDatabase.emailReportingDAO(), appDatabase.incidentCategoryDAO(), appDatabase.emailReportingIncidentCategoryMappingDAO(), executorService, networkAvailabilityService);
 
-        EmailReporting reporting=new EmailReporting();
+        return emailReportingRepository;
+    }
+
+    @Provides
+    @Singleton
+    public EmailReportingRepo provideEmailReportingRepo(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
+
+        EmailReportingRepo repo = new EmailReportingRepo(appDatabase.emailReportingDAO(), appDatabase.incidentCategoryDAO(), appDatabase.emailReportingIncidentCategoryMappingDAO(), executorService);
+        EmailReporting reporting = new EmailReporting();
         reporting.setAddress("cert@certrs.org");
         reporting.setDefaultTLP(TLP.AMBER);
         reporting.setPgpId("0xEE03B7F3");
         reporting.setPgpFingerprint("6F1F 1A61 EBA9 50A7 E3FC 5C03 1B5A 3A3B EE03 B7F3");
         reporting.setPgpKey("Potpis");
-        List<IncidentCategory> categories=new ArrayList<>();
-        for(int i=0;i<5;i++){
-            IncidentCategory category=new IncidentCategory();
-            category.setId("ID"+i);
+        List<IncidentCategory> categories = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            IncidentCategory category = new IncidentCategory();
+            category.setId("ID" + i);
             category.setClassDescription("ClassDescription");
             category.setClassName("Class");
             category.setDescription("Description");
@@ -48,20 +60,34 @@ public class RepositoryModule {
         }
         reporting.setIncidentCategories(categories);
 
-       emailReportingRepository.save(reporting);
+       repo.save(true,reporting);
 
 
-        return emailReportingRepository;
+        return repo;
     }
 
     @Provides
     @Singleton
-    public EmailReportingRepo provideEmailReportingRepo(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService){
+    public LanguageRepository provideLanguageRepository(LangDAO langDAO, WordDAO wordDAO, TranslationDAO translationDAO, ExecutorService executorService) {
+        LanguageRepository languageRepository = new LanguageRepository(langDAO, wordDAO, translationDAO, executorService);
 
-      
+        String langId = "sr-lat";
+        Language lang = new Language();
+        lang.setName("Srpski");
+        lang.setLangId(langId);
+        lang.setDescription("Srpski jezika");
+        List<Translation> translations = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Translation translation = new Translation();
+            translation.setLangId(langId);
+            translation.setWord("Hello" + i);
+            translation.setValue("Pozdrav " + i);
+            translations.add(translation);
+        }
+        lang.setTranslations(translations);
 
+        languageRepository.save(true, lang);
 
-
-        return new EmailReportingRepo(appDatabase.emailReportingDAO(),appDatabase.incidentCategoryDAO(),appDatabase.emailReportingIncidentCategoryMappingDAO(),executorService);
+        return languageRepository;
     }
 }

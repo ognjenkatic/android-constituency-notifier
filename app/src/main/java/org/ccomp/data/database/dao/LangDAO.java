@@ -1,12 +1,15 @@
 package org.ccomp.data.database.dao;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Query;
 
-import org.ccomp.data.domain.settings.lang.Language;
+import org.ccomp.data.domain.lang.Language;
 
 import java.util.List;
 
+
+@Dao
 public abstract class LangDAO implements IDAO<Language,String> {
 
     @Override
@@ -26,6 +29,10 @@ public abstract class LangDAO implements IDAO<Language,String> {
     @Query("SELECT * FROM language WHERE lang_id=:key")
     public abstract LiveData<Language> get(String key);
 
+    @Override
+    @Query("SELECT lang_id FROM language")
+    public abstract LiveData<List<String>> getKeys();
+
 
 
 
@@ -40,4 +47,8 @@ public abstract class LangDAO implements IDAO<Language,String> {
     @Override
     @Query("SELECT * FROM language WHERE lang_id=:key")
     public abstract Language getSync(String key);
+
+    @Override
+    @Query("SELECT lang_id FROM language")
+    public abstract List<String> getKeysSync();
 }

@@ -13,18 +13,24 @@ import org.ccomp.data.database.dao.EmailReportingDAO;
 import org.ccomp.data.database.dao.FeedDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.database.dao.IncidentCategoryDAO;
+import org.ccomp.data.database.dao.LangDAO;
+import org.ccomp.data.database.dao.WordDAO;
 import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMapping;
 
 import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMappingDAO;
+import org.ccomp.data.database.dao.mapping.TranslationDAO;
 import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.feed.FeedCategory;
 import org.ccomp.data.domain.feed.FeedItem;
 import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
+import org.ccomp.data.domain.lang.Language;
+import org.ccomp.data.domain.lang.Translation;
+import org.ccomp.data.domain.lang.Word;
 
 
 @TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class,EmailReportingConverters.class})
-@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, EmailReporting.class, IncidentCategory.class, EmailReportingIncidentCategoryMapping.class}, version = 7,exportSchema = false)
+@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, EmailReporting.class, IncidentCategory.class, EmailReportingIncidentCategoryMapping.class, Language.class, Word.class, Translation.class}, version = 8,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeedDAO feedDAO();
@@ -33,6 +39,10 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract EmailReportingDAO emailReportingDAO();
     public abstract IncidentCategoryDAO incidentCategoryDAO();
     public abstract EmailReportingIncidentCategoryMappingDAO emailReportingIncidentCategoryMappingDAO();
+
+    public abstract LangDAO langDAO();
+    public abstract WordDAO wordDAO();
+    public abstract TranslationDAO translationDAO();
 
     @NonNull
     @Override
