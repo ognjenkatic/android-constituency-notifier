@@ -8,6 +8,7 @@ import org.ccomp.di.module.DatabaseModule;
 import org.ccomp.di.module.FragmentModule;
 import org.ccomp.di.module.ServiceModule;
 import org.ccomp.di.module.ViewModelModule;
+import org.ccomp.di.module.WorkerModule;
 
 import javax.inject.Singleton;
 
@@ -15,7 +16,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
 
-@Component(modules = {DatabaseModule.class, ActivityModule.class, AndroidSupportInjectionModule.class, ViewModelModule.class, FragmentModule.class, ServiceModule.class})
+@Component(modules = {WorkerModule.class, DatabaseModule.class, ActivityModule.class, AndroidSupportInjectionModule.class, ViewModelModule.class, FragmentModule.class, ServiceModule.class})
 @Singleton
 public interface AppComponent {
 

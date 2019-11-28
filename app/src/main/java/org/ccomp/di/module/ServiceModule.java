@@ -1,6 +1,11 @@
 package org.ccomp.di.module;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+
 import org.ccomp.service.feed.FeedParserService;
+import org.ccomp.service.notification.NotificationService;
 
 
 import java.util.concurrent.ExecutorService;
@@ -24,5 +29,11 @@ public class ServiceModule {
     @Singleton
     FeedParserService provideFeedParserService(){
         return new FeedParserService();
+    }
+
+    @Provides
+    @Singleton
+    NotificationService provideNotificationService(@NonNull Application application){
+        return new NotificationService(application);
     }
 }

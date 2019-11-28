@@ -78,6 +78,7 @@ public class FeedRepository {
                                 for(FeedCategory cat : item.getCategories()){
                                     FeedCategory fc = feedCategoryDAO.selectByName(cat.getName());
                                     if (fc == null){
+                                        cat.setFeedCategoryImportance(FeedCategoryImportance.SHOW);
                                         cat.setId(feedCategoryDAO.insert(cat)[0]);
                                     } else{
                                         cat.setId(fc.getId());

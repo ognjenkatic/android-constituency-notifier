@@ -18,14 +18,33 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.view.Menu;
+
+import org.ccomp.service.feed.FeedFetchWorker;
+import org.ccomp.service.notification.NotificationService;
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    @Inject
+    public NotificationService notificationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +73,27 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+        notificationService.createNotificationChannel();
+
+        Constraints consts = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+
+        Data inputData = new Data.Builder().putInt("key", 2).build();
+        // we then retrieve it inside the NotifyWorker with:
+        // final int DBEventID = getInputData().getInt(DBEventIDTag, ERROR_VALUE);
+
+
+        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(FeedFetchWorker.class)
+                .setConstraints(consts)
+                .setInitialDelay(1, TimeUnit.SECONDS)
+                .build();
+
+
+
+
+        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork("name1", ExistingWorkPolicy.REPLACE, notificationWork);
+
     }
 
     @Override

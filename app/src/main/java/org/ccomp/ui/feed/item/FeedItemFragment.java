@@ -1,5 +1,6 @@
 package org.ccomp.ui.feed.item;
 
+import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
@@ -16,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.ccomp.R;
+import org.ccomp.data.application.NotificationData;
 import org.ccomp.factory.ViewModelFactory;
+import org.ccomp.service.notification.NotificationService;
 
 import javax.inject.Inject;
 
@@ -27,9 +30,13 @@ public class FeedItemFragment extends DaggerFragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    @Inject
+    NotificationService notificationService;
+
     private FeedItemViewModel mViewModel;
 
     private TextView descriptionText;
+
 
     public static FeedItemFragment newInstance() {
         return new FeedItemFragment();
@@ -62,9 +69,10 @@ public class FeedItemFragment extends DaggerFragment {
 
         getView().findViewById(R.id.visit_feed_item).setOnClickListener((param)->{
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(mViewModel.getFeedItem().getValue().getLink()));
-                getView().getContext().startActivity(intent);
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(mViewModel.getFeedItem().getValue().getLink()));
+            getView().getContext().startActivity(intent);
         });
 
     }
