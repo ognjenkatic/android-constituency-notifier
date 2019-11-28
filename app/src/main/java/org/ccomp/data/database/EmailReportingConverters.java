@@ -4,13 +4,7 @@ import android.util.Log;
 
 import androidx.room.TypeConverter;
 
-import org.ccomp.data.database.EmailReportingDatabase;
-import org.ccomp.data.database.dao.IncidentCategoryDAO;
-import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.settings.TLP;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EmailReportingConverters {
 

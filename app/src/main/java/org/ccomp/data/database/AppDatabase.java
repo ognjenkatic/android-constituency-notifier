@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import org.ccomp.data.database.dao.AppSettingsPropertyDAO;
 import org.ccomp.data.database.dao.EmailReportingDAO;
 import org.ccomp.data.database.dao.FeedDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
@@ -27,10 +28,11 @@ import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.lang.Translation;
 import org.ccomp.data.domain.lang.Word;
+import org.ccomp.data.domain.settings.AppSettingsProperty;
 
 
-@TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class,EmailReportingConverters.class})
-@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, EmailReporting.class, IncidentCategory.class, EmailReportingIncidentCategoryMapping.class, Language.class, Word.class, Translation.class}, version = 8,exportSchema = false)
+@TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class,EmailReportingConverters.class, AppSettingsConverters.class})
+@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, EmailReporting.class, IncidentCategory.class, EmailReportingIncidentCategoryMapping.class, Language.class, Word.class, Translation.class, AppSettingsProperty.class}, version = 8,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeedDAO feedDAO();
@@ -43,6 +45,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract LangDAO langDAO();
     public abstract WordDAO wordDAO();
     public abstract TranslationDAO translationDAO();
+
+    public abstract AppSettingsPropertyDAO appSettingsPropertyDAO();
 
     @NonNull
     @Override

@@ -39,13 +39,16 @@ public class LanguageRepository extends GenericRepository<Language,String> {
 
     @Override
     public void dismantle(Language obj) {
-        mainDAO.save(obj);
-        if(obj.getTranslations()!=null){
-            for(Translation translation : obj.getTranslations()){
-                wordDAO.save(new Word(translation.getWord()));
-                translationDAO.insert(translation);
-            }
-        }
+       executorService.execute(()->{
+           mainDAO.save(obj);
+           if(obj.getTranslations()!=null){
+               for(Translation translation : obj.getTranslations()){
+                   wordDAO.save(new Word(translation.getWord()));
+                   translationDAO.insert(translation);
+               }
+           }
+       });
+
     }
 
     @Override

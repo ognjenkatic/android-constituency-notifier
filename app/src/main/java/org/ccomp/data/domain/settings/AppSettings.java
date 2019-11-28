@@ -1,38 +1,34 @@
 package org.ccomp.data.domain.settings;
 
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 public class AppSettings {
 
-    private String base64Logo;
-    private MOTD mOTD;
+
+
     private List<Feed> certFeeds;
     private List<Feed> userFeeds;
     private List<EmailReporting> emailReportings;
     private Language defaultLang;
     private List<Language> supportedLangs;
 
+    private Map<AppSettingsOption,AppSettingsProperty > properties;
 
-    public String getBase64Logo() {
-        return base64Logo;
-    }
 
-    public void setBase64Logo(String base64Logo) {
-        this.base64Logo = base64Logo;
-    }
 
-    public MOTD getmOTD() {
-        return mOTD;
-    }
 
-    public void setmOTD(MOTD mOTD) {
-        this.mOTD = mOTD;
-    }
+
 
     public List<Feed> getUserFeeds() {
         return userFeeds;
@@ -73,5 +69,25 @@ public class AppSettings {
 
     public void setSupportedLangs(List<Language> supportedLangs) {
         this.supportedLangs = supportedLangs;
+    }
+
+    public Map<AppSettingsOption, AppSettingsProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<AppSettingsOption, AppSettingsProperty> properties) {
+        this.properties = properties;
+    }
+    public void setProperties(List<AppSettingsProperty> propertiesList){
+        Map<AppSettingsOption,AppSettingsProperty> properiesMap=new HashMap<>();
+        for(AppSettingsProperty property :propertiesList){
+            if(properiesMap.containsKey(property.optionName)){
+                properiesMap.replace(property.optionName,property)
+            }else{
+                properiesMap.put(property.optionName,property);
+            }
+        }
+        this.properties=properiesMap;
+
     }
 }
