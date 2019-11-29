@@ -68,7 +68,7 @@ public abstract class GenericRepository<T,K> {
     }
 
     public void save(@NotNull T... args){
-        return; save(true,args);
+         save(true,args);
     }
     public void save(boolean complexSave, @NotNull T... args){
         if(args!=null){
