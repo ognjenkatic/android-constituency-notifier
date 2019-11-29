@@ -9,10 +9,11 @@ import android.os.StrictMode;
 import androidx.fragment.app.Fragment;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
-import androidx.work.WorkerFactory;
 
 
+import org.ccomp.di.component.AppComponent;
 import org.ccomp.di.component.DaggerAppComponent;
+import org.ccomp.factory.WorkerFactory;
 
 import javax.inject.Inject;
 
@@ -24,9 +25,6 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class AppController extends Application implements HasActivityInjector, HasSupportFragmentInjector {
 
-
-    @Inject
-    WorkerFactory workerFactory;
 
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
@@ -59,16 +57,14 @@ public class AppController extends Application implements HasActivityInjector, H
 
 
 
-        DaggerAppComponent.builder()
+        AppComponent ac = DaggerAppComponent.builder()
                 .application(this)
-                .build()
-                .inject(this);
+                .build();
 
-        WorkManager.initialize(
-                this,
-                new Configuration.Builder().setWorkerFactory(workerFactory).build()
-        );
+        ac.inject(this);
+        WorkerFactory factory = ac.factory();
 
+        WorkManager.initialize(this, new Configuration.Builder().setWorkerFactory(factory).build());
 
     }
 

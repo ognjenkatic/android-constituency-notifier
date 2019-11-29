@@ -4,11 +4,13 @@ import android.app.Application;
 
 import org.ccomp.AppController;
 import org.ccomp.di.module.ActivityModule;
+import org.ccomp.di.module.AppAssistedInjectModule;
 import org.ccomp.di.module.DatabaseModule;
 import org.ccomp.di.module.FragmentModule;
 import org.ccomp.di.module.ServiceModule;
 import org.ccomp.di.module.ViewModelModule;
 import org.ccomp.di.module.WorkerModule;
+import org.ccomp.factory.WorkerFactory;
 
 import javax.inject.Singleton;
 
@@ -16,7 +18,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
 
-@Component(modules = {WorkerModule.class, DatabaseModule.class, ActivityModule.class, AndroidSupportInjectionModule.class, ViewModelModule.class, FragmentModule.class, ServiceModule.class})
+@Component(modules = {AppAssistedInjectModule.class, WorkerModule.class, DatabaseModule.class, ActivityModule.class, AndroidSupportInjectionModule.class, ViewModelModule.class, FragmentModule.class, ServiceModule.class})
 @Singleton
 public interface AppComponent {
 
@@ -28,6 +30,8 @@ public interface AppComponent {
 
         AppComponent build();
     }
+
+    WorkerFactory factory();
 
     void inject(AppController appController);
 }

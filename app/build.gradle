@@ -77,4 +77,8 @@ dependencies {
 
     // Work
     implementation "androidx.work:work-runtime:2.2.0"
+
+
+    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.5.2'
+    annotationProcessor 'com.squareup.inject:assisted-inject-processor-dagger2:0.5.2'
 }

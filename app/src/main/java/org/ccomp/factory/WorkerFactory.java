@@ -20,20 +20,20 @@ import javax.inject.Singleton;
 @Singleton
 public class WorkerFactory extends androidx.work.WorkerFactory {
 
-    private final Map<Class<? extends ListenableWorker>, Provider<Worker>> creators;
+    private final Map<Class<? extends ListenableWorker>, Provider<ChildWorkerFactory>> creators;
 
     @Inject
-    public WorkerFactory(Map<Class<? extends ListenableWorker>, Provider<Worker>> creators) {
+    public WorkerFactory(Map<Class<? extends ListenableWorker>, Provider<ChildWorkerFactory>> creators) {
         this.creators = creators;
     }
 
     @Nullable
     @Override
     public ListenableWorker createWorker(@NonNull Context appContext, @NonNull String workerClassName, @NonNull WorkerParameters workerParameters) {
-        Provider<? extends Worker> creator = creators.get(workerClassName);
+        Provider<? extends ChildWorkerFactory> creator = creators.get(workerClassName);
 
         if (creator == null) {
-            for (Map.Entry<Class<? extends ListenableWorker>, Provider<Worker>> entry : creators.entrySet()) {
+            for (Map.Entry<Class<? extends ListenableWorker>, Provider<ChildWorkerFactory>> entry : creators.entrySet()) {
                 try {
                     if (Class.forName(workerClassName).isAssignableFrom(entry.getKey())) {
                         creator = entry.getValue();
@@ -45,6 +45,6 @@ public class WorkerFactory extends androidx.work.WorkerFactory {
             }
         }
 
-        return creator.get();
+        return creator.get().create(appContext,workerParameters);
     }
 }

@@ -5,6 +5,9 @@ import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerFactory;
 
+import com.squareup.inject.assisted.AssistedInject;
+import com.squareup.inject.assisted.dagger2.AssistedModule;
+
 import org.ccomp.di.ViewModelKey;
 import org.ccomp.di.WorkerKey;
 import org.ccomp.interfaces.ChildWorkerFactory;
@@ -21,5 +24,5 @@ public abstract class WorkerModule {
     @Binds
     @IntoMap
     @WorkerKey(FeedFetchWorker.class)
-    protected abstract ChildWorkerFactory bindChildWorkerFactory(FeedFetchWorker.ChildFactoryImpl childFactoryImpl);
+    protected abstract ChildWorkerFactory bindChildWorkerFactory(FeedFetchWorker.Factory factory);
 }

@@ -13,6 +13,9 @@ import androidx.work.ListenableWorker;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.squareup.inject.assisted.Assisted;
+import com.squareup.inject.assisted.AssistedInject;
+
 import org.ccomp.MainActivity;
 import org.ccomp.R;
 import org.ccomp.data.application.NotificationData;
@@ -31,9 +34,10 @@ public class FeedFetchWorker extends Worker {
 
     public FeedParserService feedParserService;
 
-    @Inject
-    public FeedFetchWorker(@NonNull  Context context,@NonNull WorkerParameters params, FeedParserService feedParserService){
-        super(context, params);
+
+    @AssistedInject
+    public FeedFetchWorker(@Assisted Context context, @Assisted WorkerParameters parameters, FeedParserService feedParserService){
+        super(context, parameters);
         this.feedParserService = feedParserService;
     }
 
@@ -67,21 +71,12 @@ public class FeedFetchWorker extends Worker {
         return null;
     }
 
-    public static class ChildFactoryImpl implements ChildWorkerFactory {
+    @AssistedInject.Factory
+    public interface Factory extends ChildWorkerFactory {
 
-        private FeedParserService feedParserService;
-
-        @Inject
-        ChildFactoryImpl(FeedParserService feedParserService) {
-            this.feedParserService = feedParserService;
-        }
-
-
-        @Override
-        public ListenableWorker create(Context context, WorkerParameters parameters) {
-            return new FeedFetchWorker(context,parameters, feedParserService);
-        }
     }
 
 
 }
+
+
