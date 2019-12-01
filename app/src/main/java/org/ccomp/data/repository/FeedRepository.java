@@ -9,8 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 
 
 import org.ccomp.data.database.dao.FeedCategoryDAO;
+import org.ccomp.data.database.dao.FeedDAO;
 import org.ccomp.data.database.dao.FeedItemCategoryDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
+import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.feed.FeedCategory;
 import org.ccomp.data.domain.feed.FeedCategoryImportance;
 import org.ccomp.data.domain.feed.FeedItem;
@@ -32,6 +34,7 @@ public class FeedRepository {
 
     private static final String TAG = "FeedRepository";
 
+    private FeedDAO feedDAO;
     private FeedItemDAO feedItemDAO;
     private FeedParserService feedParserService;
     private FeedCategoryDAO feedCategoryDAO;
@@ -39,7 +42,9 @@ public class FeedRepository {
     private ExecutorService executorService;
 
     public FeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService, FeedItemCategoryDAO feedItemCategoryDAO
-    ,FeedCategoryDAO feedCategoryDAO) {
+    ,FeedCategoryDAO feedCategoryDAO, FeedDAO feedDao) {
+
+        this.feedDAO = feedDao;
         this.feedItemDAO = feedItemDAO;
         this.feedParserService = feedParserService;
         this.executorService = executorService;
@@ -48,11 +53,26 @@ public class FeedRepository {
     }
 
 
-    public LiveData<FeedItem> loadFeedItem(int id){
+    public LiveData<FeedItem> loadFeedItemAsync(int id){
 
         return feedItemDAO.selectById(id);
     }
 
+    public void addFeed(Feed feed){
+        executorService.execute(()->{
+
+            Feed parsedFeed = null;
+            try {
+                parsedFeed = feedParserService.parseStreamToFeed(new URL(feed.getLink()));
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            if (parsedFeed != null)
+                feedDAO.insert(parsedFeed);
+        });
+    }
     public void updateFeedItem(FeedItem feedItem){
 
         executorService.execute(()->{
@@ -60,7 +80,69 @@ public class FeedRepository {
         });
     }
 
-    public LiveData<Resource<List<FeedItem>>> loadFeedItems(String feedURL){
+    public LiveData<List<Feed>> loadFeedsAsync(){
+        return feedDAO.selectAll();
+    }
+
+    public List<FeedItem> loadFeedItemsSync(){
+        return feedItemDAO.selectAllSync();
+    }
+
+
+    public LiveData<List<FeedItem>> loadFeedItemsByCategoryNameAndFeedId(FeedCategoryImportance categoryImportance, int feedId){
+
+        fetchFeeds(feedId);
+        return feedItemDAO.selectAllByCategoryImportanceAndFeedId(categoryImportance, feedId);
+    }
+
+    private void fetchFeeds(int feedId){
+
+        executorService.execute(()->{
+            try {
+                Feed feed = feedDAO.selectAllById(feedId);
+                List<FeedItem> feedItems = feedParserService.parseStream(new URL(feed.getLink()));
+                for(FeedItem feedItem : feedItems){
+                    feedItem.setFeedId((int)feed.getId());
+                }
+                saveFetchResult(feedItems);
+            } catch (MalformedURLException e) {
+                Log.d(TAG, "createCall: "+e.getMessage());
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    private void saveFetchResult(List<FeedItem> items){
+
+        if (items != null)
+            for(FeedItem item: items) {
+                if (feedItemDAO.selectCountByTitle(item.getTitle()) == 0){
+
+                    item.setId(feedItemDAO.insert(item)[0]);
+                    for(FeedCategory cat : item.getCategories()){
+                        FeedCategory fc = feedCategoryDAO.selectByName(cat.getName());
+                        if (fc == null){
+                            cat.setFeedCategoryImportance(FeedCategoryImportance.SHOW);
+                            cat.setId(feedCategoryDAO.insert(cat)[0]);
+                        } else{
+                            cat.setId(fc.getId());
+                        }
+
+                        FeedItemCategory fic = new FeedItemCategory();
+
+                        fic.setCategoryId(cat.getId());
+                        fic.setFeedItemId(item.getId());
+
+                        feedItemCategoryDAO.insert(fic);
+                    }
+
+
+                }
+
+            }
+    }
+    public LiveData<Resource<List<FeedItem>>> networkBoundloadFeedItems(String feedURL){
 
         return new NetworkBoundResource<List<FeedItem>, List<FeedItem>>() {
 

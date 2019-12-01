@@ -30,6 +30,17 @@ public class FeedItem {
     private String link;
     private String author;
 
+    public int getFeedId() {
+        return feedId;
+    }
+
+    public void setFeedId(int feedId) {
+        this.feedId = feedId;
+    }
+
+    @ColumnInfo(name="feed_id")
+    private int feedId;
+
     public boolean isRead() {
         return isRead;
     }

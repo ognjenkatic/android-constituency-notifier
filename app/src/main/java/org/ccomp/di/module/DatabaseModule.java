@@ -36,9 +36,16 @@ public class DatabaseModule {
         return "ccomp";
     }
 
+
     @Provides
     @Singleton
-    FeedItemDAO provideFeedDAO(@NonNull AppDatabase appDatabase){
+    FeedDAO provideFeedDAO(@NonNull AppDatabase appDatabase){
+        return appDatabase.feedDAO();
+    }
+
+    @Provides
+    @Singleton
+    FeedItemDAO provideFeedItemDAO(@NonNull AppDatabase appDatabase){
         return appDatabase.feedItemDAO();
     }
 

@@ -7,6 +7,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity(tableName = "feed",indices = {@Index("id")})
 public class Feed {
@@ -77,5 +78,16 @@ public class Feed {
 
     @ColumnInfo(name = "fetched")
     private Timestamp fetched;
+
+    public List<FeedItem> getFeedItemList() {
+        return feedItemList;
+    }
+
+    public void setFeedItemList(List<FeedItem> feedItemList) {
+        this.feedItemList = feedItemList;
+    }
+
+    @Ignore
+    private List<FeedItem> feedItemList;
 
 }

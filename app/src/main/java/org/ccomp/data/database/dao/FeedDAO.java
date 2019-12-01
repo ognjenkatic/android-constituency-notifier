@@ -30,5 +30,8 @@ public interface FeedDAO {
     public void deleteAll();
 
     @Query("SELECT * FROM feed WHERE id = :id")
-    public LiveData<Feed> selectAllById(int id);
+    public LiveData<Feed> selectAllByIdAsync(int id);
+
+    @Query("SELECT * FROM feed WHERE id = :id")
+    public Feed selectAllById(int id);
 }

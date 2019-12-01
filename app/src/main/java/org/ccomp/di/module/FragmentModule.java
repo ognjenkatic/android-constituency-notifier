@@ -2,6 +2,7 @@ package org.ccomp.di.module;
 
 import org.ccomp.ui.category.CategoryFragment;
 import org.ccomp.ui.feed.FeedFragment;
+import org.ccomp.ui.feed.index.FeedIndexFragment;
 import org.ccomp.ui.feed.item.FeedItemFragment;
 
 import dagger.Module;
@@ -18,4 +19,7 @@ public abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract FeedItemFragment contributeFeedItemFragment();
+
+    @ContributesAndroidInjector
+    abstract FeedIndexFragment contributeFeedIndexFragment();
 }

@@ -12,6 +12,21 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/nav_feed_index"
+        android:name="org.ccomp.ui.feed.index.FeedIndexFragment"
+        android:label="@string/menu_feed_index"
+        tools:layout="@layout/fragment_feed_index" >
+        <action
+            android:id="@+id/action_nav_feed_index_to_nav_feed"
+            app:destination="@id/nav_feed">
+            <argument
+                android:name="feedId"
+                app:argType="integer"
+                android:defaultValue="-1"/>
+        </action>
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_feed"
         android:name="org.ccomp.ui.feed.FeedFragment"
         android:label="@string/menu_feed"

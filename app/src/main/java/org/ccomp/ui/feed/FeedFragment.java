@@ -34,6 +34,8 @@ public class FeedFragment extends DaggerFragment {
 
     private FeedViewModel mViewModel;
 
+    private int feedId;
+
     public static FeedFragment newInstance() {
         return new FeedFragment();
     }
@@ -59,9 +61,9 @@ public class FeedFragment extends DaggerFragment {
 
     private void initialiseView(){
 
-        mViewModel.getFeedItems().observe(this, listResource -> {
+        mViewModel.getFeedItems(feedId).observe(this, listResource -> {
 
-            FeedEntryAdapter faa = new FeedEntryAdapter(listResource.data);
+            FeedEntryAdapter faa = new FeedEntryAdapter(listResource);
             RecyclerView lv = view.findViewById(R.id.entry_list);
 
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -75,6 +77,9 @@ public class FeedFragment extends DaggerFragment {
 
     private void initialiseViewModel() {
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(FeedViewModel.class);
+
+        feedId = getArguments().getInt("feedId");
+
 
     }
 

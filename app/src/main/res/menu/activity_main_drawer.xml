@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_menu_dashboard"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_feed"
+            android:id="@+id/nav_feed_index"
             android:icon="@drawable/ic_menu_feed"
-            android:title="@string/menu_feed" />
+            android:title="@string/menu_feeds" />
         <item
             android:id="@+id/nav_category"
             android:icon="@drawable/ic_menu_feed"

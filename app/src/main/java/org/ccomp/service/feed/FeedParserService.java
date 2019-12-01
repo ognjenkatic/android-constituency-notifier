@@ -9,9 +9,11 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
+import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.feed.FeedCategory;
 import org.ccomp.data.domain.feed.FeedCategoryImportance;
 import org.ccomp.data.domain.feed.FeedItem;
+import org.xml.sax.XMLReader;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -41,6 +43,35 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
         this.categoryImportanceMap=categoryImportanceMap;
     }
 
+    public Feed parseStreamToFeed(URL feedURL){
+
+        Feed feed = new Feed();
+        List<FeedItem> feedItems = null;
+        SyndFeed syndFeed = null;
+
+
+        try {
+
+            syndFeed = getSyndFeedInput().build(new XmlReader(feedURL));
+
+            feedItems = new ArrayList<>();
+            Iterator<SyndEntry> iterator = syndFeed.getEntries().iterator();
+            while (iterator.hasNext()) {
+                FeedItem feedItem = convertToFeedItem(iterator.next());
+                feedItems.add(feedItem);
+            }
+
+            feed.setLink(feedURL.toString());
+            feed.setTitle(syndFeed.getTitle());
+            feed.setSubtitle(syndFeed.getDescription());
+            feed.setFeedItemList(feedItems);
+
+        } catch (FeedException | IOException e) {
+            Log.d(TAG, "parseStream: "+e.getMessage());
+        }
+        return feed;
+
+    }
     @Override
     public List<FeedItem> parseStream(URL feedURL) {
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.NavDeepLinkBuilder;
 import androidx.work.ListenableWorker;
 import androidx.work.Worker;
@@ -19,6 +20,7 @@ import com.squareup.inject.assisted.AssistedInject;
 import org.ccomp.MainActivity;
 import org.ccomp.R;
 import org.ccomp.data.application.NotificationData;
+import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.domain.feed.FeedItem;
 import org.ccomp.interfaces.ChildWorkerFactory;
 import org.ccomp.service.notification.NotificationService;
@@ -32,13 +34,14 @@ import javax.inject.Inject;
 public class FeedFetchWorker extends Worker {
 
 
-    public FeedParserService feedParserService;
-
+    private FeedParserService feedParserService;
+    private FeedItemDAO feedItemDAO;
 
     @AssistedInject
-    public FeedFetchWorker(@Assisted Context context, @Assisted WorkerParameters parameters, FeedParserService feedParserService){
+    public FeedFetchWorker(@Assisted Context context, @Assisted WorkerParameters parameters, FeedParserService feedParserService, FeedItemDAO feedItemDAO){
         super(context, parameters);
         this.feedParserService = feedParserService;
+        this.feedItemDAO = feedItemDAO;
     }
 
     @NonNull
@@ -47,8 +50,9 @@ public class FeedFetchWorker extends Worker {
 
         try {
 
-            List<FeedItem> feeds = new FeedParserService().parseStream(new URL("https://certrs.org/feed/atom"));
 
+
+            List<FeedItem> feeds = feedItemDAO.selectAllSync();
 
 
             NotificationData nd = new NotificationData();
@@ -60,7 +64,7 @@ public class FeedFetchWorker extends Worker {
             nd.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
             Bundle args = new Bundle();
-            args.putInt("itemId", 4);
+            args.putInt("itemId", (int)feeds.get(0).getId());
             nd.setArguments(args);
 
             new NotificationService(getApplicationContext()).createNotification(nd);
@@ -68,7 +72,7 @@ public class FeedFetchWorker extends Worker {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return Result.success();
     }
 
     @AssistedInject.Factory

@@ -7,6 +7,8 @@ import org.ccomp.di.ViewModelKey;
 import org.ccomp.factory.ViewModelFactory;
 import org.ccomp.ui.category.CategoryViewModel;
 import org.ccomp.ui.feed.FeedViewModel;
+import org.ccomp.ui.feed.index.FeedIndexFragment;
+import org.ccomp.ui.feed.index.FeedIndexViewModel;
 import org.ccomp.ui.feed.item.FeedItemViewModel;
 
 import dagger.Binds;
@@ -33,5 +35,10 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FeedItemViewModel.class)
     protected abstract ViewModel feedItemViewModel(FeedItemViewModel feedItemViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FeedIndexViewModel.class)
+    protected abstract ViewModel feedIndexViewModel(FeedIndexViewModel feedIndexViewModel);
 
 }

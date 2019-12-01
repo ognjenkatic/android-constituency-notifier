@@ -76,12 +76,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         notificationService.createNotificationChannel();
-
+        /*
         Constraints consts = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
 
         Data inputData = new Data.Builder().putInt("key", 2).build();
         // we then retrieve it inside the NotifyWorker with:
         // final int DBEventID = getInputData().getInt(DBEventIDTag, ERROR_VALUE);
+
 
 
         OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(FeedFetchWorker.class)
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork("name1", ExistingWorkPolicy.REPLACE, notificationWork);
+        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork("name1", ExistingWorkPolicy.REPLACE, notificationWork);*/
 
     }
 
