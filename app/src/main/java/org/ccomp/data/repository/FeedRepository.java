@@ -2,6 +2,7 @@ package org.ccomp.data.repository;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -32,7 +33,9 @@ import javax.inject.Singleton;
 @Singleton
 public class FeedRepository {
 
+
     private static final String TAG = "FeedRepository";
+
 
     private FeedDAO feedDAO;
     private FeedItemDAO feedItemDAO;
@@ -58,20 +61,26 @@ public class FeedRepository {
         return feedItemDAO.selectById(id);
     }
 
-    public void addFeed(Feed feed){
+    public LiveData<Boolean> tryAddFeed(String feedUrl){
+        MutableLiveData<Boolean> success = new MutableLiveData<>();
         executorService.execute(()->{
 
             Feed parsedFeed = null;
             try {
-                parsedFeed = feedParserService.parseStreamToFeed(new URL(feed.getLink()));
+                parsedFeed = feedParserService.parseStreamToFeed(new URL(feedUrl));
 
+                if (parsedFeed != null) {
+                    feedDAO.insert(parsedFeed);
+                    success.postValue(true);
+                } else{
+                    success.postValue(false);
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-
-            if (parsedFeed != null)
-                feedDAO.insert(parsedFeed);
         });
+
+        return success;
     }
     public void updateFeedItem(FeedItem feedItem){
 

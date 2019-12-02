@@ -45,7 +45,7 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
 
     public Feed parseStreamToFeed(URL feedURL){
 
-        Feed feed = new Feed();
+        Feed feed = null;
         List<FeedItem> feedItems = null;
         SyndFeed syndFeed = null;
 
@@ -60,6 +60,8 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
                 FeedItem feedItem = convertToFeedItem(iterator.next());
                 feedItems.add(feedItem);
             }
+
+            feed = new Feed();
 
             feed.setLink(feedURL.toString());
             feed.setTitle(syndFeed.getTitle());
@@ -101,7 +103,9 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
         feedItem.setAuthor(syndEntry.getAuthor());
         feedItem.setDescription(syndEntry.getDescription().getValue());
         feedItem.setLink(syndEntry.getLink());
-        feedItem.setPublished(new Timestamp(syndEntry.getPublishedDate().getTime()));
+
+        if (syndEntry.getPublishedDate() != null)
+            feedItem.setPublished(new Timestamp(syndEntry.getPublishedDate().getTime()));
         feedItem.setTitle(syndEntry.getTitle());
         List<FeedCategory> feedCategories = new ArrayList<>();
         for(SyndCategory category:syndEntry.getCategories()){

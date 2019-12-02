@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,15 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.ccomp.R;
 import org.ccomp.data.adapter.FeedAdapter;
-import org.ccomp.data.adapter.FeedEntryAdapter;
-import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.factory.ViewModelFactory;
-import org.ccomp.ui.feed.FeedViewModel;
 
 import javax.inject.Inject;
 
@@ -63,11 +60,14 @@ public class FeedIndexFragment extends DaggerFragment {
 
             String url = textInput.getText().toString();
 
-            Feed feed = new Feed();
-            feed.setLink(url);
-            feed.setTitle("Title");
-            feed.setSubtitle("Exciting subtitle");
-            mViewModel.addFeed(feed);
+            mViewModel.tryAddFeed(url).observe(this,  success ->{
+
+                if (success.booleanValue()== true){
+                    Toast.makeText(getContext().getApplicationContext(),"Successfully added new feed",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext().getApplicationContext(),"Error adding new feed!",Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         mViewModel.getFeeds().observe(this, listResource -> {

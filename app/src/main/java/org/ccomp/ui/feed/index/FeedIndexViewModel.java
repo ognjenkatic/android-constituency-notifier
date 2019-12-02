@@ -8,8 +8,6 @@ import org.ccomp.data.database.dao.FeedDAO;
 import org.ccomp.data.database.dao.FeedItemCategoryDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.domain.feed.Feed;
-import org.ccomp.data.domain.feed.FeedItem;
-import org.ccomp.data.network.Resource;
 import org.ccomp.data.repository.FeedRepository;
 import org.ccomp.service.feed.FeedParserService;
 
@@ -35,8 +33,8 @@ public class FeedIndexViewModel extends ViewModel {
         feeds = feedRepository.loadFeedsAsync();
     }
 
-    public void addFeed(Feed feed){
+    public LiveData<Boolean> tryAddFeed(String feedUrl){
 
-        feedRepository.addFeed(feed);
+        return feedRepository.tryAddFeed(feedUrl);
     }
 }

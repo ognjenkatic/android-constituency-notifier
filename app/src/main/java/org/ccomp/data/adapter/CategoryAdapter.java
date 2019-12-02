@@ -39,8 +39,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
 
         FeedCategory entry = feedCategories.get(position);
 
+        holder.setListeningForCheckChanges(false);
         holder.setName(entry.getName());
         holder.setImportance(entry.getFeedCategoryImportance());
+        holder.setListeningForCheckChanges(true);
     }
 
     @Override

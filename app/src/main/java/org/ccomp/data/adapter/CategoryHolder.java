@@ -41,30 +41,45 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
     private TextView name;
     private RadioGroup importanceGroup;
 
-    public CategoryHolder(@NonNull View itemView, CategoryImportanceChangeListener recyclerOnClickListener) {
+    public boolean isListeningForCheckChanges() {
+        return isListeningForCheckChanges;
+    }
+
+    public void setListeningForCheckChanges(boolean listeningForCheckChanges) {
+        isListeningForCheckChanges = listeningForCheckChanges;
+    }
+
+    private boolean isListeningForCheckChanges = false;
+
+    public CategoryHolder(@NonNull View itemView, CategoryImportanceChangeListener categoryImportanceChangeListener) {
         super(itemView);
 
         name = itemView.findViewById(R.id.category_entry_name);
         importanceGroup = itemView.findViewById(R.id.importance_radio_group);
 
+
         importanceGroup.setOnCheckedChangeListener(
-                (group, checkedId)->{
-                    switch (checkedId){
-                        case(R.id.cat_hide_radio):{
-                            recyclerOnClickListener.onChange(getAdapterPosition(), FeedCategoryImportance.HIDE);
-                            break;
-                        }
-                        case(R.id.cat_show_radio):{
-                            recyclerOnClickListener.onChange(getAdapterPosition(), FeedCategoryImportance.SHOW);
-                            break;
-                        }
-                        case(R.id.cat_alert_radio):{
-                            recyclerOnClickListener.onChange(getAdapterPosition(), FeedCategoryImportance.NOTIFY);
-                            break;
+                (radioGroup, checkedId)-> {
+
+                    if (isListeningForCheckChanges) {
+                        switch (checkedId) {
+                            case (R.id.cat_hide_radio): {
+                                categoryImportanceChangeListener.onChange(getAdapterPosition(), FeedCategoryImportance.HIDE);
+                                break;
+                            }
+                            case (R.id.cat_show_radio): {
+                                categoryImportanceChangeListener.onChange(getAdapterPosition(), FeedCategoryImportance.SHOW);
+                                break;
+                            }
+                            case (R.id.cat_alert_radio): {
+                                categoryImportanceChangeListener.onChange(getAdapterPosition(), FeedCategoryImportance.NOTIFY);
+                                break;
+                            }
                         }
                     }
                 }
         );
 
     }
+
 }

@@ -24,6 +24,9 @@ public class URLConverter {
 
     @TypeConverter
     public static String fromURL(URL url){
-        return url.toString();
+        if (url != null)
+            return url.toString();
+        else
+            return "";
     }
 }
