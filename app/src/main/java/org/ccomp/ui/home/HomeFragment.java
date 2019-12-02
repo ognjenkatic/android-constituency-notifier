@@ -35,6 +35,8 @@ public class HomeFragment extends DaggerFragment {
     private HomeViewModel homeViewModel;
     private TextView textHome;
     private Button homeButton;
+    @Inject
+    Gson gson;
 
 
     @Override
@@ -55,15 +57,23 @@ public class HomeFragment extends DaggerFragment {
 
         /*homeViewModel.getAllEmails().observe(this, (all) -> {
 
-            Gson gson = new Gson();
+
             textHome.setText(gson.toJson(all));
 
-        });*/
+        });
 
         homeViewModel.getAllLang().observe(this,(all)->{
-            Gson gson=new Gson();
+
             textHome.setText(gson.toJson(all));
         });
+
+
+         */
+        homeViewModel.getAppSettings().observe(this,(appSettings -> {
+            textHome.setText(gson.toJson(appSettings.getProperties()));
+        }));
+
+
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

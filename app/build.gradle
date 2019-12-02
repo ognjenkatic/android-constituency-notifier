@@ -68,4 +68,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.android.volley:dc-volley:1.1.0'
     implementation 'org.xmlpull:com.springsource.org.xmlpull:1.1.4.c'
+    implementation 'apache-xerces:xercesImpl:2.9.1'
 }

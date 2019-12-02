@@ -77,7 +77,10 @@ public abstract class GenericRepository<T,K> {
                     dismantle(obj);
                 }
             }else{
-                mainDAO.save(args);
+                executorService.execute(()->{
+                    mainDAO.save(args);
+                });
+
             }
         }
 
