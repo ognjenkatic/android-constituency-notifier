@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 
@@ -31,6 +32,7 @@ public class FeedRepository {
     private FeedParserService feedParserService;
     private ExecutorService executorService;
 
+    @Inject
     public FeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService) {
         this.feedItemDAO = feedItemDAO;
         this.feedParserService = feedParserService;

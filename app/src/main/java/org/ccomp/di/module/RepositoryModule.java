@@ -2,6 +2,7 @@ package org.ccomp.di.module;
 
 import org.ccomp.data.database.AppDatabase;
 import org.ccomp.data.database.dao.AppSettingsPropertyDAO;
+import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.database.dao.LangDAO;
 import org.ccomp.data.database.dao.WordDAO;
 import org.ccomp.data.database.dao.mapping.TranslationDAO;
@@ -13,8 +14,10 @@ import org.ccomp.data.domain.settings.TLP;
 import org.ccomp.data.repository.AppSettingsPropertyRepository;
 import org.ccomp.data.repository.EmailReportingRepo;
 import org.ccomp.data.repository.EmailReportingRepository;
+import org.ccomp.data.repository.FeedRepository;
 import org.ccomp.data.repository.LanguageRepository;
 import org.ccomp.service.NetworkAvailabilityService;
+import org.ccomp.service.feed.FeedParserService;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -28,6 +31,12 @@ import dagger.Provides;
 
 @Module
 public class RepositoryModule {
+
+    @Provides
+    @Singleton
+    public FeedRepository provideFeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService){
+        return new FeedRepository(feedItemDAO,feedParserService,executorService);
+    }
 
     @Provides
     @Singleton
@@ -96,6 +105,6 @@ public class RepositoryModule {
     @Provides
     @Singleton
     public AppSettingsPropertyRepository provideAppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService){
-        return new AppSettingsPropertyRepository(appSettingsPropertyDAO ,executorService )
+        return new AppSettingsPropertyRepository(appSettingsPropertyDAO ,executorService );
     }
 }

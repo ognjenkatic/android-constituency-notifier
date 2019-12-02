@@ -1,6 +1,8 @@
 package org.ccomp.di.module;
 
 
+import com.google.gson.Gson;
+
 import org.ccomp.data.domain.settings.AppSettingsXMLParser;
 
 import javax.inject.Singleton;
@@ -23,6 +25,12 @@ public class MiscModule {
     @Singleton
     public AppSettingsXMLParser provideAppSettingsXMLParser(){
         return new AppSettingsXMLParser();
+    }
+
+    @Provides
+    @Singleton
+    public Gson provideGson(){
+        return new Gson();
     }
 
 

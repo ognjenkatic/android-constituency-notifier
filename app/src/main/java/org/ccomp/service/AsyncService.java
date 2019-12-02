@@ -3,14 +3,15 @@ package org.ccomp.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 public abstract class AsyncService<T> implements IAsyncService<T> {
 
-    NetworkAvailabilityService networkAvailabilityService;
+   protected NetworkAvailabilityService networkAvailabilityService;
 
 
-    public AsyncService(NetworkAvailabilityService networkAvailabilityService) {
-        this.networkAvailabilityService = networkAvailabilityService;
-    }
+
+
 
     @Override
     public List<T> fetch() {
@@ -30,5 +31,11 @@ public abstract class AsyncService<T> implements IAsyncService<T> {
         }
     }
 
+    public NetworkAvailabilityService getNetworkAvailabilityService() {
+        return networkAvailabilityService;
+    }
 
+    public void setNetworkAvailabilityService(NetworkAvailabilityService networkAvailabilityService) {
+        this.networkAvailabilityService = networkAvailabilityService;
+    }
 }

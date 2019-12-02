@@ -11,9 +11,5 @@ import dagger.Provides;
 @Module
 public class FeedModule {
 
-    @Provides
-    @Singleton
-    FeedParserService provideFeedParserService(){
-        return new FeedParserService();
-    }
+
 }

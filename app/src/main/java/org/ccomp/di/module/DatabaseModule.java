@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import org.ccomp.data.database.AppDatabase;
+import org.ccomp.data.database.dao.AppSettingsPropertyDAO;
 import org.ccomp.data.database.dao.EmailReportingDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.database.dao.IncidentCategoryDAO;
@@ -80,6 +81,12 @@ public class DatabaseModule {
     @Singleton
     public TranslationDAO provideTranslationDAO(@NotNull AppDatabase appDatabase){
         return appDatabase.translationDAO();
+    }
+
+    @Provides
+    @Singleton
+    public AppSettingsPropertyDAO provideAppSettingsPropertyDAO(@NotNull AppDatabase appDatabase){
+        return appDatabase.appSettingsPropertyDAO();
     }
 
 }

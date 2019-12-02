@@ -1,6 +1,7 @@
 package org.ccomp.data.database.dao;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Query;
 
 import org.ccomp.data.domain.settings.AppSettingsOption;
@@ -8,8 +9,13 @@ import org.ccomp.data.domain.settings.AppSettingsProperty;
 
 import java.util.List;
 
+@Dao
 public interface AppSettingsPropertyDAO extends IDAO<AppSettingsProperty, AppSettingsOption> {
 
+
+    @Override
+    @Query("DELETE FROM app_settings")
+    void deleteAll();
 
     @Override
     @Query("SELECT * FROM app_settings")
@@ -27,7 +33,7 @@ public interface AppSettingsPropertyDAO extends IDAO<AppSettingsProperty, AppSet
     @Query("SELECT option_name FROM app_settings")
     LiveData<List<AppSettingsOption>> getKeys();
 
-    @Query("SELECT option_name FROM app_settings WHERE option_name like %:key%")
+    @Query("SELECT option_name FROM app_settings WHERE option_name like :key")
     LiveData<List<AppSettingsOption>> getKeys(AppSettingsOption key);
 
 
@@ -47,7 +53,7 @@ public interface AppSettingsPropertyDAO extends IDAO<AppSettingsProperty, AppSet
     @Query("SELECT option_name FROM app_settings")
     List<AppSettingsOption> getKeysSync();
 
-    @Query("SELECT option_name FROM app_settings WHERE option_name like %:key%")
+    @Query("SELECT option_name FROM app_settings WHERE option_name like :key")
     List<AppSettingsOption> getKeysSync(AppSettingsOption key);
 
 }
