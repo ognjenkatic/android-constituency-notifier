@@ -59,6 +59,9 @@ public class AppSettingsRepository extends GenericRepository<AppSettings,String>
     }
 
 
+    public LiveData<AppSettings> get(){
+        return get("");
+    }
 
     @Override
     public LiveData<AppSettings> get(String key) {

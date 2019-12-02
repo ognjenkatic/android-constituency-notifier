@@ -4,7 +4,9 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import org.ccomp.data.domain.settings.AppSettingsXMLParser;
 import org.ccomp.service.NetworkAvailabilityService;
+import org.ccomp.service.XMLValidatorService;
 import org.ccomp.service.appsettings.AppSettingService;
 import org.ccomp.service.feed.FeedParserService;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
+import javax.xml.validation.SchemaFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -41,7 +44,15 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public AppSettingService provideAppSettingService(@NotNull NetworkAvailabilityService networkAvailabilityService){
-        return new AppSettingService(networkAvailabilityService);
+    public XMLValidatorService provideXmlValidatorService(){
+        SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+
+        return new XMLValidatorService(schemaFactory);
+    }
+
+    @Provides
+    @Singleton
+    public AppSettingService provideAppSettingService(@NotNull Application app, @NotNull XMLValidatorService xmlValidatorService, @NotNull NetworkAvailabilityService networkAvailabilityService, @NotNull AppSettingsXMLParser xmlParser){
+        return new AppSettingService(app.getApplicationContext(),xmlValidatorService,networkAvailabilityService,xmlParser);
     }
 }

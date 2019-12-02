@@ -10,13 +10,17 @@ import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.lang.Translation;
+import org.ccomp.data.domain.settings.AppSettingsOption;
+import org.ccomp.data.domain.settings.AppSettingsProperty;
 import org.ccomp.data.domain.settings.TLP;
 import org.ccomp.data.repository.AppSettingsPropertyRepository;
+import org.ccomp.data.repository.AppSettingsRepository;
 import org.ccomp.data.repository.EmailReportingRepo;
 import org.ccomp.data.repository.EmailReportingRepository;
 import org.ccomp.data.repository.FeedRepository;
 import org.ccomp.data.repository.LanguageRepository;
 import org.ccomp.service.NetworkAvailabilityService;
+import org.ccomp.service.appsettings.AppSettingService;
 import org.ccomp.service.feed.FeedParserService;
 import org.jetbrains.annotations.NotNull;
 
@@ -105,6 +109,24 @@ public class RepositoryModule {
     @Provides
     @Singleton
     public AppSettingsPropertyRepository provideAppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService){
-        return new AppSettingsPropertyRepository(appSettingsPropertyDAO ,executorService );
+        AppSettingsPropertyRepository appSettingsPropertyRepository = new AppSettingsPropertyRepository(appSettingsPropertyDAO, executorService);
+
+        List<AppSettingsProperty> appSettingsProperties=new ArrayList<>();
+        AppSettingsProperty appSettingsProperty=new AppSettingsProperty(AppSettingsOption.app_settings_first_run,"TRUE");
+        appSettingsProperties.add(appSettingsProperty);
+        appSettingsProperty=new AppSettingsProperty(AppSettingsOption.app_settings_message_wellcome,"Wellcome");
+        appSettingsProperties.add(appSettingsProperty);
+        appSettingsProperty=new AppSettingsProperty(AppSettingsOption.app_settings_logo_base64,"Logo");
+        appSettingsProperties.add(appSettingsProperty);
+
+        appSettingsPropertyRepository.save(false,appSettingsProperties.toArray(new AppSettingsProperty[appSettingsProperties.size()]));
+
+        return appSettingsPropertyRepository;
+    }
+
+    @Provides
+    @Singleton
+    public AppSettingsRepository provideAppSettingsRepository(EmailReportingRepo emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService){
+        return new AppSettingsRepository(  emailReportingRepository, languageRepository, appSettingsPropertyRepository,mainService,executorService);
     }
 }
