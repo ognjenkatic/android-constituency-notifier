@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
-public class AppSettingsPropertyRepository extends GenericRepository <AppSettingsProperty, AppSettingsOption> {
+public class AppSettingsPropertyRepository extends GenericRepository <AppSettingsProperty, AppSettingsOption {
 
 
 

@@ -5,8 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 
 @Entity(tableName = "app_settings")
@@ -15,9 +13,8 @@ public class AppSettingsProperty {
 
     @PrimaryKey
     @ColumnInfo(name = "option_name")
-    @NotNull
     AppSettingsOption optionName;
-    @ColumnInfo(name = "option_value")
+    @ColumnInfo(name="option_value")
     String optionValue;
 
 

@@ -37,16 +37,14 @@ public class AppSettingsRepository extends GenericRepository<AppSettings,String>
         this.languageRepository = languageRepository;
         this.appSettingsPropertyRepository = appSettingsPropertyRepository;
         this.mainService=mainService;
-        this.executorService=executorService;
+        this,executorService=executorService;
     }
 
     @Override
     public LiveData<List<AppSettings>> getAll(Predicate<AppSettings> predicate) {
-        MutableLiveData<List<AppSettings>> mutableLiveData=new MutableLiveData<>();
         List<AppSettings> all=new ArrayList<>();
-        all.add(get(null).getValue());
-        mutableLiveData.postValue(all);
-        return  mutableLiveData;
+        all.add(get(null));
+        return  all;
     }
 
 
@@ -66,7 +64,7 @@ public class AppSettingsRepository extends GenericRepository<AppSettings,String>
 
 
     @Override
-    public void save(boolean complexSave,  @NotNull AppSettings... args) {
+    public void save(boolean complexSave, @NotNull @NotNull AppSettings... args) {
         if(args!=null){
             for(AppSettings obj : args){
                 dismantle(obj);

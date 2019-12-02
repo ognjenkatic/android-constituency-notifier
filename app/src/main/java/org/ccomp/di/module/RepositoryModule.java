@@ -96,6 +96,6 @@ public class RepositoryModule {
     @Provides
     @Singleton
     public AppSettingsPropertyRepository provideAppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService){
-        return new AppSettingsPropertyRepository(appSettingsPropertyDAO ,executorService );
+        return new AppSettingsPropertyRepository(appSettingsPropertyDAO ,executorService )
     }
 }

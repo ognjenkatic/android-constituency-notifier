@@ -82,7 +82,7 @@ public class AppSettings {
         Map<AppSettingsOption,AppSettingsProperty> properiesMap=new HashMap<>();
         for(AppSettingsProperty property :propertiesList){
             if(properiesMap.containsKey(property.optionName)){
-                properiesMap.replace(property.optionName,property);
+                properiesMap.replace(property.optionName,property)
             }else{
                 properiesMap.put(property.optionName,property);
             }
