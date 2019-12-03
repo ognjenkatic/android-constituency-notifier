@@ -63,7 +63,7 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
 
             feed = new Feed();
 
-            feed.setLink(feedURL.toString());
+            feed.setLink(feedURL.toString().toLowerCase());
             feed.setTitle(syndFeed.getTitle());
             feed.setSubtitle(syndFeed.getDescription());
             feed.setFeedItemList(feedItems);
@@ -110,9 +110,9 @@ public class FeedParserService implements IFeedParser<SyndEntry> {
         List<FeedCategory> feedCategories = new ArrayList<>();
         for(SyndCategory category:syndEntry.getCategories()){
             FeedCategory feedCategory = new FeedCategory();
-            feedCategory.setName(category.getName());
+            feedCategory.setName(category.getName().toLowerCase());
             if(getCategoryImportanceMap().containsKey(feedCategory.getName())){
-                feedCategory.setFeedCategoryImportance(getCategoryImportanceMap().get(feedCategory.getName()));
+                feedCategory.setFeedCategoryImportance(getCategoryImportanceMap().get(feedCategory.getName().toLowerCase()));
             }else{
                 feedCategory.setFeedCategoryImportance(FeedCategoryImportance.UNCATEGORIZED);
             }

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import java.net.URL;
 
 @Entity(tableName = "feed_category",indices = {@Index("id")})
-public class FeedCategory {
+public class FeedCategory implements Comparable<FeedCategory> {
 
     public long getId() {
         return id;
@@ -49,5 +49,11 @@ public class FeedCategory {
 
     public void setFeedCategoryImportance(FeedCategoryImportance feedCategoryImportance) {
         this.feedCategoryImportance = feedCategoryImportance;
+    }
+
+
+    @Override
+    public int compareTo(FeedCategory feedCategory) {
+        return getName().compareTo(feedCategory.getName());
     }
 }

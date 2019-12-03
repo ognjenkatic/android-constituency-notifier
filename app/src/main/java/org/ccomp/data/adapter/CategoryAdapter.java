@@ -16,6 +16,14 @@ import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryHolder> {
 
+    public List<FeedCategory> getFeedCategories() {
+        return feedCategories;
+    }
+
+    public void setFeedCategories(List<FeedCategory> feedCategories) {
+        this.feedCategories = feedCategories;
+    }
+
     private List<FeedCategory> feedCategories;
     private CategoryImportanceChangeListener categoryImportanceChangeListener;
 

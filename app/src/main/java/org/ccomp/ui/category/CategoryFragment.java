@@ -21,6 +21,9 @@ import org.ccomp.data.domain.feed.FeedCategoryImportance;
 import org.ccomp.factory.ViewModelFactory;
 import org.ccomp.interfaces.CategoryImportanceChangeListener;
 import org.ccomp.ui.feed.FeedViewModel;
+import org.ccomp.utility.CategoryComparator;
+
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -32,6 +35,8 @@ public class CategoryFragment extends DaggerFragment implements CategoryImportan
     ViewModelFactory viewModelFactory;
 
     private CategoryViewModel mViewModel;
+
+    private CategoryAdapter adapter;
 
     public static CategoryFragment newInstance() {
         return new CategoryFragment();
@@ -61,16 +66,24 @@ public class CategoryFragment extends DaggerFragment implements CategoryImportan
 
         mViewModel.getFeedCategories().observe(this, categoryList -> {
 
-            CategoryAdapter faa = new CategoryAdapter(categoryList, this);
-            RecyclerView lv = view.findViewById(R.id.category_entry_list);
+            Collections.sort(categoryList);
+            if (adapter == null) {
+                adapter = new CategoryAdapter(categoryList, this);
 
-            LinearLayoutManager llm = new LinearLayoutManager(getContext());
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
+                RecyclerView lv = view.findViewById(R.id.category_entry_list);
 
-            lv.setLayoutManager(llm);
-            lv.setAdapter(faa);
+                LinearLayoutManager llm = new LinearLayoutManager(getContext());
+                llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-            faa.notifyDataSetChanged();
+
+                lv.setLayoutManager(llm);
+                lv.setAdapter(adapter);
+            } else{
+                adapter.setFeedCategories(categoryList);
+            }
+
+
+            adapter.notifyDataSetChanged();
         });
     }
 
