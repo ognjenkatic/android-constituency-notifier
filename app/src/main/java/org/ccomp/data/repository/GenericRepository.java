@@ -28,7 +28,7 @@ public abstract class GenericRepository<T,K> {
             return true;
         }
     };
-    private String TAG="Generic";
+    private static final String TAG = "GenericRepository";
 
     public LiveData<List<T>> getAll(Predicate<T> predicate){
         MutableLiveData<List<T>> mutableLiveData= new MutableLiveData<>();
@@ -121,8 +121,10 @@ public abstract class GenericRepository<T,K> {
                                 List<T> items = mainService.fetch();
                                 mutableLiveData.postValue(items);
                             } catch (Exception ex) {
-                                Log.d(TAG, "createCall: " + ex.getMessage());
+                                Log.e(TAG, "createCall: ",ex );
+                                
                                 ex.printStackTrace();
+                                boolean b=true;
                             }
 
 

@@ -9,7 +9,8 @@ import org.ccomp.data.domain.settings.TLP;
 public class EmailReportingConverters {
 
 
-//        IncidentCategoryDAO incidentCategoryDAO= EmailReportingDatabase.getInstance().incidentCategoryDAO();
+    private static final String TAG = "EmailReportingConverter";
+
 
         @TypeConverter
         public TLP tlpFromString(String s){
@@ -18,7 +19,7 @@ public class EmailReportingConverters {
                 TLP tlp=TLP.valueOf(s);
                 return tlp;
             }catch (Exception e){
-                Log.println(Log.ERROR,"Enumeration Conversion Error",e.getMessage());
+                Log.e(TAG, "tlpFromString: ",e );
             }
             return TLP.UNKNOWN;
 

@@ -1,6 +1,7 @@
 package org.ccomp.service.appsettings;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -28,11 +29,10 @@ import javax.inject.Inject;
 
 public class AppSettingService extends AsyncService<AppSettings> {
 
-
+    private static final String TAG = "AppSettingService";
 
     Context context;
     XMLValidatorService xmlValidatorService;
-    NetworkAvailabilityService networkAvailabilityService;
     AppSettingsXMLParser xmlParser;
 
 
@@ -65,9 +65,10 @@ public class AppSettingService extends AsyncService<AppSettings> {
             MutableLiveData<String> xmlConfigStringMutableLiveData=new MutableLiveData<>();
 
             final Response.ErrorListener errorListener = new Response.ErrorListener() {
+
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Log.e(TAG, "onErrorResponse: ", error);
                 }
             };
 

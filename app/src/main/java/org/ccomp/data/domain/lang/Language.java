@@ -57,14 +57,14 @@ public class Language {
         this.translations = translations;
     }
 
-    public Map<String,String> getDictionary(){
-        Map<String,String> dictionary=new HashMap<>();
-        for(Translation translation:translations){
-            if(dictionary.containsKey(translation.getWord())){
-                dictionary.replace(translation.getWord(),translation.getValue());
-            }else {
-                dictionary.put(translation.getWord(),translation.getValue());
+    public Map<String, String> getDictionary() {
+        Map<String, String> dictionary = new HashMap<>();
+        for (Translation translation : translations) {
+            if (dictionary.containsKey(translation.getWord())) {
+                dictionary.remove(translation.getWord());
             }
+            dictionary.put(translation.getWord(), translation.getValue());
+
         }
         return dictionary;
 

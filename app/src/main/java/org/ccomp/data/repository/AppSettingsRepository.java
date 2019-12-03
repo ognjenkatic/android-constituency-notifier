@@ -2,24 +2,17 @@ package org.ccomp.data.repository;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.settings.AppSettings;
-import org.ccomp.data.domain.settings.AppSettingsOption;
 import org.ccomp.data.domain.settings.AppSettingsProperty;
-import org.ccomp.data.network.Resource;
-import org.ccomp.service.IService;
 import org.ccomp.service.appsettings.AppSettingService;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Predicate;
 
@@ -29,13 +22,13 @@ public class AppSettingsRepository extends GenericRepository<AppSettings,String>
 
 
     FeedRepository feedRepository;
-    EmailReportingRepo emailReportingRepository;
+    EmailReportingRepository emailReportingRepository;
     LanguageRepository languageRepository;
     AppSettingsPropertyRepository appSettingsPropertyRepository;
 
 
     @Inject
-    public AppSettingsRepository(EmailReportingRepo emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService) {
+    public AppSettingsRepository(EmailReportingRepository emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService) {
 
         this.emailReportingRepository = emailReportingRepository;
         this.languageRepository = languageRepository;
@@ -85,10 +78,11 @@ public class AppSettingsRepository extends GenericRepository<AppSettings,String>
         AppSettings appSettings=new AppSettings();
         MediatorLiveData<AppSettings> liveData=new MediatorLiveData<>();
         liveData.setValue(appSettings);
+        LiveData<List<EmailReporting>> emailReportingLiveData=emailReportingRepository.getAll();
+        LiveData<List<Language>> langLiveData=languageRepository.getAll();
+        LiveData<List<AppSettingsProperty>> propertiesLiveData=appSettingsPropertyRepository.getAll();
         executorService.execute(()->{
-            LiveData<List<EmailReporting>> emailReportingLiveData=emailReportingRepository.getAll();
-            LiveData<List<Language>> langLiveData=languageRepository.getAll();
-            LiveData<List<AppSettingsProperty>> propertiesLiveData=appSettingsPropertyRepository.getAll();
+
             liveData.addSource(emailReportingLiveData,(value)->{
                 AppSettings newAppSettings=liveData.getValue();
                 newAppSettings.setEmailReportings(value);
@@ -130,7 +124,7 @@ public class AppSettingsRepository extends GenericRepository<AppSettings,String>
 
     @Override
     public void saveCallResults(@NotNull List<AppSettings> items) {
-
+        boolean b=true;
     }
 
 
@@ -142,11 +136,11 @@ public class AppSettingsRepository extends GenericRepository<AppSettings,String>
         this.feedRepository = feedRepository;
     }
 
-    public EmailReportingRepo getEmailReportingRepository() {
+    public EmailReportingRepository getEmailReportingRepository() {
         return emailReportingRepository;
     }
 
-    public void setEmailReportingRepository(EmailReportingRepo emailReportingRepository) {
+    public void setEmailReportingRepository(EmailReportingRepository emailReportingRepository) {
         this.emailReportingRepository = emailReportingRepository;
     }
 

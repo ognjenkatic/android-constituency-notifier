@@ -1,9 +1,6 @@
 package org.ccomp.data.domain.settings;
 
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
@@ -16,18 +13,13 @@ import java.util.Map;
 public class AppSettings {
 
 
-
     private List<Feed> certFeeds;
     private List<Feed> userFeeds;
     private List<EmailReporting> emailReportings;
     private Language defaultLang;
     private List<Language> supportedLangs;
 
-    private Map<AppSettingsOption,AppSettingsProperty > properties;
-
-
-
-
+    private Map<AppSettingsOption, AppSettingsProperty> properties;
 
 
     public List<Feed> getUserFeeds() {
@@ -78,16 +70,17 @@ public class AppSettings {
     public void setProperties(Map<AppSettingsOption, AppSettingsProperty> properties) {
         this.properties = properties;
     }
-    public void setProperties(List<AppSettingsProperty> propertiesList){
-        Map<AppSettingsOption,AppSettingsProperty> properiesMap=new HashMap<>();
-        for(AppSettingsProperty property :propertiesList){
-            if(properiesMap.containsKey(property.optionName)){
-                properiesMap.replace(property.optionName,property);
-            }else{
-                properiesMap.put(property.optionName,property);
+
+    public void setProperties(List<AppSettingsProperty> propertiesList) {
+        Map<AppSettingsOption, AppSettingsProperty> properiesMap = new HashMap<>();
+        for (AppSettingsProperty property : propertiesList) {
+            if (properiesMap.containsKey(property.optionName)) {
+                properiesMap.remove(property.optionName);
             }
+            properiesMap.put(property.optionName, property);
+
         }
-        this.properties=properiesMap;
+        this.properties = properiesMap;
 
     }
 }

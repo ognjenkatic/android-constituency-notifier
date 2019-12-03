@@ -43,16 +43,29 @@ public class AppSettingsProperty {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AppSettingsProperty)) return false;
-        AppSettingsProperty that = (AppSettingsProperty) o;
-        return getOptionName() == that.getOptionName() &&
-                Objects.equals(getOptionValue(), that.getOptionValue());
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hash(getOptionName(), getOptionValue());
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((optionName == null) ? 0 : optionName.hashCode());
+        result = prime * result + ((optionValue == null) ? 0 : optionValue.hashCode());
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        AppSettingsProperty other = (AppSettingsProperty) obj;
+        if (optionName != other.optionName)
+            return false;
+        if (optionValue == null) {
+            if (other.optionValue != null)
+                return false;
+        } else if (!optionValue.equals(other.optionValue))
+            return false;
+        return true;
     }
 }

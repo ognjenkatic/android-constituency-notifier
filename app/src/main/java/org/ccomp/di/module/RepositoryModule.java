@@ -15,7 +15,6 @@ import org.ccomp.data.domain.settings.AppSettingsProperty;
 import org.ccomp.data.domain.settings.TLP;
 import org.ccomp.data.repository.AppSettingsPropertyRepository;
 import org.ccomp.data.repository.AppSettingsRepository;
-import org.ccomp.data.repository.EmailReportingRepo;
 import org.ccomp.data.repository.EmailReportingRepository;
 import org.ccomp.data.repository.FeedRepository;
 import org.ccomp.data.repository.LanguageRepository;
@@ -42,19 +41,13 @@ public class RepositoryModule {
         return new FeedRepository(feedItemDAO,feedParserService,executorService);
     }
 
-    @Provides
-    @Singleton
-    public EmailReportingRepository provideEmailReportingRepository(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
-        EmailReportingRepository emailReportingRepository = new EmailReportingRepository(appDatabase.emailReportingDAO(), appDatabase.incidentCategoryDAO(), appDatabase.emailReportingIncidentCategoryMappingDAO(), executorService, networkAvailabilityService);
 
-        return emailReportingRepository;
-    }
 
     @Provides
     @Singleton
-    public EmailReportingRepo provideEmailReportingRepo(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
+    public EmailReportingRepository provideEmailReportingRepo(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
 
-        EmailReportingRepo repo = new EmailReportingRepo(appDatabase.emailReportingDAO(), appDatabase.incidentCategoryDAO(), appDatabase.emailReportingIncidentCategoryMappingDAO(), executorService);
+        EmailReportingRepository repo = new EmailReportingRepository(appDatabase.emailReportingDAO(), appDatabase.incidentCategoryDAO(), appDatabase.emailReportingIncidentCategoryMappingDAO(), executorService);
         EmailReporting reporting = new EmailReporting();
         reporting.setAddress("cert@certrs.org");
         reporting.setDefaultTLP(TLP.AMBER);
@@ -126,7 +119,7 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public AppSettingsRepository provideAppSettingsRepository(EmailReportingRepo emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService){
+    public AppSettingsRepository provideAppSettingsRepository(EmailReportingRepository emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService){
         return new AppSettingsRepository(  emailReportingRepository, languageRepository, appSettingsPropertyRepository,mainService,executorService);
     }
 }

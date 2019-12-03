@@ -1,5 +1,7 @@
 package org.ccomp.ui.home;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,10 +11,10 @@ import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.settings.AppSettings;
 import org.ccomp.data.domain.settings.AppSettingsProperty;
+import org.ccomp.data.domain.settings.AppSettingsXMLParser;
 import org.ccomp.data.network.Resource;
-import org.ccomp.data.repository.AppSettingsPropertyRepository;
 import org.ccomp.data.repository.AppSettingsRepository;
-import org.ccomp.data.repository.EmailReportingRepo;
+import org.ccomp.data.repository.EmailReportingRepository;
 import org.ccomp.data.repository.LanguageRepository;
 
 import java.util.List;
@@ -27,44 +29,47 @@ public class HomeViewModel extends ViewModel {
     private LiveData<AppSettings> appSettings;
     private LiveData<List<AppSettingsProperty>> appSettingsPropertyLiveData;
 
-   EmailReportingRepo emailsRepository;
-   LanguageRepository languageRepository;
-   AppSettingsRepository appSettingsRepository;
+    EmailReportingRepository emailsRepository;
+    LanguageRepository languageRepository;
+    AppSettingsRepository appSettingsRepository;
 
 
+    private static final String TAG = "HomeViewModel";
 
-
-   @Inject
+    @Inject
     public HomeViewModel(AppSettingsRepository appSettingsRepository) {
-       // super(application);
+        // super(application);
+
+        try {
+            AppSettingsXMLParser xmlParser = new AppSettingsXMLParser();
+            xmlParser.parse("");
+        } catch (Exception ex) {
+            Log.e(TAG, "HomeViewModel: ", ex);
+        }
+
         setmText(new MutableLiveData<>());
         getmText().setValue("This is home fragment");
-        this.appSettingsRepository=appSettingsRepository;
-       MediatorLiveData<AppSettings> mediatorAppSettings=new MediatorLiveData<>();
-       LiveData<Resource<List<AppSettings>>> listLiveData=appSettingsRepository.load(true,appSettingsRepository.getDefaultPredicate());
-       mediatorAppSettings.addSource(listLiveData,(value)->{
-           List<AppSettings> allSettings=value.data;
-           if(allSettings!=null && !allSettings.isEmpty()) {
-               AppSettings appSettings = allSettings.get(0);
-               mediatorAppSettings.setValue(appSettings);
-           }
-       });
-       this.appSettings=mediatorAppSettings;
+        this.appSettingsRepository = appSettingsRepository;
+        MediatorLiveData<AppSettings> mediatorAppSettings = new MediatorLiveData<>();
+        LiveData<Resource<List<AppSettings>>> listLiveData = appSettingsRepository.load(true, appSettingsRepository.getDefaultPredicate());
+        mediatorAppSettings.addSource(listLiveData, (value) -> {
+            List<AppSettings> allSettings = value.data;
+            if (allSettings != null && !allSettings.isEmpty()) {
+                AppSettings appSettings = allSettings.get(0);
+                mediatorAppSettings.setValue(appSettings);
+            }
+        });
+        this.appSettings = mediatorAppSettings;
 
 
-        this.appSettingsPropertyLiveData=appSettingsRepository.getAppSettingsPropertyRepository().getAll();
+        this.appSettingsPropertyLiveData = appSettingsRepository.getAppSettingsPropertyRepository().getAll();
         this.emailsRepository = appSettingsRepository.getEmailReportingRepository();
-        this.setAllEmails(emailsRepository.load(false,emailsRepository.getDefaultPredicate()));
-        this.languageRepository=appSettingsRepository.getLanguageRepository();
-        this.setAllLang(languageRepository.load(false,languageRepository.getDefaultPredicate()));
-        boolean b=true;
+        this.setAllEmails(emailsRepository.load(false, emailsRepository.getDefaultPredicate()));
+        this.languageRepository = appSettingsRepository.getLanguageRepository();
+        this.setAllLang(languageRepository.load(false, languageRepository.getDefaultPredicate()));
+        boolean b = true;
 
     }
-
-
-
-
-
 
 
     public LiveData<String> getText() {
@@ -72,12 +77,12 @@ public class HomeViewModel extends ViewModel {
     }
 
 
-
-    public void save(EmailReporting emailReporting){
-        getEmailsRepository().save(true,emailReporting);
+    public void save(EmailReporting emailReporting) {
+        getEmailsRepository().save(true, emailReporting);
     }
-    public void save(Language lang){
-       getLanguageRepository().save(true,lang);
+
+    public void save(Language lang) {
+        getLanguageRepository().save(true, lang);
     }
 
 
@@ -114,11 +119,11 @@ public class HomeViewModel extends ViewModel {
         this.languageRepository = languageRepository;
     }
 
-    public EmailReportingRepo getEmailsRepository() {
+    public EmailReportingRepository getEmailsRepository() {
         return emailsRepository;
     }
 
-    public void setEmailsRepository(EmailReportingRepo emailsRepository) {
+    public void setEmailsRepository(EmailReportingRepository emailsRepository) {
         this.emailsRepository = emailsRepository;
     }
 
