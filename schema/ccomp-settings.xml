@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <certapp xmlns="http://www.certrs.org/certapp"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.certrs.org/certapp ccomp.xsd">
+	xsi:schemaLocation="http://www.certrs.org/certapp https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/feature-XML-config/schema/ccomp.xsd">
 	<settings>
 		<default_lang>
 			sr-latn-BA
@@ -12,17 +12,18 @@
 	</settings>
 	<cert_feeds_settings>
 		<feed_settings>
-			<link>https://certrs.org/feed/atom/</link>
-			<lang>sr-latn-BA</lang>
-			<categories>
-				<category name="Kategorija neka 0. stagod"
+			<feed_link>https://certrs.org/feed/atom/</feed_link>
+			<feed_lang>sr-latn-BA</feed_lang>
+			<feed_categories>
+			
+				<feed_category name="Kategorija neka 0. stagod"
 					importance="UNCATEGORIZED" />
-				<category name="Kategorija neka 1. stagod"
+				<feed_category name="Kategorija neka 1. stagod"
 					importance="HIDE" />
-				<category name="Kategorija neka 2. stagod"
+				<feed_category name="Kategorija neka 2. stagod"
 					importance="NOTIFY" />
-				<category name="Novosti" importance="SHOW" />
-			</categories>
+				<feed_category name="Novosti" importance="SHOW" />
+			</feed_categories>
 		</feed_settings>
 	</cert_feeds_settings>
 	<reporting_emails>
@@ -38,18 +39,18 @@
 				incident_type="Tip4" incident_class="Klasa4">
 				<incident_type_description>Opis tipa 4</incident_type_description>
 				<incident_class_description>Opis klase 4</incident_class_description>
-				<description>Opis4</description>
+				<incident_description>Opis4</incident_description>
 			</incident_category>
 			<incident_category incident_category_id="ID5"
 				incident_type="Tip5" incident_class="Klasa5">
 				<incident_type_description>Opis tipa 5</incident_type_description>
 				<incident_class_description>Opis klase 5</incident_class_description>
-				<description>Opis5</description>
+				<incident_description>Opis5</incident_description>
 			</incident_category>
 			<pgp_public>
-				<id>0xEE03B7F3</id>
-				<fingerprint>6F1F 1A61 EBA9 50A7 E3FC 5C03 1B5A 3A3B EE03 B7F3</fingerprint>
-				<key>-----BEGIN PGP PUBLIC KEY BLOCK-----
+				<pgp_id>0xEE03B7F3</pgp_id>
+				<pgp_fingerprint>6F1F 1A61 EBA9 50A7 E3FC 5C03 1B5A 3A3B EE03 B7F3</pgp_fingerprint>
+				<pgp_pubkey>-----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBFzr6FoBEAC6zON1gkaKluE7Tp6cXbtLDzR6xwbTI/TIl1QkMAMC/x3f9jxO
 cxQjRMWAVCWu69gp7dAeFbbhbTmqpc21KKgF8Na3I4A1E622w0TlZJk39Nvp5JXt
@@ -100,61 +101,24 @@ aErm6CxmxgL92cdk/eQd5lRpMrg59XUfInaRCvih8uQ2MttKEPhL2hLNuHgYFsoF
 2CzPdmG7cMxpnh8y78Fx2bZkDEHXMtIq3Il+TVIGyMobp03Jc3HSHo3AWNPGyWL5
 482r8oofl7dXTi1+oxvjwpokh1w0
 =Cwt0
------END PGP PUBLIC KEY BLOCK-----</key>
+-----END PGP PUBLIC KEY BLOCK-----</pgp_pubkey>
 			</pgp_public>
 		</reporting_email>
 	</reporting_emails>
 	<supported_langs>
 		<supported_lang lang_id="sr-Latn-BA">
-			<word>
-				<key>app_name</key>
-				<value>CERT RS pomoćnik</value>
-			</word>
-			<word>
-				<key>navigation_drawer_open</key>
-				<value>Otvori navigaciju</value>
-			</word>
-			<word>
-				<key>navigation_drawer_close</key>
-				<value>Zatvori navigaciju</value>
-			</word>
-			<word>
-				<key>nav_header_title</key>
-				<value>CERT RS pomoćnik</value>
-			</word>
-			<word>
-				<key>nav_header_subtitle</key>
-				<value>Jednostavan pristup servisina CERTa</value>
-			</word>
-			<word>
-				<key>nav_header_desc</key>
-				<value>Navigacija aplikacije</value>
-			</word>
-			<word>
-				<key>action_settings</key>
-				<value>Podešavanja</value>
-			</word>
-			<word>
-				<key>menu_home</key>
-				<value>Početna</value>
-			</word>
-			<word>
-				<key>menu_about</key>
-				<value>O nama</value>
-			</word>
-			<word>
-				<key>menu_settings</key>
-				<value>Podešavanja</value>
-			</word>
-			<word>
-				<key>menu_feed</key>
-				<value>Feed</value>
-			</word>
-
-			<word>
-				<key>welcome_message</key>
-				<value>Dobrodošli</value>
-			</word>
+			<translation word="app_name">CERT RS pomoćnik</translation>
+			<translation word="navigation_drawer_open" >Otvori navigaciju</translation>
+			<translation word="navigation_drawer_close" >Zatvori navigaciju</translation>
+			<translation word="nav_header_title" >CERT RS pomoćnik</translation>
+			<translation word="nav_header_subtitle" >Jednostavan pristup servisina CERTa</translation>
+			<translation word="nav_header_desc" >Navigacija aplikacije</translation>
+			<translation word="action_settings" >Podešavanja</translation>
+			<translation word="menu_home" >Početna</translation>
+			<translation word="menu_about" >O nama</translation>
+			<translation word="menu_settings" >Podešavanja</translation>
+			<translation word="menu_feed" >Feed</translation>
+			<translation word="welcome_message" >Dobrodošli</translation>
 		</supported_lang>
 	</supported_langs>
 </certapp>
