@@ -104,7 +104,7 @@ public class RepositoryModule {
     public AppSettingsPropertyRepository provideAppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService){
         AppSettingsPropertyRepository appSettingsPropertyRepository = new AppSettingsPropertyRepository(appSettingsPropertyDAO, executorService);
 
-        List<AppSettingsProperty> appSettingsProperties=new ArrayList<>();
+       /* List<AppSettingsProperty> appSettingsProperties=new ArrayList<>();
         AppSettingsProperty appSettingsProperty=new AppSettingsProperty(AppSettingsOption.app_settings_first_run,"TRUE");
         appSettingsProperties.add(appSettingsProperty);
         appSettingsProperty=new AppSettingsProperty(AppSettingsOption.app_settings_message_wellcome,"Wellcome");
@@ -113,6 +113,10 @@ public class RepositoryModule {
         appSettingsProperties.add(appSettingsProperty);
 
         appSettingsPropertyRepository.save(false,appSettingsProperties.toArray(new AppSettingsProperty[appSettingsProperties.size()]));
+          */
+       executorService.execute(()->{
+           appSettingsPropertyRepository.getMainDAO().deleteAll();
+       });
 
         return appSettingsPropertyRepository;
     }

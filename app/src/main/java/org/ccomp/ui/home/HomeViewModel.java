@@ -40,12 +40,12 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel(AppSettingsRepository appSettingsRepository) {
         // super(application);
 
-        try {
+       /* try {
             AppSettingsXMLParser xmlParser = new AppSettingsXMLParser();
             xmlParser.parse("");
         } catch (Exception ex) {
             Log.e(TAG, "HomeViewModel: ", ex);
-        }
+        }*/
 
         setmText(new MutableLiveData<>());
         getmText().setValue("This is home fragment");
@@ -56,7 +56,7 @@ public class HomeViewModel extends ViewModel {
             List<AppSettings> allSettings = value.data;
             if (allSettings != null && !allSettings.isEmpty()) {
                 AppSettings appSettings = allSettings.get(0);
-                mediatorAppSettings.setValue(appSettings);
+                mediatorAppSettings.postValue(appSettings);
             }
         });
         this.appSettings = mediatorAppSettings;

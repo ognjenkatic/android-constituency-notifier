@@ -17,10 +17,7 @@ public class AppSettingsXMLParser {
 
 
     SAXParser parser;
-    AppSettingsHandler handler = new AppSettingsHandler();
-
-    public AppSettingsXMLParser() {
-    }
+    AppSettingsHandler handler;
 
 
     @Inject
@@ -50,6 +47,7 @@ public class AppSettingsXMLParser {
 
         } catch (Exception ex) {
             Log.e(TAG, "parse: ", ex);
+            boolean b=true;
         }
         return appSettings;
     }

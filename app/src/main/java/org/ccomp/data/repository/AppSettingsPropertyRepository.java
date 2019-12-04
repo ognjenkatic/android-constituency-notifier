@@ -34,4 +34,9 @@ public class AppSettingsPropertyRepository extends GenericRepository <AppSetting
     public void saveCallResults(@NotNull List<AppSettingsProperty> items) {
         save(new AppSettingsProperty[items.size()]);
     }
+
+    @Override
+    public void save(@NotNull AppSettingsProperty... args) {
+        save(false,args);
+    }
 }

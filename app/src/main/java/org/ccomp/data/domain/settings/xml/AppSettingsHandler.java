@@ -109,7 +109,7 @@ public class AppSettingsHandler extends DefaultHandler {
                     try {
                         taxonomyUrl = new URL(taxonomy);
                     } catch (Exception ex) {
-                        Log.e(TAG, "startElement: taxonomy URL", ex);
+                        //Log.e(TAG, "startElement: taxonomy URL", ex);
                     }
                     FeedCategory feedCategory = new FeedCategory();
                     feedCategory.setName(name);
