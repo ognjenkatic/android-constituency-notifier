@@ -1,7 +1,7 @@
 package org.ccomp.data.domain.settings;
 
 
-import org.ccomp.data.domain.feed.Feed;
+import org.ccomp.data.domain.feed.FeedSettings;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 
@@ -13,22 +13,13 @@ import java.util.Map;
 public class AppSettings {
 
 
-    private List<Feed> certFeeds;
-    private List<Feed> userFeeds;
+    private List<FeedSettings> certFeeds;
+
     private List<EmailReporting> emailReportings;
     private Language defaultLang;
     private List<Language> supportedLangs;
 
     private Map<AppSettingsOption, AppSettingsProperty> properties;
-
-
-    public List<Feed> getUserFeeds() {
-        return userFeeds;
-    }
-
-    public void setUserFeeds(List<Feed> userFeeds) {
-        this.userFeeds = userFeeds;
-    }
 
 
     public Language getDefaultLang() {
@@ -47,11 +38,11 @@ public class AppSettings {
         this.emailReportings = emailReportings;
     }
 
-    public List<Feed> getCertFeeds() {
+    public List<FeedSettings> getCertFeeds() {
         return certFeeds;
     }
 
-    public void setCertFeeds(List<Feed> certFeeds) {
+    public void setCertFeeds(List<FeedSettings> certFeeds) {
         this.certFeeds = certFeeds;
     }
 

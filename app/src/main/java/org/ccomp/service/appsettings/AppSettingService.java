@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -34,15 +35,17 @@ public class AppSettingService extends AsyncService<AppSettings> {
     Context context;
     XMLValidatorService xmlValidatorService;
     AppSettingsXMLParser xmlParser;
+    ExecutorService executorService;
 
 
     @Inject
-    public AppSettingService(Context context, XMLValidatorService xmlValidatorService, NetworkAvailabilityService networkAvailabilityService,AppSettingsXMLParser xmlParser) {
+    public AppSettingService(Context context, XMLValidatorService xmlValidatorService, NetworkAvailabilityService networkAvailabilityService,AppSettingsXMLParser xmlParser, ExecutorService executorService) {
 
         this.context = context;
         this.xmlValidatorService = xmlValidatorService;
         this.networkAvailabilityService=networkAvailabilityService;
         this.xmlParser=xmlParser;
+        this.executorService=executorService;
     }
 
 
@@ -60,58 +63,19 @@ public class AppSettingService extends AsyncService<AppSettings> {
         String urlConfigString = (String) params.get("app.settings.url.config");
         String urlSchemaString = (String) params.get("app.settings.url.schema");
         RequestQueue requestQueue = Volley.newRequestQueue(context);
+        MutableLiveData<List<AppSettings>> appSettingsLiveData=null;
         if(networkAvailabilityService.isNetworkAvailable()) {
-            MutableLiveData<List<AppSettings>> appSettingsMutableLiveData = new MutableLiveData<>();
-            MutableLiveData<String> xmlConfigStringMutableLiveData=new MutableLiveData<>();
+            appSettingsLiveData=new MutableLiveData<>();
+            executorService.execute(()->{
+                    AppSettings appSettings=xmlParser.parse(urlConfigString);
+                    appSettingsLiveData.postValue(appSettings);
+            });
 
-            final Response.ErrorListener errorListener = new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "onErrorResponse: ", error);
-                }
-            };
-
-            Response.Listener<String> xmlSchemaListener=new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    boolean valid=xmlValidatorService.validate(xmlConfigStringMutableLiveData.getValue(),response);
-                    if(valid){
-                        AppSettings appSettings=xmlParser.parse(xmlConfigStringMutableLiveData.getValue());
-                        if(appSettings!=null){
-                            List<AppSettings> appSettingsList=new ArrayList<>();
-                            appSettingsList.add(appSettings);
-                            appSettingsMutableLiveData.postValue(appSettingsList);
-                        }
-                    }
-
-                }
-            };
-
-
-            Response.Listener<String> xmlConfigListener=new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    xmlConfigStringMutableLiveData.postValue(response);
-                    StringRequest xmlSchemaRequest=new StringRequest(Request.Method.GET,urlSchemaString,xmlSchemaListener, errorListener);
-                    requestQueue.add(xmlSchemaRequest);
-
-                }
-            };
-
-
-
-
-
-
-
-            StringRequest xmlConfigStringRequest = new StringRequest(Request.Method.GET, urlConfigString, xmlConfigListener,errorListener);
-            requestQueue.add(xmlConfigStringRequest);
-
-            return appSettingsMutableLiveData;
-        }else {
-            return null;
         }
+
+        return appSettingsLiveData;
+
+
 
     }
 }

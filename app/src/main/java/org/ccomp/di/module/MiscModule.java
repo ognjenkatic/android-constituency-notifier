@@ -4,9 +4,12 @@ package org.ccomp.di.module;
 import com.google.gson.Gson;
 
 import org.ccomp.data.domain.settings.AppSettingsXMLParser;
+import org.ccomp.data.domain.settings.xml.AppSettingsHandler;
 
 import javax.inject.Singleton;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.SchemaFactory;
 
 import dagger.Module;
@@ -31,6 +34,22 @@ public class MiscModule {
     @Singleton
     public Gson provideGson(){
         return new Gson();
+    }
+
+
+    @Provides
+    @Singleton
+    public SAXParser provideSAXParser(){
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setValidating(true);
+        factory.setNamespaceAware(true);
+        return factory.newSAXParser();
+    }
+
+    @Provides
+    @Singleton
+    public AppSettingsHandler provideAppSettingsHandler(){
+        return new AppSettingsHandler();
     }
 
 

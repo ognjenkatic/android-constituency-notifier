@@ -85,7 +85,8 @@ public class AppSettingsHandler extends DefaultHandler {
             case tag_certapp: {
                 if (attributes.getLength() > 0) {
                     schemaLocation = attributes.getValue(att_schema_location);
-                    boolean b = true;
+                    String [] tmp=schemaLocation.split(" ");
+                    schemaLocation=tmp[tmp.length-1];
                 }
             }
             break;
@@ -263,7 +264,7 @@ public class AppSettingsHandler extends DefaultHandler {
     @Override
     public void endDocument() throws SAXException {
         appSettings.setProperties(properties);
-        // appSettings.setCertFeeds(certFeeds);
+        appSettings.setCertFeeds(certFeeds);
         appSettings.setEmailReportings(emailReportings);
         appSettings.setSupportedLangs(supportedLangs);
     }
