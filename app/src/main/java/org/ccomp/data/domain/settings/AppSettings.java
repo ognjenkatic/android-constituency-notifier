@@ -17,6 +17,7 @@ public class AppSettings {
 
     private List<EmailReporting> emailReportings;
     private Language defaultLang;
+    private String defaultLangString;
     private List<Language> supportedLangs;
 
     private Map<AppSettingsOption, AppSettingsProperty> properties;
@@ -73,5 +74,13 @@ public class AppSettings {
         }
         this.properties = properiesMap;
 
+    }
+
+    public String getDefaultLangString() {
+        return defaultLangString;
+    }
+
+    public void setDefaultLangString(String defaultLangString) {
+        this.defaultLangString = defaultLangString;
     }
 }

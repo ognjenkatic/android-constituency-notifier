@@ -249,6 +249,9 @@ public class AppSettingsHandler extends DefaultHandler {
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         elementValue = new String(ch, start, length);
+        if(elementValue.startsWith("AA0sPC+") || elementValue.contains("---")){
+            boolean b=true;
+        }
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.ccomp.data.domain.feed.FeedSettings;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.settings.AppSettings;
+import org.ccomp.data.domain.settings.AppSettingsOption;
 import org.ccomp.data.domain.settings.AppSettingsProperty;
 import org.ccomp.service.appsettings.AppSettingService;
 import org.jetbrains.annotations.NotNull;
@@ -95,6 +96,9 @@ public class AppSettingsRepository extends GenericRepository<AppSettings, String
         liveData.addSource(propertiesLiveData, (value) -> {
             AppSettings newAppSettings = liveData.getValue();
             newAppSettings.setProperties(value);
+            if(newAppSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)){
+                newAppSettings.setDefaultLangString(newAppSettings.getProperties().get(AppSettingsOption.app_settings_lang_default).getOptionValue());
+            }
             liveData.postValue(newAppSettings);
         });
 
@@ -104,9 +108,6 @@ public class AppSettingsRepository extends GenericRepository<AppSettings, String
 
     @Override
     public AppSettings build(AppSettings in) {
-        in.setEmailReportings(emailReportingRepository.getAll().getValue());
-        in.setSupportedLangs(languageRepository.getAll().getValue());
-        in.setProperties(appSettingsPropertyRepository.getAll().getValue());
         return in;
     }
 
