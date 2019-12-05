@@ -85,6 +85,7 @@ public class MiscModule {
             parser= factory.newSAXParser();
             parser.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                     "http://www.w3.org/2001/XMLSchema");
+            parser.setProperty("http://apache.org/xml/properties/input-buffer-size",new Integer(8192));
             parser.getXMLReader().setErrorHandler(errorHandler);
         } catch (ParserConfigurationException | SAXException e) {
             Log.e(TAG, "provideSAXParser: ", e);

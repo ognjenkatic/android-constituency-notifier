@@ -27,7 +27,7 @@ public class AppSettingsHandler extends DefaultHandler {
     private static final String TAG = "AppSettingsHandler";
 
     private AppSettings appSettings;
-    private String elementValue;
+    private StringBuffer elementValue;
 
     private final String tag_certapp = "certapp";
     private final String tag_settings = "settings";
@@ -81,6 +81,9 @@ public class AppSettingsHandler extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
+        if(elementValue==null){
+            elementValue=new StringBuffer();
+        }
         switch (qName) {
             case tag_certapp: {
                 if (attributes.getLength() > 0) {
@@ -192,66 +195,68 @@ public class AppSettingsHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (qName) {
             case tag_base64_logo: {
-                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_logo_base64, elementValue);
+                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_logo_base64, elementValue.toString());
                 properties.add(appSettingsProperty);
             }
             break;
             case tag_default_lang: {
-                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_lang_default, elementValue);
+                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_lang_default, elementValue.toString());
                 properties.add(appSettingsProperty);
             }
             break;
             case tag_link: {
-                getLastFeedSettings().setLink(elementValue);
+                getLastFeedSettings().setLink(elementValue.toString());
 
             }
             break;
             case tag_lang: {
-                getLastFeedSettings().setLang(elementValue);
+                getLastFeedSettings().setLang(elementValue.toString());
             }
             break;
             case tag_incident_type_description: {
-                getLastCategory().setTypeDescription(elementValue);
+                getLastCategory().setTypeDescription(elementValue.toString());
             }
             break;
 
             case tag_incident_class_description: {
-                getLastCategory().setClassDescription(elementValue);
+                getLastCategory().setClassDescription(elementValue.toString());
 
             }
             break;
             case tag_description: {
-                getLastCategory().setDescription(elementValue);
+                getLastCategory().setDescription(elementValue.toString());
 
             }
             break;
             case tag_id: {
-                getLastEmailReporting().setPgpId(elementValue);
+                getLastEmailReporting().setPgpId(elementValue.toString());
             }
             break;
             case tag_fingerprint: {
-                getLastEmailReporting().setPgpFingerprint(elementValue);
+                getLastEmailReporting().setPgpFingerprint(elementValue.toString());
             }
             break;
             case tag_key: {
-                getLastEmailReporting().setPgpKey(elementValue);
+                getLastEmailReporting().setPgpKey(elementValue.toString());
             }
             break;
             case tag_word: {
-                getLastTranslation().setValue(elementValue);
+                getLastTranslation().setValue(elementValue.toString());
             }
             break;
 
 
         }
+        elementValue=null;
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        elementValue = new String(ch, start, length);
-        if(elementValue.startsWith("AA0sPC+") || elementValue.contains("---")){
-            boolean b=true;
+        String current=new String(ch, start, length);
+        if(elementValue!=null){
+            elementValue.append(current);
         }
+
     }
 
     @Override

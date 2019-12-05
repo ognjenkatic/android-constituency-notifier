@@ -5,9 +5,6 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
 import org.ccomp.data.domain.settings.AppSettings;
 import org.ccomp.data.domain.settings.AppSettingsXMLParser;
 import org.ccomp.service.IAsyncService;
@@ -54,7 +51,6 @@ public class AppSettingService implements IAsyncService<AppSettings> {
     public LiveData<List<AppSettings>> fetchAsync(Map<String, Object> params) {
         String urlConfigString = (String) params.get("app.settings.url.config");
         String urlSchemaString = (String) params.get("app.settings.url.schema");
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
         MutableLiveData<List<AppSettings>> appSettingsLiveData = new MutableLiveData<>();
         boolean networAvailable = networkAvailabilityService.isNetworkAvailable();
         if (networkAvailabilityService.isNetworkAvailable()) {
@@ -87,7 +83,6 @@ public class AppSettingService implements IAsyncService<AppSettings> {
     public List<AppSettings> fetch(Map<String, Object> params) {
         String urlConfigString = (String) params.get("app.settings.url.config");
         String urlSchemaString = (String) params.get("app.settings.url.schema");
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
         boolean networAvailable = networkAvailabilityService.isNetworkAvailable();
         List<AppSettings> appSettingsList = null;
         if (networkAvailabilityService.isNetworkAvailable()) {
