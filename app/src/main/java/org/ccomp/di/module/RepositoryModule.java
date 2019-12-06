@@ -47,8 +47,11 @@ public class RepositoryModule {
     @Singleton
     public EmailReportingRepository provideEmailReportingRepo(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
 
+
         EmailReportingRepository repo = new EmailReportingRepository(appDatabase.emailReportingDAO(), appDatabase.incidentCategoryDAO(), appDatabase.emailReportingIncidentCategoryMappingDAO(), executorService);
-        EmailReporting reporting = new EmailReporting();
+
+
+        /*EmailReporting reporting = new EmailReporting();
         reporting.setAddress("cert@certrs.org");
         reporting.setDefaultTLP(TLP.AMBER);
         reporting.setPgpId("0xEE03B7F3");
@@ -69,7 +72,7 @@ public class RepositoryModule {
         reporting.setIncidentCategories(categories);
 
        repo.save(true,reporting);
-
+    */
 
         return repo;
     }
@@ -79,6 +82,8 @@ public class RepositoryModule {
     public LanguageRepository provideLanguageRepository(LangDAO langDAO, WordDAO wordDAO, TranslationDAO translationDAO, ExecutorService executorService) {
         LanguageRepository languageRepository = new LanguageRepository(langDAO, wordDAO, translationDAO, executorService);
 
+
+        /*
         String langId = "sr-lat";
         Language lang = new Language();
         lang.setName("Srpski");
@@ -95,6 +100,8 @@ public class RepositoryModule {
         lang.setTranslations(translations);
 
         languageRepository.save(true, lang);
+
+         */
 
         return languageRepository;
     }

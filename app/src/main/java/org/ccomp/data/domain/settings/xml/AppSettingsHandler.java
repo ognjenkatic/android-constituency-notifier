@@ -276,6 +276,10 @@ public class AppSettingsHandler extends DefaultHandler {
         appSettings.setCertFeeds(certFeeds);
         appSettings.setEmailReportings(emailReportings);
         appSettings.setSupportedLangs(supportedLangs);
+        properties=null;
+        certFeeds=null;
+        emailReportings=null;
+        supportedLangs=null;
     }
 
     public FeedSettings getLastFeedSettings() {

@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import org.ccomp.data.domain.feed.FeedSettings;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.settings.AppSettings;
@@ -16,7 +15,6 @@ import org.ccomp.data.domain.settings.AppSettingsProperty;
 import org.ccomp.data.network.NetworkBoundResource;
 import org.ccomp.data.network.Resource;
 import org.ccomp.service.appsettings.AppSettingService;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,7 +44,6 @@ public class AppSettingsRepository {
     }
 
 
-
     public LiveData<Resource<AppSettings>> load(boolean shouldFetch) {
         return new NetworkBoundResource<AppSettings, AppSettings>() {
             @Override
@@ -62,6 +59,7 @@ public class AppSettingsRepository {
             @NonNull
             @Override
             protected LiveData<AppSettings> loadFromDb() {
+
                 return buildLiveDataSync();
             }
 
@@ -101,22 +99,22 @@ public class AppSettingsRepository {
         }.getAsLiveData();
     }
 
-    public LiveData<AppSettings> buildLiveDataSync(){
-        MutableLiveData<AppSettings> mutableLiveData=new MutableLiveData<>();
-        executorService.execute(()->{
-            AppSettings appSettings=new AppSettings();
+    public LiveData<AppSettings> buildLiveDataSync() {
+        MutableLiveData<AppSettings> mutableLiveData = new MutableLiveData<>();
+        executorService.execute(() -> {
+            AppSettings appSettings = new AppSettings();
             appSettings.setSupportedLangs(languageRepository.getMainDAO().getAllSync());
             appSettings.setEmailReportings(emailReportingRepository.getMainDAO().getAllSync());
             appSettings.setProperties(appSettingsPropertyRepository.getMainDAO().getAllSync());
-            if(appSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)){
-                Language defaultLang=languageRepository.getMainDAO().getSync(appSettings.getProperties().get(AppSettingsOption.app_settings_lang_default).getOptionValue());
+            if (appSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)) {
+                Language defaultLang = languageRepository.getMainDAO().getSync(appSettings.getProperties().get(AppSettingsOption.app_settings_lang_default).getOptionValue());
                 appSettings.setDefaultLang(defaultLang);
-                if(defaultLang!=null){
+                if (defaultLang != null) {
                     appSettings.setDefaultLangString(defaultLang.getLangId());
                 }
             }
             mutableLiveData.postValue(appSettings);
-            appSettings=null;
+            appSettings = null;
         });
         return mutableLiveData;
     }
@@ -159,16 +157,14 @@ public class AppSettingsRepository {
                 Collection<AppSettingsProperty> properties = obj.getProperties().values();
                 appSettingsPropertyRepository.save(properties.toArray(new AppSettingsProperty[properties.size()]));
             }
-            if(obj.getCertFeeds()!=null){
+            if (obj.getCertFeeds() != null) {
 
             }
-            if(obj.getSupportedLangs()!=null){
+            if (obj.getSupportedLangs() != null) {
                 languageRepository.saveCallResults(obj.getSupportedLangs());
             }
         }
     }
-
-
 
 
     public FeedRepository getFeedRepository() {

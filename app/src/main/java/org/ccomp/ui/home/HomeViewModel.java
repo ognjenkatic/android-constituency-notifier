@@ -24,8 +24,6 @@ import javax.inject.Inject;
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
-    private LiveData<Resource<List<EmailReporting>>> allEmails;
-    private LiveData<Resource<List<Language>>> allLang;
     private LiveData<Resource<AppSettings>> appSettings;
 
 
@@ -40,12 +38,11 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel(AppSettingsRepository appSettingsRepository) {
 
 
-        setmText(new MutableLiveData<>());
-        getmText().setValue("This is home fragment");
+        mText=new MutableLiveData<>();
+        mText.setValue("This is home fragment");
         this.appSettingsRepository = appSettingsRepository;
-        this.appSettings = appSettingsRepository.load(false);
-      //  this.emailsRepository = appSettingsRepository.getEmailReportingRepository();
-       // this.languageRepository = appSettingsRepository.getLanguageRepository();
+        this.appSettings = appSettingsRepository.load(true);
+
         boolean b = true;
 
     }
@@ -73,21 +70,6 @@ public class HomeViewModel extends ViewModel {
         this.mText = mText;
     }
 
-    public LiveData<Resource<List<EmailReporting>>> getAllEmails() {
-        return allEmails;
-    }
-
-    public void setAllEmails(LiveData<Resource<List<EmailReporting>>> allEmails) {
-        this.allEmails = allEmails;
-    }
-
-    public LiveData<Resource<List<Language>>> getAllLang() {
-        return allLang;
-    }
-
-    public void setAllLang(LiveData<Resource<List<Language>>> allLang) {
-        this.allLang = allLang;
-    }
 
 
     public LanguageRepository getLanguageRepository() {

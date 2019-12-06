@@ -64,16 +64,14 @@ public class AppSettings {
     }
 
     public void setProperties(List<AppSettingsProperty> propertiesList) {
-        Map<AppSettingsOption, AppSettingsProperty> properiesMap = new HashMap<>();
+        this.properties = new HashMap<>();
         for (AppSettingsProperty property : propertiesList) {
-            if (properiesMap.containsKey(property.optionName)) {
-                properiesMap.remove(property.optionName);
+            if (this.properties.containsKey(property.optionName)) {
+                this.properties.remove(property.optionName);
             }
-            properiesMap.put(property.optionName, property);
+            this.properties.put(property.optionName, property);
 
         }
-        this.properties = properiesMap;
-
     }
 
     public String getDefaultLangString() {
