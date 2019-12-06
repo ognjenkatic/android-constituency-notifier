@@ -2,6 +2,7 @@ package org.ccomp.data.domain.settings.xml;
 
 import android.util.Log;
 
+import org.apache.commons.text.TextStringBuilder;
 import org.ccomp.data.domain.feed.FeedCategory;
 import org.ccomp.data.domain.feed.FeedCategoryImportance;
 import org.ccomp.data.domain.feed.FeedSettings;
@@ -27,7 +28,7 @@ public class AppSettingsHandler extends DefaultHandler {
     private static final String TAG = "AppSettingsHandler";
 
     private AppSettings appSettings;
-    private StringBuffer elementValue;
+    private TextStringBuilder elementValue=new TextStringBuilder();
 
     private final String tag_certapp = "certapp";
     private final String tag_settings = "settings";
@@ -81,9 +82,7 @@ public class AppSettingsHandler extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
-        if(elementValue==null){
-            elementValue=new StringBuffer();
-        }
+
         switch (qName) {
             case tag_certapp: {
                 if (attributes.getLength() > 0) {
@@ -195,67 +194,68 @@ public class AppSettingsHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (qName) {
             case tag_base64_logo: {
-                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_logo_base64, elementValue.toString());
+                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_logo_base64, elementValue.build());
                 properties.add(appSettingsProperty);
             }
             break;
             case tag_default_lang: {
-                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_lang_default, elementValue.toString());
+                AppSettingsProperty appSettingsProperty = new AppSettingsProperty(AppSettingsOption.app_settings_lang_default, elementValue.build());
                 properties.add(appSettingsProperty);
             }
             break;
             case tag_link: {
-                getLastFeedSettings().setLink(elementValue.toString());
+                getLastFeedSettings().setLink(elementValue.build());
 
             }
             break;
             case tag_lang: {
-                getLastFeedSettings().setLang(elementValue.toString());
+                getLastFeedSettings().setLang(elementValue.build());
             }
             break;
             case tag_incident_type_description: {
-                getLastCategory().setTypeDescription(elementValue.toString());
+                getLastCategory().setTypeDescription(elementValue.build());
             }
             break;
 
             case tag_incident_class_description: {
-                getLastCategory().setClassDescription(elementValue.toString());
+                getLastCategory().setClassDescription(elementValue.build());
 
             }
             break;
             case tag_description: {
-                getLastCategory().setDescription(elementValue.toString());
+                getLastCategory().setDescription(elementValue.build());
 
             }
             break;
             case tag_id: {
-                getLastEmailReporting().setPgpId(elementValue.toString());
+                getLastEmailReporting().setPgpId(elementValue.build());
             }
             break;
             case tag_fingerprint: {
-                getLastEmailReporting().setPgpFingerprint(elementValue.toString());
+                getLastEmailReporting().setPgpFingerprint(elementValue.build());
             }
             break;
             case tag_key: {
-                getLastEmailReporting().setPgpKey(elementValue.toString());
+                getLastEmailReporting().setPgpKey(elementValue.build());
             }
             break;
             case tag_word: {
-                getLastTranslation().setValue(elementValue.toString());
+                getLastTranslation().setValue(elementValue.build());
             }
             break;
 
 
         }
-        elementValue=null;
+
+        elementValue.delete(0,elementValue.length());
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        String current=new String(ch, start, length);
-        if(elementValue!=null){
-            elementValue.append(current);
-        }
+            elementValue.append(ch,start,length);
+            boolean b=true;
+
+
 
     }
 
@@ -266,6 +266,7 @@ public class AppSettingsHandler extends DefaultHandler {
         certFeeds = new ArrayList<>(1);
         emailReportings = new ArrayList<>(3);
         supportedLangs = new ArrayList<>(2);
+
 
     }
 

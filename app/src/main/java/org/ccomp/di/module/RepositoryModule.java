@@ -113,10 +113,12 @@ public class RepositoryModule {
         appSettingsProperties.add(appSettingsProperty);
 
         appSettingsPropertyRepository.save(false,appSettingsProperties.toArray(new AppSettingsProperty[appSettingsProperties.size()]));
-          */
+
        executorService.execute(()->{
            appSettingsPropertyRepository.getMainDAO().deleteAll();
        });
+
+        */
 
         return appSettingsPropertyRepository;
     }

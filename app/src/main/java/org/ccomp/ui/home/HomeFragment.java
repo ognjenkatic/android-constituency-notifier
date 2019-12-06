@@ -18,9 +18,13 @@ import com.google.gson.Gson;
 
 import org.ccomp.R;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
+import org.ccomp.data.domain.settings.AppSettings;
+import org.ccomp.data.domain.settings.AppSettingsOption;
+import org.ccomp.data.domain.settings.AppSettingsProperty;
 import org.ccomp.factory.ViewModelFactory;
 import org.ccomp.ui.feed.FeedViewModel;
 
+import java.util.Map;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -69,17 +73,23 @@ public class HomeFragment extends DaggerFragment {
 
 
          */
-        homeViewModel.getAppSettings().observe(this,(appSettings -> {
-            textHome.setText(gson.toJson(appSettings.getProperties()));
+        homeViewModel.getAppSettings().observe(this,(value -> {
+            AppSettings appSettings=value.data;
+            if(appSettings!=null) {
+                Map<AppSettingsOption, AppSettingsProperty> properties = appSettings.getProperties();
+                textHome.setText(gson.toJson(properties));
+            }
         }));
 
 
-        homeViewModel.getText().observe(this, new Observer<String>() {
+     /*   homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textHome.setText(s);
             }
         });
+
+      */
 
         homeButton.setOnClickListener(this::buttonOnClick);
 
@@ -88,13 +98,12 @@ public class HomeFragment extends DaggerFragment {
 
     public void buttonOnClick(View view) {
         Toast.makeText(view.getContext(), "Bla bla bla", Toast.LENGTH_LONG).show();
-        EmailReporting emailReporting = homeViewModel.getAllEmails().getValue().data.get(0);
-        Random rand = new Random();
-        emailReporting.setPgpKey("Potpis " + rand.nextInt(10));
-        homeViewModel.save(emailReporting);
+
 
 
     }
+
+
 
 
 }

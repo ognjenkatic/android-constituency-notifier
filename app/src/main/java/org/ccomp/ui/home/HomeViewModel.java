@@ -26,8 +26,8 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private LiveData<Resource<List<EmailReporting>>> allEmails;
     private LiveData<Resource<List<Language>>> allLang;
-    private LiveData<AppSettings> appSettings;
-    private LiveData<List<AppSettingsProperty>> appSettingsPropertyLiveData;
+    private LiveData<Resource<AppSettings>> appSettings;
+
 
     EmailReportingRepository emailsRepository;
     LanguageRepository languageRepository;
@@ -38,35 +38,14 @@ public class HomeViewModel extends ViewModel {
 
     @Inject
     public HomeViewModel(AppSettingsRepository appSettingsRepository) {
-        // super(application);
 
-       /* try {
-            AppSettingsXMLParser xmlParser = new AppSettingsXMLParser();
-            xmlParser.parse("");
-        } catch (Exception ex) {
-            Log.e(TAG, "HomeViewModel: ", ex);
-        }*/
 
         setmText(new MutableLiveData<>());
         getmText().setValue("This is home fragment");
         this.appSettingsRepository = appSettingsRepository;
-        MediatorLiveData<AppSettings> mediatorAppSettings = new MediatorLiveData<>();
-        LiveData<Resource<List<AppSettings>>> listLiveData = appSettingsRepository.load(true, appSettingsRepository.getDefaultPredicate());
-        mediatorAppSettings.addSource(listLiveData, (value) -> {
-            List<AppSettings> allSettings = value.data;
-            if (allSettings != null && !allSettings.isEmpty()) {
-                AppSettings appSettings = allSettings.get(0);
-                mediatorAppSettings.postValue(appSettings);
-            }
-        });
-        this.appSettings = mediatorAppSettings;
-
-
-        this.appSettingsPropertyLiveData = appSettingsRepository.getAppSettingsPropertyRepository().getAll();
-        this.emailsRepository = appSettingsRepository.getEmailReportingRepository();
-        this.setAllEmails(emailsRepository.load(false, emailsRepository.getDefaultPredicate()));
-        this.languageRepository = appSettingsRepository.getLanguageRepository();
-        this.setAllLang(languageRepository.load(false, languageRepository.getDefaultPredicate()));
+        this.appSettings = appSettingsRepository.load(false);
+      //  this.emailsRepository = appSettingsRepository.getEmailReportingRepository();
+       // this.languageRepository = appSettingsRepository.getLanguageRepository();
         boolean b = true;
 
     }
@@ -127,11 +106,11 @@ public class HomeViewModel extends ViewModel {
         this.emailsRepository = emailsRepository;
     }
 
-    public LiveData<AppSettings> getAppSettings() {
+    public LiveData<Resource<AppSettings>> getAppSettings() {
         return appSettings;
     }
 
-    public void setAppSettings(LiveData<AppSettings> appSettings) {
+    public void setAppSettings(LiveData<Resource<AppSettings>> appSettings) {
         this.appSettings = appSettings;
     }
 

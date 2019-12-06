@@ -1,33 +1,38 @@
 package org.ccomp.data.repository;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import org.ccomp.data.domain.feed.Feed;
 import org.ccomp.data.domain.feed.FeedSettings;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.settings.AppSettings;
 import org.ccomp.data.domain.settings.AppSettingsOption;
 import org.ccomp.data.domain.settings.AppSettingsProperty;
+import org.ccomp.data.network.NetworkBoundResource;
+import org.ccomp.data.network.Resource;
 import org.ccomp.service.appsettings.AppSettingService;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
-public class AppSettingsRepository extends GenericRepository<AppSettings, String> {
+public class AppSettingsRepository {
 
-
+    private static final String TAG = "AppSettingsRepository";
     FeedRepository feedRepository;
     EmailReportingRepository emailReportingRepository;
     LanguageRepository languageRepository;
     AppSettingsPropertyRepository appSettingsPropertyRepository;
+    AppSettingService mainService;
+    ExecutorService executorService;
 
 
     @Inject
@@ -40,38 +45,80 @@ public class AppSettingsRepository extends GenericRepository<AppSettings, String
         this.executorService = executorService;
     }
 
-    @Override
-    public LiveData<List<AppSettings>> getAll(Predicate<AppSettings> predicate) {
-        MediatorLiveData<List<AppSettings>> all = new MediatorLiveData<>();
-        List<AppSettings> list = new ArrayList<>();
-        all.setValue(list);
-        all.addSource(buildLiveData(), (value) -> {
-            list.add(value);
-            all.postValue(list);
-        });
-
-        return all;
-
-    }
 
 
-    public LiveData<AppSettings> get() {
-        return get("");
-    }
-
-    @Override
-    public LiveData<AppSettings> get(String key) {
-        return buildLiveData();
-    }
-
-
-    @Override
-    public void save(boolean complexSave, @NotNull AppSettings... args) {
-        if (args != null) {
-            for (AppSettings obj : args) {
-                dismantle(obj);
+    public LiveData<Resource<AppSettings>> load(boolean shouldFetch) {
+        return new NetworkBoundResource<AppSettings, AppSettings>() {
+            @Override
+            protected void saveCallResult(@NonNull AppSettings item) {
+                dismantle(item);
             }
-        }
+
+            @Override
+            protected boolean shouldFetch() {
+                return shouldFetch;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<AppSettings> loadFromDb() {
+                return buildLiveDataSync();
+            }
+
+            @NonNull
+            @Override
+            protected Resource<LiveData<AppSettings>> createCall() {
+                try {
+
+                    MutableLiveData<AppSettings> mutableLiveData = new MutableLiveData<>();
+                    if (mainService != null) {
+                        executorService.execute(() -> {
+
+                            try {
+                                AppSettings item = mainService.fetch();
+                                mutableLiveData.postValue(item);
+                            } catch (Exception ex) {
+                                Log.e(TAG, "createCall: ", ex);
+
+                                ex.printStackTrace();
+                                boolean b = true;
+                            }
+
+
+                        });
+                    } else {
+                        return null;
+                    }
+
+                    return Resource.success(mutableLiveData);
+
+                } catch (Exception ex) {
+
+                    Log.d(TAG, "createCall: " + ex.getMessage());
+                    return null;
+                }
+            }
+        }.getAsLiveData();
+    }
+
+    public LiveData<AppSettings> buildLiveDataSync(){
+        MutableLiveData<AppSettings> mutableLiveData=new MutableLiveData<>();
+        executorService.execute(()->{
+            AppSettings appSettings=new AppSettings();
+            appSettings.setSupportedLangs(languageRepository.getMainDAO().getAllSync());
+            appSettings.setEmailReportings(emailReportingRepository.getMainDAO().getAllSync());
+            appSettings.setProperties(appSettingsPropertyRepository.getMainDAO().getAllSync());
+            if(appSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)){
+                Language defaultLang=languageRepository.getMainDAO().getSync(appSettings.getProperties().get(AppSettingsOption.app_settings_lang_default).getOptionValue());
+                appSettings.setDefaultLang(defaultLang);
+                if(defaultLang!=null){
+                    appSettings.setDefaultLangString(defaultLang.getLangId());
+                }
+            }
+            mutableLiveData.postValue(appSettings);
+            appSettings=null;
+        });
+        return mutableLiveData;
     }
 
     public LiveData<AppSettings> buildLiveData() {
@@ -96,7 +143,7 @@ public class AppSettingsRepository extends GenericRepository<AppSettings, String
         liveData.addSource(propertiesLiveData, (value) -> {
             AppSettings newAppSettings = liveData.getValue();
             newAppSettings.setProperties(value);
-            if(newAppSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)){
+            if (newAppSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)) {
                 newAppSettings.setDefaultLangString(newAppSettings.getProperties().get(AppSettingsOption.app_settings_lang_default).getOptionValue());
             }
             liveData.postValue(newAppSettings);
@@ -106,24 +153,22 @@ public class AppSettingsRepository extends GenericRepository<AppSettings, String
         return liveData;
     }
 
-    @Override
-    public AppSettings build(AppSettings in) {
-        return in;
-    }
-
-    @Override
     public void dismantle(AppSettings obj) {
-        Collection<AppSettingsProperty> properties = obj.getProperties().values();
-        appSettingsPropertyRepository.save(properties.toArray(new AppSettingsProperty[properties.size()]));
-        for(FeedSettings feedSettings:obj.getCertFeeds()){
+        if (obj != null) {
+            if (obj.getProperties() != null) {
+                Collection<AppSettingsProperty> properties = obj.getProperties().values();
+                appSettingsPropertyRepository.save(properties.toArray(new AppSettingsProperty[properties.size()]));
+            }
+            if(obj.getCertFeeds()!=null){
 
+            }
+            if(obj.getSupportedLangs()!=null){
+                languageRepository.saveCallResults(obj.getSupportedLangs());
+            }
         }
     }
 
-    @Override
-    public void saveCallResults(@NotNull List<AppSettings> items) {
-        save(items.toArray(new AppSettings[items.size()]));
-    }
+
 
 
     public FeedRepository getFeedRepository() {

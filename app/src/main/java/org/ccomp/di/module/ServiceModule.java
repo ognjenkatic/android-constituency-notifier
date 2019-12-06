@@ -52,7 +52,7 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public AppSettingService provideAppSettingService(@NotNull Application app,  @NotNull NetworkAvailabilityService networkAvailabilityService, @NotNull AppSettingsXMLParser xmlParser,@NotNull ExecutorService executorService){
-        return new AppSettingService(app.getApplicationContext(),networkAvailabilityService,xmlParser,executorService);
+    public AppSettingService provideAppSettingService(  @NotNull NetworkAvailabilityService networkAvailabilityService, @NotNull AppSettingsXMLParser xmlParser){
+        return new AppSettingService(networkAvailabilityService,xmlParser);
     }
 }

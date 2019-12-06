@@ -15,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Predicate;
+
 
 public abstract class GenericRepository<T,K> {
 
     protected IDAO<T,K> mainDAO;
     protected IService<T> mainService;
     protected ExecutorService executorService;
-    protected Predicate<T> defaultPredicate=new Predicate<T>() {
+    protected Predicate<T> defaultPredicate=new DefaultPredicate<T>() {
         @Override
         public boolean test(T t) {
             return true;
@@ -89,6 +89,9 @@ public abstract class GenericRepository<T,K> {
     public abstract void dismantle(T obj);
 
     public  abstract void saveCallResults(@NotNull List<T> items);
+    public LiveData<Resource<List<T>>> loadDefault(boolean shouldFetch){
+        return load(shouldFetch,defaultPredicate);
+    }
 
     public LiveData<Resource<List<T>>> load(boolean shouldFetch, Predicate<T> predicate){
         return new NetworkBoundResource<List<T>,List<T>>(){
