@@ -1,13 +1,16 @@
 package org.ccomp.di.module;
 
 
+import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
 
 import org.apache.xerces.jaxp.SAXParserFactoryImpl;
+import org.ccomp.data.domain.lang.Restring;
 import org.ccomp.data.domain.settings.AppSettingsXMLParser;
-import org.ccomp.data.domain.settings.xml.AppSettingsHandler;
+import org.ccomp.data.domain.settings.TLP;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -36,7 +39,7 @@ public class MiscModule {
 
     @Provides
     @Singleton
-    public AppSettingsXMLParser provideAppSettingsXMLParser(@NotNull SAXParser parser, @NotNull AppSettingsHandler handler) {
+    public AppSettingsXMLParser provideAppSettingsXMLParser(@NotNull SAXParser parser, @NotNull TLP.AppSettingsHandler handler) {
         return new AppSettingsXMLParser(parser,handler);
     }
 
@@ -96,8 +99,14 @@ public class MiscModule {
 
     @Provides
     @Singleton
-    public AppSettingsHandler provideAppSettingsHandler() {
-        return new AppSettingsHandler();
+    public TLP.AppSettingsHandler provideAppSettingsHandler() {
+        return new TLP.AppSettingsHandler();
+    }
+
+    @Provides
+    @Singleton
+    public Restring provideRestring(@NotNull Application application){
+        return new Restring(application.getApplicationContext());
     }
 
 

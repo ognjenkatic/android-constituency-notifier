@@ -44,7 +44,7 @@ public class AppSettingsRepository {
     }
 
 
-    public LiveData<Resource<AppSettings>> load(boolean shouldFetch) {
+    public synchronized LiveData<Resource<AppSettings>> load(boolean shouldFetch) {
         return new NetworkBoundResource<AppSettings, AppSettings>() {
             @Override
             protected void saveCallResult(@NonNull AppSettings item) {
@@ -103,11 +103,12 @@ public class AppSettingsRepository {
         MutableLiveData<AppSettings> mutableLiveData = new MutableLiveData<>();
         executorService.execute(() -> {
             AppSettings appSettings = new AppSettings();
-            appSettings.setSupportedLangs(languageRepository.getMainDAO().getAllSync());
-            appSettings.setEmailReportings(emailReportingRepository.getMainDAO().getAllSync());
-            appSettings.setProperties(appSettingsPropertyRepository.getMainDAO().getAllSync());
+            appSettings.setSupportedLangs(languageRepository.getAllSync());
+            appSettings.setEmailReportings(emailReportingRepository.getAllSync());
+            appSettings.setProperties(appSettingsPropertyRepository.getAllSync());
             if (appSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)) {
-                Language defaultLang = languageRepository.getMainDAO().getSync(appSettings.getProperties().get(AppSettingsOption.app_settings_lang_default).getOptionValue());
+                AppSettingsProperty defaultLangProp=appSettings.getProperties().get(AppSettingsOption.app_settings_lang_default);
+                Language defaultLang = languageRepository.getSync(defaultLangProp.getOptionValue());
                 appSettings.setDefaultLang(defaultLang);
                 if (defaultLang != null) {
                     appSettings.setDefaultLangString(defaultLang.getLangId());
@@ -161,7 +162,7 @@ public class AppSettingsRepository {
 
             }
             if (obj.getSupportedLangs() != null) {
-                languageRepository.saveCallResults(obj.getSupportedLangs());
+                languageRepository.save(obj.getSupportedLangs().toArray(new Language[obj.getSupportedLangs().size()]));
             }
         }
     }

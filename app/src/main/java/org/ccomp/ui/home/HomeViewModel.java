@@ -1,5 +1,6 @@
 package org.ccomp.ui.home;
 
+import android.content.ClipData;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -41,7 +42,9 @@ public class HomeViewModel extends ViewModel {
         mText=new MutableLiveData<>();
         mText.setValue("This is home fragment");
         this.appSettingsRepository = appSettingsRepository;
-        this.appSettings = appSettingsRepository.load(true);
+        this.appSettings = appSettingsRepository.load(false);
+
+
 
         boolean b = true;
 

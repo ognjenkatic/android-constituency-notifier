@@ -2,7 +2,6 @@ package org.ccomp.data.domain.settings;
 
 import android.util.Log;
 
-import org.ccomp.data.domain.settings.xml.AppSettingsHandler;
 import org.xml.sax.InputSource;
 
 import java.io.StringReader;
@@ -17,11 +16,11 @@ public class AppSettingsXMLParser {
 
 
     SAXParser parser;
-    AppSettingsHandler handler;
+    TLP.AppSettingsHandler handler;
 
 
     @Inject
-    public AppSettingsXMLParser(SAXParser parser, AppSettingsHandler handler) {
+    public AppSettingsXMLParser(SAXParser parser, TLP.AppSettingsHandler handler) {
         this.parser = parser;
         this.handler = handler;
     }
@@ -60,11 +59,11 @@ public class AppSettingsXMLParser {
         this.parser = parser;
     }
 
-    public AppSettingsHandler getHandler() {
+    public TLP.AppSettingsHandler getHandler() {
         return handler;
     }
 
-    public void setHandler(AppSettingsHandler handler) {
+    public void setHandler(TLP.AppSettingsHandler handler) {
         this.handler = handler;
     }
 }

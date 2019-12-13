@@ -32,8 +32,10 @@ public class LanguageRepository extends GenericRepository<Language,String> {
 
     @Override
     public Language build(Language in) {
-        List<Translation> translations=translationDAO.getTranslationByLangIdSync(in.getLangId());
-        in.setTranslations(translations);
+       if(in!=null) {
+           List<Translation> translations = translationDAO.getTranslationByLangIdSync(in.getLangId());
+           in.setTranslations(translations);
+       }
         return in;
     }
 

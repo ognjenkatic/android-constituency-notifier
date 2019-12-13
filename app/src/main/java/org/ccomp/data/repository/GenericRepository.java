@@ -46,8 +46,25 @@ public abstract class GenericRepository<T,K> {
         });
         return mutableLiveData;
     }
+
+
     public LiveData<List<T>> getAll(){
         return getAll(getDefaultPredicate());
+    }
+
+    public List<T> getAllSync(Predicate<T> predicate){
+        List<T> unfiltered=mainDAO.getAllSync();
+        List<T> filtered=new ArrayList<>();
+        for(T obj : unfiltered){
+            if(predicate.test(obj)){
+                filtered.add(build(obj));
+            }
+        }
+        return filtered;
+    }
+
+    public List<T> getAllSync(){
+        return getAllSync(defaultPredicate);
     }
 
     public LiveData<T> get(K key){
@@ -55,6 +72,10 @@ public abstract class GenericRepository<T,K> {
         MutableLiveData<T> mutableLiveData=new MutableLiveData<>();
         mutableLiveData.postValue(build(liveData.getValue()));
         return mutableLiveData;
+    }
+    public T getSync(K key){
+        T t=mainDAO.getSync(key);
+        return build(mainDAO.getSync(key));
     }
 
     public abstract T build(T in);
