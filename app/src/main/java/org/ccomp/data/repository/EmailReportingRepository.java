@@ -1,66 +1,65 @@
 package org.ccomp.data.repository;
 
-import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
-
-import androidx.lifecycle.LiveData;
-import androidx.room.TypeConverter;
-
-import org.ccomp.data.database.EmailReportingDatabase;
 import org.ccomp.data.database.dao.EmailReportingDAO;
 import org.ccomp.data.database.dao.IncidentCategoryDAO;
-import org.ccomp.data.database.dao.mapping.MappingDAO;
+import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMapping;
+import org.ccomp.data.database.dao.mapping.EmailReportingIncidentCategoryMappingDAO;
+import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
-import org.ccomp.data.domain.settings.TLP;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
-public class EmailReportingRepository {
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-    EmailReportingDAO emailReportingDAO;
+
+@Singleton
+public class EmailReportingRepository extends GenericRepository<EmailReporting, String> {
+
+
     IncidentCategoryDAO incidentCategoryDAO;
-    MappingDAO mappingDAO;
-    LiveData<List<EmailReporting>> allEmailReporting;
+    EmailReportingIncidentCategoryMappingDAO mappingDAO;
 
-    public EmailReportingRepository(Application application) {
 
-        EmailReportingDatabase database = EmailReportingDatabase.getInstance(application);
-        emailReportingDAO = database.emailReportingDAO();
-        incidentCategoryDAO=database.incidentCategoryDAO();
-        mappingDAO=database.mappingDAO();
+    @Inject
+    public EmailReportingRepository(EmailReportingDAO emailReportingDAO, IncidentCategoryDAO incidentCategoryDAO, EmailReportingIncidentCategoryMappingDAO mappingDAO, ExecutorService executorService) {
+        this.mainDAO = emailReportingDAO;
+        this.incidentCategoryDAO = incidentCategoryDAO;
+        this.mappingDAO = mappingDAO;
+        this.executorService = executorService;
 
-        emailReportingDAO.setIncidentCategoryDAO(incidentCategoryDAO);
-        emailReportingDAO.setMappingDAO(mappingDAO);
-
-        allEmailReporting = emailReportingDAO.getAll();
+        boolean b = true;
     }
 
-
-    public void insert(EmailReporting note) {
-        new InsertNoteAsyncTask(emailReportingDAO).execute(note);
+    @Override
+    public EmailReporting build(EmailReporting in) {
+        List<String> keys = mappingDAO.getIncidentyCategoryKeysByEmailAddressSync(in.getAddress());
+        in.setIncidentCategories(incidentCategoryDAO.getAllSync(keys));
+        return in;
     }
 
+    @Override
+    public void dismantle(EmailReporting obj) {
+        executorService.execute(() -> {
+            mainDAO.save(obj);
+            if (obj.getIncidentCategories() != null) {
+                for (IncidentCategory category : obj.getIncidentCategories()) {
+                    EmailReportingIncidentCategoryMapping mapping = new EmailReportingIncidentCategoryMapping(obj.getAddress(), category.getId());
+                    incidentCategoryDAO.save(category);
+                    mappingDAO.insert(mapping);
+                }
+            }
+        });
 
-    public LiveData<List<EmailReporting>> getAll() {
-        return allEmailReporting;
+
     }
 
-    private static class InsertNoteAsyncTask extends AsyncTask<EmailReporting, Void, String> {
-        private EmailReportingDAO emailReportingDAO;
-
-
-        public InsertNoteAsyncTask(EmailReportingDAO emailReportingDAO) {
-            this.emailReportingDAO = emailReportingDAO;
-        }
-
-        @Override
-        protected Void doInBackground(EmailReporting... notes) {
-            emailReportingDAO.insert(notes[0]);
-            return null;
-        }
+    @Override
+    public void saveCallResults(@NotNull List<EmailReporting> items) {
+        save(true, items.toArray(new EmailReporting[items.size()]));
     }
-
 
 
 }

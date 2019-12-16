@@ -1,5 +1,6 @@
 package org.ccomp.data.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -8,6 +9,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.ccomp.data.domain.feed.Feed;
+
+import java.util.List;
 
 @Dao
 public interface FeedDAO {
@@ -21,11 +24,11 @@ public interface FeedDAO {
     public void delete(Feed... feeds);
 
     @Query("SELECT * FROM feed")
-    public Feed[] selectAll();
+    public LiveData<List<Feed>> selectAll();
 
     @Query("DELETE FROM feed")
     public void deleteAll();
 
     @Query("SELECT * FROM feed WHERE id = :id")
-    public Feed selectAllById(int id);
+    public LiveData<Feed> selectAllById(int id);
 }

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.certrs.org/certapp"
+	xmlns:tns="http://www.certrs.org/certapp"
+	elementFormDefault="qualified">
+	<xs:element name="certapp">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="settings" type="tns:app_settings" />
+				<xs:element name="cert_feeds_settings">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="feed_settings" type="tns:feed_settings"
+								maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="reporting_email" type="tns:email" />
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="app_settings">
+		<xs:all>
+			<xs:element name="MOTD">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="is_url" type="xs:boolean"
+								use="required" />
+						</xs:extension>
+					</xs:simpleContent>
+
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="default_lang" type="tns:lang_setting" />
+			<xs:element name="base64_logo"></xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="feed_settings">
+		<xs:sequence>
+			<xs:element name="link" type="xs:string" />
+			<xs:element name="lang" type="xs:string" />
+			<xs:element name="type" type="tns:feed_type" />
+			<xs:element name="version" type="xs:string" />
+			<xs:element name="categories">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="category" type="tns:feed_category"
+							maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="feed_category">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="importance"
+			type="tns:feed_importance" />
+		<xs:attribute name="taxonomy_uri" type="xs:string" use="optional"/>
+	</xs:complexType>
+
+	<xs:simpleType name="feed_importance">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="UNCATEGORIZED" />
+			<xs:enumeration value="HIDE" />
+			<xs:enumeration value="SHOW" />
+			<xs:enumeration value="NOTIFY" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="feed_type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RSS" />
+			<xs:enumeration value="ATOM" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="email">
+		<xs:sequence>
+			<xs:element name="incident_category" type="tns:incident_category"  maxOccurs="unbounded"/>
+			<xs:element name="pgp_public" type="tns:pgp_key"
+				minOccurs="0" />
+		</xs:sequence>
+		<xs:attribute name="address" type="xs:string"
+			use="required" />
+		<xs:attribute name="default_tlp" type="tns:tlp"
+			use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="pgp_key">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" maxOccurs="1"
+				minOccurs="1" />
+			<xs:element name="fingerprint" type="xs:string"
+				maxOccurs="1" minOccurs="1" />
+			<xs:element name="key" type="xs:string" maxOccurs="1"
+				minOccurs="1" />
+		</xs:sequence>
+
+	</xs:complexType>
+
+	<xs:simpleType name="tlp">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="WHITE" />
+			<xs:enumeration value="GREEN" />
+			<xs:enumeration value="AMBER" />
+			<xs:enumeration value="RED" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="incident_category">
+		<xs:sequence>
+			<xs:element name="incident_type_description" type="xs:string" minOccurs="0" />
+			<xs:element name="incident_class_description" type="xs:string" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" minOccurs="0" />
+		</xs:sequence>
+		<xs:attribute name="incident_type" type="xs:string" use="required"/>
+		<xs:attribute name="incident_class" type="xs:string" use="required"/>
+		<xs:attribute name="incident_category_id" type="xs:string" use="required"/>
+	</xs:complexType>
+
+	<xs:complexType name="lang_setting">
+		<xs:sequence>
+			<xs:element name="word" type="tns:word_translation"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="lang_id" type="xs:string"
+			use="required" />
+	</xs:complexType>
+
+
+	<xs:complexType name="word_translation">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="key" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:simpleContent>		
+	</xs:complexType>
+
+</xs:schema>

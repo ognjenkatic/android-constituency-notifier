@@ -2,16 +2,10 @@ package org.ccomp.data.domain.incident.reporting;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
 
-import org.ccomp.data.domain.incident.IncidentCategory;
 import org.ccomp.data.domain.settings.TLP;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 
 @Entity(tableName = "email_reporting_settings")
@@ -76,11 +70,4 @@ public class EmailReporting extends Reporting {
     }
 
 
-    public List<IncidentCategory> getIncidentCategories() {
-        return incidentCategories;
-    }
-
-    public void setIncidentCategories(List<IncidentCategory> incidentCategories) {
-        this.incidentCategories = incidentCategories;
-    }
 }

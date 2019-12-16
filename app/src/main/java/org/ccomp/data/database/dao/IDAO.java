@@ -1,5 +1,6 @@
 package org.ccomp.data.database.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -9,7 +10,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
-public interface IDAO<T, K> {
+public interface IDAO<T, K>  {
 
     @Insert
     void insert(T... objects);
@@ -24,14 +25,31 @@ public interface IDAO<T, K> {
     void save(T... objects);
 
     @Query("")
-    List<T> getAll();
-
-    @Query("")
     void deleteAll();
 
     @Query("")
-    T get(K key);
+    LiveData<List<T>> getAll();
 
     @Query("")
-    List<K> getKeys();
+    LiveData<List<T>> getAll(List<K>keys);
+
+    @Query("")
+    LiveData<T> get(K key);
+
+    @Query("")
+    LiveData<List<K>> getKeys();
+
+    @Query("")
+    List<T> getAllSync();
+
+    @Query("")
+    List<T> getAllSync(List<K>keys);
+
+    @Query("")
+    T getSync(K key);
+
+    @Query("")
+    List<K> getKeysSync();
+
+
 }

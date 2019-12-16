@@ -1,26 +1,35 @@
 package org.ccomp;
 
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
-import androidx.drawerlayout.widget.DrawerLayout;
+import org.ccomp.data.domain.lang.Language;
+import org.ccomp.data.domain.lang.Restring;
+import org.ccomp.data.domain.settings.AppSettings;
+import org.ccomp.data.network.Resource;
+import org.ccomp.ui.ViewTranslator;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.view.Menu;
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 
 import org.ccomp.ui.home.HomeViewModel;
@@ -30,9 +39,16 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
 
+    @Inject ViewTranslator viewTranslator;
+
+    LiveData<Resource<AppSettings>> appSettings;
+    List<MenuItem> menuItems = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -47,15 +63,47 @@ public class MainActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+
+        AppController appController = (AppController) getApplication();
+        appSettings=appController.getAppSettings();
+        appSettings.observe(this, (value) -> {
+            if (value != null && value.data != null) {
+                Language defaultLang = value.data.getDefaultLang();
+                if(defaultLang!=null) {
+                    viewTranslator.getRestring().setLanguage(defaultLang);
+                    viewTranslator.translate(drawer);
+                    viewTranslator.translate(navigationView);
+                    if (menuItems != null && menuItems.size() > 0)
+                        for (MenuItem menuItem : menuItems) {
+                            viewTranslator.translate(menuItem);
+                        }
+                }
+
+            }
+        });
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_send)
+                R.id.nav_home, R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+        navigationView.post(() -> {
+            if (navigationView.getMenu() != null && navigationView.getMenu().size() > 0) {
+                for (int i = 0; i < navigationView.getMenu().size(); i++) {
+                    menuItems.add(navigationView.getMenu().getItem(i));
+                }
+            }
+        });
 
 
     }
@@ -64,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            menuItems.add(menu.getItem(i));
+        }
         return true;
     }
 
@@ -73,4 +124,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 }
