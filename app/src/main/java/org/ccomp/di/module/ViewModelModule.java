@@ -10,6 +10,7 @@ import org.ccomp.ui.feed.FeedViewModel;
 import org.ccomp.ui.feed.index.FeedIndexFragment;
 import org.ccomp.ui.feed.index.FeedIndexViewModel;
 import org.ccomp.ui.feed.item.FeedItemViewModel;
+import org.ccomp.ui.home.HomeViewModel;
 
 import dagger.Binds;
 import dagger.Module;

@@ -54,8 +54,20 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    FeedItemDAO provideFeedDAO(@NonNull AppDatabase appDatabase) {
+    FeedItemDAO provideFeedItemDAO(@NonNull AppDatabase appDatabase) {
         return appDatabase.feedItemDAO();
+    }
+
+    @Provides
+    @Singleton
+    FeedItemCategoryDAO provideFeedItemCategoryDAO(@NonNull AppDatabase appDatabase){
+        return appDatabase.feedItemCategoryDAO();
+    }
+
+    @Provides
+    @Singleton
+    FeedCategoryDAO provideFeedCategoryDAO(@NonNull AppDatabase appDatabase){
+        return appDatabase.feedCategoryDAO();
     }
 
     @Provides
@@ -88,11 +100,7 @@ public class DatabaseModule {
         return appDatabase.wordDAO();
     }
 
-    @Provides
-    @Singleton
-    FeedItemCategoryDAO provideFeedItemCategoryDAO(@NonNull AppDatabase appDatabase){
-        return appDatabase.feedItemCategoryDAO();
-    }
+
 
     @Provides
     @Singleton

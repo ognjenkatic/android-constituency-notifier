@@ -2,15 +2,9 @@ package org.ccomp;
 
 import android.app.Activity;
 import android.app.Application;
-import android.media.VolumeShaper;
 import android.os.StrictMode;
 
 import androidx.fragment.app.Fragment;
-import androidx.work.Configuration;
-import androidx.work.WorkManager;
-
-
-import org.ccomp.di.component.AppComponent;
 import androidx.lifecycle.LiveData;
 
 import org.ccomp.data.database.AppDatabase;
@@ -19,7 +13,6 @@ import org.ccomp.data.domain.settings.AppSettings;
 import org.ccomp.data.network.Resource;
 import org.ccomp.data.repository.AppSettingsRepository;
 import org.ccomp.di.component.DaggerAppComponent;
-import org.ccomp.factory.WorkerFactory;
 
 import javax.inject.Inject;
 
@@ -77,9 +70,10 @@ public class AppController extends Application implements HasActivityInjector, H
                 .application(this)
                 .build()
                 .inject(this);
+
         appSettings = appSettingsRepository.load(true);
 
-        WorkManager.initialize(this, new Configuration.Builder().setWorkerFactory(factory).build());
+        //WorkManager.initialize(this, new Configuration.Builder().setWorkerFactory(factory).build());
 
     }
 

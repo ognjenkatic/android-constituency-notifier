@@ -2,6 +2,9 @@ package org.ccomp.di.module;
 
 import org.ccomp.data.database.AppDatabase;
 import org.ccomp.data.database.dao.AppSettingsPropertyDAO;
+import org.ccomp.data.database.dao.FeedCategoryDAO;
+import org.ccomp.data.database.dao.FeedDAO;
+import org.ccomp.data.database.dao.FeedItemCategoryDAO;
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.database.dao.LangDAO;
 import org.ccomp.data.database.dao.WordDAO;
@@ -28,8 +31,8 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public FeedRepository provideFeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService) {
-        return new FeedRepository(feedItemDAO, feedParserService, executorService);
+    public FeedRepository provideFeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService, FeedCategoryDAO feedCategoryDAO, FeedItemCategoryDAO feedItemCategoryDAO, FeedDAO feedDAO) {
+        return new FeedRepository(feedItemDAO, feedParserService, executorService, feedItemCategoryDAO, feedCategoryDAO, feedDAO);
     }
 
 
