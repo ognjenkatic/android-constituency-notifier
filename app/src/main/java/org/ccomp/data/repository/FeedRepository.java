@@ -1,6 +1,5 @@
 package org.ccomp.data.repository;
 
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,6 +26,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 
@@ -158,7 +158,7 @@ public class FeedRepository {
             @Override
             protected void saveCallResult(@NonNull List<FeedItem> items) {
 
-                executorService.execute(()->{
+                executorService.execute(() -> {
 
 
                     if (items != null)
@@ -190,7 +190,6 @@ public class FeedRepository {
                 });
 
 
-
             }
 
             @Override
@@ -215,21 +214,21 @@ public class FeedRepository {
 
                     MutableLiveData<List<FeedItem>> ld = new MutableLiveData<>();
 
-                    executorService.execute(()->{
+                    executorService.execute(() -> {
                         try {
                             List<FeedItem> feedItems = feedParserService.parseStream(new URL(feedURL));
                             ld.postValue(feedItems);
                         } catch (MalformedURLException e) {
-                            Log.d(TAG, "createCall: "+e.getMessage());
+                            Log.d(TAG, "createCall: " + e.getMessage());
                             e.printStackTrace();
                         }
                     });
 
                     return Resource.success(ld);
 
-                } catch(Exception mex){
+                } catch (Exception mex) {
 
-                    Log.d(TAG, "createCall: "+mex.getMessage());
+                    Log.d(TAG, "createCall: " + mex.getMessage());
                     return null;
                 }
 
@@ -238,9 +237,6 @@ public class FeedRepository {
 
         }.getAsLiveData();
     }
-
-
-
 
 
 }

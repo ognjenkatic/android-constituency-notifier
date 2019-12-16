@@ -41,4 +41,10 @@ public abstract class ViewModelModule {
     @ViewModelKey(FeedIndexViewModel.class)
     protected abstract ViewModel feedIndexViewModel(FeedIndexViewModel feedIndexViewModel);
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeViewModel.class)
+    protected abstract ViewModel homeViewModel(HomeViewModel homeViewModel);
+
+
 }

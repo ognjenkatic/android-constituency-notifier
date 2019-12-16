@@ -1,11 +1,25 @@
 package org.ccomp.data.domain.incident;
 
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
+
+@Entity(tableName = "incident_category")
 public class IncidentCategory {
 
+    @PrimaryKey
+    @NotNull
     private String id;
+    @ColumnInfo(name = "type_name")
     private String typeName;
+    @ColumnInfo(name = "type_description")
     private String typeDescription;
+    @ColumnInfo(name = "class_name")
     private String className;
+    @ColumnInfo(name = "class_description")
     private String classDescription;
     private String description;
 

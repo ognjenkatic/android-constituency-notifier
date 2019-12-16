@@ -1,61 +1,27 @@
 package org.ccomp.data.domain.settings;
 
 
-import org.ccomp.data.domain.feed.Feed;
+import org.ccomp.data.domain.feed.FeedSettings;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
-import org.ccomp.data.domain.settings.lang.Language;
+import org.ccomp.data.domain.lang.Language;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 public class AppSettings {
 
-    private String base64Logo;
-    private MOTD mOTD;
-    private Feed certFeed;
-    private List<Feed> userFeeds;
-    private EmailReporting emailReporting;
+
+    private List<FeedSettings> certFeeds;
+
+    private List<EmailReporting> emailReportings;
     private Language defaultLang;
+    private String defaultLangString;
+    private List<Language> supportedLangs;
 
+    private Map<AppSettingsOption, AppSettingsProperty> properties;
 
-    public String getBase64Logo() {
-        return base64Logo;
-    }
-
-    public void setBase64Logo(String base64Logo) {
-        this.base64Logo = base64Logo;
-    }
-
-    public MOTD getmOTD() {
-        return mOTD;
-    }
-
-    public void setmOTD(MOTD mOTD) {
-        this.mOTD = mOTD;
-    }
-
-    public Feed getCertFeed() {
-        return certFeed;
-    }
-
-    public void setCertFeed(Feed certFeed) {
-        this.certFeed = certFeed;
-    }
-
-    public List<Feed> getUserFeeds() {
-        return userFeeds;
-    }
-
-    public void setUserFeeds(List<Feed> userFeeds) {
-        this.userFeeds = userFeeds;
-    }
-
-    public EmailReporting getEmailReporting() {
-        return emailReporting;
-    }
-
-    public void setEmailReporting(EmailReporting emailReporting) {
-        this.emailReporting = emailReporting;
-    }
 
     public Language getDefaultLang() {
         return defaultLang;
@@ -63,5 +29,56 @@ public class AppSettings {
 
     public void setDefaultLang(Language defaultLang) {
         this.defaultLang = defaultLang;
+    }
+
+    public List<EmailReporting> getEmailReportings() {
+        return emailReportings;
+    }
+
+    public void setEmailReportings(List<EmailReporting> emailReportings) {
+        this.emailReportings = emailReportings;
+    }
+
+    public List<FeedSettings> getCertFeeds() {
+        return certFeeds;
+    }
+
+    public void setCertFeeds(List<FeedSettings> certFeeds) {
+        this.certFeeds = certFeeds;
+    }
+
+    public List<Language> getSupportedLangs() {
+        return supportedLangs;
+    }
+
+    public void setSupportedLangs(List<Language> supportedLangs) {
+        this.supportedLangs = supportedLangs;
+    }
+
+    public Map<AppSettingsOption, AppSettingsProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<AppSettingsOption, AppSettingsProperty> properties) {
+        this.properties = properties;
+    }
+
+    public void setProperties(List<AppSettingsProperty> propertiesList) {
+        this.properties = new HashMap<>();
+        for (AppSettingsProperty property : propertiesList) {
+            if (this.properties.containsKey(property.optionName)) {
+                this.properties.remove(property.optionName);
+            }
+            this.properties.put(property.optionName, property);
+
+        }
+    }
+
+    public String getDefaultLangString() {
+        return defaultLangString;
+    }
+
+    public void setDefaultLangString(String defaultLangString) {
+        this.defaultLangString = defaultLangString;
     }
 }

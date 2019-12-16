@@ -1,14 +1,32 @@
 package org.ccomp.data.domain.incident.reporting;
 
-import org.ccomp.data.domain.settings.TLP;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import org.ccomp.data.domain.settings.TLP;
+import org.jetbrains.annotations.NotNull;
+
+
+@Entity(tableName = "email_reporting_settings")
 public class EmailReporting extends Reporting {
 
+    @PrimaryKey
+    @NotNull
     private String address;
-    private TLP deafultTLP;
+    @ColumnInfo(name = "default_tlp")
+    private TLP defaultTLP;
+    @ColumnInfo(name = "pgp_id")
     private String pgpId;
-    private String pgpFingerpring;
+    @ColumnInfo(name = "pgp_fingerprint")
+    private String pgpFingerprint;
+    @ColumnInfo(name = "pgp_key")
     private String pgpKey;
+
+    //@Relation(entity = IncidentCategory.class, parentColumn = "address", entityColumn = "id")
+
+    @Ignore
+    private List<IncidentCategory> incidentCategories;
 
 
     public String getAddress() {
@@ -19,12 +37,12 @@ public class EmailReporting extends Reporting {
         this.address = address;
     }
 
-    public TLP getDeafultTLP() {
-        return deafultTLP;
+    public TLP getDefaultTLP() {
+        return defaultTLP;
     }
 
-    public void setDeafultTLP(TLP deafultTLP) {
-        this.deafultTLP = deafultTLP;
+    public void setDefaultTLP(TLP defaultTLP) {
+        this.defaultTLP = defaultTLP;
     }
 
     public String getPgpId() {
@@ -35,12 +53,12 @@ public class EmailReporting extends Reporting {
         this.pgpId = pgpId;
     }
 
-    public String getPgpFingerpring() {
-        return pgpFingerpring;
+    public String getPgpFingerprint() {
+        return pgpFingerprint;
     }
 
-    public void setPgpFingerpring(String pgpFingerpring) {
-        this.pgpFingerpring = pgpFingerpring;
+    public void setPgpFingerprint(String pgpFingerprint) {
+        this.pgpFingerprint = pgpFingerprint;
     }
 
     public String getPgpKey() {
@@ -50,4 +68,6 @@ public class EmailReporting extends Reporting {
     public void setPgpKey(String pgpKey) {
         this.pgpKey = pgpKey;
     }
+
+
 }
