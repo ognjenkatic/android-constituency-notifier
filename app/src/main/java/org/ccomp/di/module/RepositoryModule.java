@@ -124,7 +124,7 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public AppSettingsRepository provideAppSettingsRepository(EmailReportingRepository emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService) {
-        return new AppSettingsRepository(emailReportingRepository, languageRepository, appSettingsPropertyRepository, mainService, executorService);
+    public AppSettingsRepository provideAppSettingsRepository(EmailReportingRepository emailReportingRepository, FeedRepository feedRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService) {
+        return new AppSettingsRepository(emailReportingRepository, feedRepository, languageRepository, appSettingsPropertyRepository, mainService, executorService);
     }
 }

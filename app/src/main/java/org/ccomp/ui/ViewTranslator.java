@@ -82,7 +82,8 @@ public class ViewTranslator {
             }
             break;
             case R.id.nav_settings: {
-                menuItem.setTitle(restring.getTranslateOrDefault(R.string.menu_settings));
+                String translation = restring.getTranslateOrDefault(R.string.menu_settings);
+                menuItem.setTitle(translation);
             }
             break;
 

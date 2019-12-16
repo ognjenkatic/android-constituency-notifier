@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import org.ccomp.data.domain.feed.Feed;
+import org.ccomp.data.domain.feed.FeedSettings;
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.settings.AppSettings;
@@ -34,13 +36,14 @@ public class AppSettingsRepository {
 
 
     @Inject
-    public AppSettingsRepository(EmailReportingRepository emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService) {
+    public AppSettingsRepository(EmailReportingRepository emailReportingRepository, FeedRepository feedRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService) {
 
         this.emailReportingRepository = emailReportingRepository;
         this.languageRepository = languageRepository;
         this.appSettingsPropertyRepository = appSettingsPropertyRepository;
         this.mainService = mainService;
         this.executorService = executorService;
+        this.feedRepository = feedRepository;
     }
 
 
@@ -158,7 +161,9 @@ public class AppSettingsRepository {
                 appSettingsPropertyRepository.save(properties.toArray(new AppSettingsProperty[properties.size()]));
             }
             if (obj.getCertFeeds() != null) {
-
+                for(FeedSettings feedSettings : obj.getCertFeeds()){
+                    feedRepository.tryAddFeed(feedSettings.getLink());
+                }
             }
             if (obj.getSupportedLangs() != null) {
                 languageRepository.save(obj.getSupportedLangs().toArray(new Language[obj.getSupportedLangs().size()]));

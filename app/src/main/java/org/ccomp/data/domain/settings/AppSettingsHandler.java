@@ -236,7 +236,7 @@ public class AppSettingsHandler extends DefaultHandler {
             }
             break;
             case tag_translation: {
-                getLastTranslation().setValue(elementValue.build());
+                getLastTranslation().setValue(elementValue.build().trim());
             }
             break;
 

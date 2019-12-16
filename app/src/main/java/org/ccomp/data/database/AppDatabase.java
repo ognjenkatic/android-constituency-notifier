@@ -34,7 +34,7 @@ import org.ccomp.data.domain.settings.AppSettingsProperty;
 import org.ccomp.data.domain.feed.FeedItemCategory;
 
 @TypeConverters({TimestampConverter.class, FeedImportanceConverter.class, URLConverter.class,EmailReportingConverters.class, AppSettingsConverters.class})
-@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, FeedItemCategory.class, EmailReporting.class, IncidentCategory.class, EmailReportingIncidentCategoryMapping.class, Language.class, Word.class, Translation.class, AppSettingsProperty.class}, version = 21,exportSchema = false)
+@Database(entities = {Feed.class, FeedItem.class, FeedCategory.class, FeedItemCategory.class, EmailReporting.class, IncidentCategory.class, EmailReportingIncidentCategoryMapping.class, Language.class, Word.class, Translation.class, AppSettingsProperty.class}, version = 24,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FeedDAO feedDAO();
