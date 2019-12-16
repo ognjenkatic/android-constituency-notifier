@@ -11,8 +11,8 @@ public class NetworkAvailabilityService {
     Context context;
 
     @Inject
-    public NetworkAvailabilityService(Context context){
-        this.context=context;
+    public NetworkAvailabilityService(Context context) {
+        this.context = context;
 
     }
 

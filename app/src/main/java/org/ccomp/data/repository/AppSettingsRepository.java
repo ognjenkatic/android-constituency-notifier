@@ -79,7 +79,6 @@ public class AppSettingsRepository {
                                 Log.e(TAG, "createCall: ", ex);
 
                                 ex.printStackTrace();
-                                boolean b = true;
                             }
 
 
@@ -107,7 +106,7 @@ public class AppSettingsRepository {
             appSettings.setEmailReportings(emailReportingRepository.getAllSync());
             appSettings.setProperties(appSettingsPropertyRepository.getAllSync());
             if (appSettings.getProperties().containsKey(AppSettingsOption.app_settings_lang_default)) {
-                AppSettingsProperty defaultLangProp=appSettings.getProperties().get(AppSettingsOption.app_settings_lang_default);
+                AppSettingsProperty defaultLangProp = appSettings.getProperties().get(AppSettingsOption.app_settings_lang_default);
                 Language defaultLang = languageRepository.getSync(defaultLangProp.getOptionValue());
                 appSettings.setDefaultLang(defaultLang);
                 if (defaultLang != null) {
@@ -120,7 +119,7 @@ public class AppSettingsRepository {
         return mutableLiveData;
     }
 
-    public LiveData<AppSettings> buildLiveData() {
+    private LiveData<AppSettings> buildLiveData() {
         AppSettings appSettings = new AppSettings();
         MediatorLiveData<AppSettings> liveData = new MediatorLiveData<>();
         liveData.setValue(appSettings);
@@ -163,6 +162,9 @@ public class AppSettingsRepository {
             }
             if (obj.getSupportedLangs() != null) {
                 languageRepository.save(obj.getSupportedLangs().toArray(new Language[obj.getSupportedLangs().size()]));
+            }
+            if(obj.getEmailReportings()!=null){
+                emailReportingRepository.save(obj.getEmailReportings().toArray(new EmailReporting[obj.getEmailReportings().size()]));
             }
         }
     }

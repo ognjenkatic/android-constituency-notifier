@@ -25,7 +25,7 @@ public class LanguageRepository extends GenericRepository<Language,String> {
 
         this.mainDAO=langDAO;
         this.wordDAO=wordDAO;
-        this.translationDAO=translationDAO;
+       this.translationDAO = translationDAO;
         this.executorService=executorService;
 
     }

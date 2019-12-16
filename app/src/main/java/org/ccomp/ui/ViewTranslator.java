@@ -12,10 +12,20 @@ import androidx.fragment.app.Fragment;
 import org.ccomp.R;
 import org.ccomp.data.domain.lang.Restring;
 
+import javax.inject.Inject;
+
 public class ViewTranslator {
 
 
-    public void translate(View view, Restring restring) {
+
+    Restring restring;
+
+    @Inject
+    public ViewTranslator(Restring restring) {
+        this.restring = restring;
+    }
+
+    public void translate(View view) {
 
 
         ImageView headerImageView = view.findViewById(R.id.header_image);
@@ -36,19 +46,21 @@ public class ViewTranslator {
             homeButton.setText(restring.getTranslateOrDefault(R.string.nav_header_subtitle));
 
     }
-    public void translate(Fragment fragment,Restring restring){
 
-        switch (fragment.getId()){
-            case R.layout.fragment_home:{
-                ((AppCompatActivity)fragment.getActivity()).getSupportActionBar().setTitle(restring.getTranslateOrDefault(R.string.menu_home));
-            }break;
-            case R.layout.fragment_feed:{
-                ((AppCompatActivity)fragment.getActivity()).getSupportActionBar().setTitle(restring.getTranslateOrDefault(R.string.menu_feed));
+    public void translate(Fragment fragment) {
+
+        switch (fragment.getId()) {
+            case R.layout.fragment_home: {
+                ((AppCompatActivity) fragment.getActivity()).getSupportActionBar().setTitle(restring.getTranslateOrDefault(R.string.menu_home));
+            }
+            break;
+            case R.layout.fragment_feed: {
+                ((AppCompatActivity) fragment.getActivity()).getSupportActionBar().setTitle(restring.getTranslateOrDefault(R.string.menu_feed));
             }
         }
     }
 
-    public void translate(MenuItem menuItem, Restring restring) {
+    public void translate(MenuItem menuItem) {
 
 
         switch (menuItem.getItemId()) {
@@ -78,6 +90,13 @@ public class ViewTranslator {
         }
 
 
+    }
 
+    public Restring getRestring() {
+        return restring;
+    }
+
+    public void setRestring(Restring restring) {
+        this.restring = restring;
     }
 }

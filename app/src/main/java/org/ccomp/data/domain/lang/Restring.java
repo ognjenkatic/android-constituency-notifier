@@ -17,55 +17,58 @@ public class Restring {
     Language language;
 
     @Inject
-    public Restring(Context context){
-        this.context=context;
+    public Restring(Context context) {
+        this.context = context;
     }
 
 
     private static final String TAG = "Restring";
 
-    public String getTranslateOrDefault(StringsEnum senum){
-        return getTranslateOrDefault(senum.toString());
-    }
-
-    public String getTranslateOrDefault(int rid){
+    public String getTranslateOrDefault(int rid) {
         return getTranslateOrDefault(getName(rid));
     }
 
-    public String getTranslateOrDefault(String id){
+    public String getTranslateOrDefault(String id) {
 
-        String translation=null;
-        try{
-            Map<String,String> dictionary=language.getDictionary();
-            if(dictionary.containsKey(id)){
-                translation=dictionary.get(id);
+        String translation = null;
+        try {
+            if(language!=null) {
+                Map<String, String> dictionary = language.getDictionary();
+                if (dictionary.containsKey(id)) {
+                    translation = dictionary.get(id);
+                } else {
+                    translation = getDefaultStringByRId(getRId(id));
+                }
             }else{
-                translation=getDefaultStringByRId(getRId(id));
+                translation = getDefaultStringByRId(getRId(id));
             }
 
-        }catch (Exception ex){
-            Log.e(TAG, "getTranslateOrDefault: ",ex );
+        } catch (Exception ex) {
+            Log.e(TAG, "getTranslateOrDefault: ", ex);
         }
 
 
         return translation;
-        
+
     }
-    public  int getRId(String id){
-        return context.getResources().getIdentifier(id,"string",context.getPackageName());
+
+    public int getRId(String id) {
+        return context.getResources().getIdentifier(id, "string", context.getPackageName());
     }
-    public String getDefaultStringByRId(int rId){
+
+    public String getDefaultStringByRId(int rId) {
         return context.getResources().getString(rId);
     }
-    public String getName(int rId){
-        Class rClass=R.string.class;
-        for(Field field:rClass.getFields()){
+
+    public String getName(int rId) {
+        Class rClass = R.string.class;
+        for (Field field : rClass.getFields()) {
             try {
-                if(rId==field.getInt(null)){
+                if (rId == field.getInt(null)) {
                     return field.getName();
                 }
             } catch (IllegalAccessException ex) {
-                Log.e(TAG, "getName: ",ex );
+                Log.e(TAG, "getName: ", ex);
             }
         }
         return null;

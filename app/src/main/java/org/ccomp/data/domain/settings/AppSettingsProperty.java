@@ -7,17 +7,15 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 @Entity(tableName = "app_settings")
 public class AppSettingsProperty {
 
 
     @PrimaryKey
     @ColumnInfo(name = "option_name")
-            @NotNull
+    @NotNull
     AppSettingsOption optionName;
-    @ColumnInfo(name="option_value")
+    @ColumnInfo(name = "option_value")
     String optionValue;
 
 
@@ -50,6 +48,7 @@ public class AppSettingsProperty {
         result = prime * result + ((optionValue == null) ? 0 : optionValue.hashCode());
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

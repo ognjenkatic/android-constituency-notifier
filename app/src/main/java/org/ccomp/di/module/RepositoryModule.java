@@ -6,13 +6,6 @@ import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.database.dao.LangDAO;
 import org.ccomp.data.database.dao.WordDAO;
 import org.ccomp.data.database.dao.mapping.TranslationDAO;
-import org.ccomp.data.domain.incident.IncidentCategory;
-import org.ccomp.data.domain.incident.reporting.EmailReporting;
-import org.ccomp.data.domain.lang.Language;
-import org.ccomp.data.domain.lang.Translation;
-import org.ccomp.data.domain.settings.AppSettingsOption;
-import org.ccomp.data.domain.settings.AppSettingsProperty;
-import org.ccomp.data.domain.settings.TLP;
 import org.ccomp.data.repository.AppSettingsPropertyRepository;
 import org.ccomp.data.repository.AppSettingsRepository;
 import org.ccomp.data.repository.EmailReportingRepository;
@@ -23,8 +16,6 @@ import org.ccomp.service.appsettings.AppSettingService;
 import org.ccomp.service.feed.FeedParserService;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import javax.inject.Singleton;
@@ -37,19 +28,17 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public FeedRepository provideFeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService){
-        return new FeedRepository(feedItemDAO,feedParserService,executorService);
+    public FeedRepository provideFeedRepository(FeedItemDAO feedItemDAO, FeedParserService feedParserService, ExecutorService executorService) {
+        return new FeedRepository(feedItemDAO, feedParserService, executorService);
     }
-
 
 
     @Provides
     @Singleton
-    public EmailReportingRepository provideEmailReportingRepo(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
+    public EmailReportingRepository provideEmailReportingRepository(@NotNull AppDatabase appDatabase, @NotNull ExecutorService executorService, @NotNull NetworkAvailabilityService networkAvailabilityService) {
 
 
         EmailReportingRepository repo = new EmailReportingRepository(appDatabase.emailReportingDAO(), appDatabase.incidentCategoryDAO(), appDatabase.emailReportingIncidentCategoryMappingDAO(), executorService);
-
 
         /*EmailReporting reporting = new EmailReporting();
         reporting.setAddress("cert@certrs.org");
@@ -108,10 +97,10 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public AppSettingsPropertyRepository provideAppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService){
+    public AppSettingsPropertyRepository provideAppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService) {
         AppSettingsPropertyRepository appSettingsPropertyRepository = new AppSettingsPropertyRepository(appSettingsPropertyDAO, executorService);
 
-       /* List<AppSettingsProperty> appSettingsProperties=new ArrayList<>();
+        /* List<AppSettingsProperty> appSettingsProperties=new ArrayList<>();
         AppSettingsProperty appSettingsProperty=new AppSettingsProperty(AppSettingsOption.app_settings_first_run,"TRUE");
         appSettingsProperties.add(appSettingsProperty);
         appSettingsProperty=new AppSettingsProperty(AppSettingsOption.app_settings_message_wellcome,"Wellcome");
@@ -132,7 +121,7 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public AppSettingsRepository provideAppSettingsRepository(EmailReportingRepository emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService){
-        return new AppSettingsRepository(  emailReportingRepository, languageRepository, appSettingsPropertyRepository,mainService,executorService);
+    public AppSettingsRepository provideAppSettingsRepository(EmailReportingRepository emailReportingRepository, LanguageRepository languageRepository, AppSettingsPropertyRepository appSettingsPropertyRepository, AppSettingService mainService, ExecutorService executorService) {
+        return new AppSettingsRepository(emailReportingRepository, languageRepository, appSettingsPropertyRepository, mainService, executorService);
     }
 }

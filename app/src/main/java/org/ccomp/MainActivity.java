@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,6 +20,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.lang.Restring;
+import org.ccomp.data.domain.settings.AppSettings;
+import org.ccomp.data.network.Resource;
 import org.ccomp.ui.ViewTranslator;
 
 import java.util.ArrayList;
@@ -33,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
 
-    @Inject
-    Restring restring;
+    @Inject ViewTranslator viewTranslator;
 
+    LiveData<Resource<AppSettings>> appSettings;
     List<MenuItem> menuItems = new ArrayList<>();
 
 
@@ -59,19 +62,20 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
 
 
-
         AppController appController = (AppController) getApplication();
-        appController.getAppSettings().observe(this, (value) -> {
+        appSettings=appController.getAppSettings();
+        appSettings.observe(this, (value) -> {
             if (value != null && value.data != null) {
                 Language defaultLang = value.data.getDefaultLang();
-                restring.setLanguage(defaultLang);
-                ViewTranslator viewTranslator = new ViewTranslator();
-                viewTranslator.translate(drawer, restring);
-                viewTranslator.translate(navigationView, restring);
-                if (menuItems != null && menuItems.size() > 0)
-                    for (MenuItem menuItem : menuItems) {
-                        viewTranslator.translate(menuItem, restring);
-                    }
+                if(defaultLang!=null) {
+                    viewTranslator.getRestring().setLanguage(defaultLang);
+                    viewTranslator.translate(drawer);
+                    viewTranslator.translate(navigationView);
+                    if (menuItems != null && menuItems.size() > 0)
+                        for (MenuItem menuItem : menuItems) {
+                            viewTranslator.translate(menuItem);
+                        }
+                }
 
             }
         });
@@ -83,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_home, R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
-
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -118,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-
 
 
 }

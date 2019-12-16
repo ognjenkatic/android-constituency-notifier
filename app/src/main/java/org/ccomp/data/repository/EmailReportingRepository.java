@@ -10,15 +10,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Predicate;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 
 @Singleton
-public class EmailReportingRepository extends GenericRepository<EmailReporting,String> {
-
+public class EmailReportingRepository extends GenericRepository<EmailReporting, String> {
 
 
     IncidentCategoryDAO incidentCategoryDAO;
@@ -26,29 +24,29 @@ public class EmailReportingRepository extends GenericRepository<EmailReporting,S
 
 
     @Inject
-    public EmailReportingRepository(EmailReportingDAO emailReportingDAO, IncidentCategoryDAO incidentCategoryDAO, EmailReportingIncidentCategoryMappingDAO mappingDAO, ExecutorService executorService){
-        this.mainDAO=emailReportingDAO;
-        this.incidentCategoryDAO=incidentCategoryDAO;
-        this.mappingDAO=mappingDAO;
-        this.executorService=executorService;
+    public EmailReportingRepository(EmailReportingDAO emailReportingDAO, IncidentCategoryDAO incidentCategoryDAO, EmailReportingIncidentCategoryMappingDAO mappingDAO, ExecutorService executorService) {
+        this.mainDAO = emailReportingDAO;
+        this.incidentCategoryDAO = incidentCategoryDAO;
+        this.mappingDAO = mappingDAO;
+        this.executorService = executorService;
 
-        boolean b=true;
+        boolean b = true;
     }
 
     @Override
     public EmailReporting build(EmailReporting in) {
-        List<String> keys=mappingDAO.getIncidentyCategoryKeysByEmailAddressSync(in.getAddress());
+        List<String> keys = mappingDAO.getIncidentyCategoryKeysByEmailAddressSync(in.getAddress());
         in.setIncidentCategories(incidentCategoryDAO.getAllSync(keys));
         return in;
     }
 
     @Override
     public void dismantle(EmailReporting obj) {
-        executorService.execute(()->{
+        executorService.execute(() -> {
             mainDAO.save(obj);
-            if(obj.getIncidentCategories()!=null){
-                for(IncidentCategory category:obj.getIncidentCategories()){
-                    EmailReportingIncidentCategoryMapping mapping=new EmailReportingIncidentCategoryMapping(obj.getAddress(),category.getId());
+            if (obj.getIncidentCategories() != null) {
+                for (IncidentCategory category : obj.getIncidentCategories()) {
+                    EmailReportingIncidentCategoryMapping mapping = new EmailReportingIncidentCategoryMapping(obj.getAddress(), category.getId());
                     incidentCategoryDAO.save(category);
                     mappingDAO.insert(mapping);
                 }
@@ -60,9 +58,8 @@ public class EmailReportingRepository extends GenericRepository<EmailReporting,S
 
     @Override
     public void saveCallResults(@NotNull List<EmailReporting> items) {
-        save(true,items.toArray(new EmailReporting[items.size()]));
+        save(true, items.toArray(new EmailReporting[items.size()]));
     }
-
 
 
 }

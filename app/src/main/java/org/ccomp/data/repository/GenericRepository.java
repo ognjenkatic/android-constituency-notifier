@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 
-public abstract class GenericRepository<T,K> {
+public abstract class GenericRepository<T, K> {
 
-    protected IDAO<T,K> mainDAO;
+    protected IDAO<T, K> mainDAO;
     protected IService<T> mainService;
     protected ExecutorService executorService;
-    protected Predicate<T> defaultPredicate=new DefaultPredicate<T>() {
+    protected Predicate<T> defaultPredicate = new DefaultPredicate<T>() {
         @Override
         public boolean test(T t) {
             return true;
@@ -30,14 +30,13 @@ public abstract class GenericRepository<T,K> {
     };
     private static final String TAG = "GenericRepository";
 
-    public LiveData<List<T>> getAll(Predicate<T> predicate){
-        MutableLiveData<List<T>> mutableLiveData= new MutableLiveData<>();
-        //mutableLiveData.setValue(mainDAO.getAll().getValue());
-        executorService.execute(()->{
-            List<T> unfiltered=mainDAO.getAllSync();
-            List<T> filtered=new ArrayList<>();
-            for(T obj : unfiltered){
-                if(predicate.test(obj)){
+    public LiveData<List<T>> getAll(Predicate<T> predicate) {
+        MutableLiveData<List<T>> mutableLiveData = new MutableLiveData<>();
+        executorService.execute(() -> {
+            List<T> unfiltered = mainDAO.getAllSync();
+            List<T> filtered = new ArrayList<>();
+            for (T obj : unfiltered) {
+                if (predicate.test(obj)) {
                     filtered.add(build(obj));
                 }
             }
@@ -48,57 +47,63 @@ public abstract class GenericRepository<T,K> {
     }
 
 
-    public LiveData<List<T>> getAll(){
+    public LiveData<List<T>> getAll() {
         return getAll(getDefaultPredicate());
     }
 
-    public List<T> getAllSync(Predicate<T> predicate){
-        List<T> unfiltered=mainDAO.getAllSync();
-        List<T> filtered=new ArrayList<>();
-        for(T obj : unfiltered){
-            if(predicate.test(obj)){
+    public List<T> getAllSync(Predicate<T> predicate) {
+        List<T> unfiltered = mainDAO.getAllSync();
+        List<T> filtered = new ArrayList<>();
+        for (T obj : unfiltered) {
+            if (predicate.test(obj)) {
                 filtered.add(build(obj));
             }
         }
         return filtered;
     }
 
-    public List<T> getAllSync(){
+    public List<T> getAllSync() {
         return getAllSync(defaultPredicate);
     }
 
-    public LiveData<T> get(K key){
-        LiveData<T> liveData=mainDAO.get(key);
-        MutableLiveData<T> mutableLiveData=new MutableLiveData<>();
+    public LiveData<T> get(K key) {
+        LiveData<T> liveData = mainDAO.get(key);
+        MutableLiveData<T> mutableLiveData = new MutableLiveData<>();
         mutableLiveData.postValue(build(liveData.getValue()));
         return mutableLiveData;
     }
-    public T getSync(K key){
-        T t=mainDAO.getSync(key);
+
+    public T getSync(K key) {
+        T t = mainDAO.getSync(key);
         return build(mainDAO.getSync(key));
     }
 
     public abstract T build(T in);
 
-    public void delete(T... args){
-        if(args!=null){
-            executorService.execute(()->{
+    public void delete(T... args) {
+        if (args != null) {
+            executorService.execute(() -> {
                 mainDAO.delete(args);
             });
         }
     }
 
-    public void save(@NotNull T... args){
-         save(true,args);
+    public void deleteAll(){
+        mainDAO.deleteAll();
     }
-    public void save(boolean complexSave, @NotNull T... args){
-        if(args!=null){
-            if(complexSave){
-                for(T obj : args){
+
+    public void save(@NotNull T... args) {
+        save(true, args);
+    }
+
+    public void save(boolean complexSave, @NotNull T... args) {
+        if (args != null) {
+            if (complexSave) {
+                for (T obj : args) {
                     dismantle(obj);
                 }
-            }else{
-                executorService.execute(()->{
+            } else {
+                executorService.execute(() -> {
                     mainDAO.save(args);
                 });
 
@@ -109,13 +114,14 @@ public abstract class GenericRepository<T,K> {
 
     public abstract void dismantle(T obj);
 
-    public  abstract void saveCallResults(@NotNull List<T> items);
-    public LiveData<Resource<List<T>>> loadDefault(boolean shouldFetch){
-        return load(shouldFetch,defaultPredicate);
+    public abstract void saveCallResults(@NotNull List<T> items);
+
+    public LiveData<Resource<List<T>>> loadDefault(boolean shouldFetch) {
+        return load(shouldFetch, defaultPredicate);
     }
 
-    public LiveData<Resource<List<T>>> load(boolean shouldFetch, Predicate<T> predicate){
-        return new NetworkBoundResource<List<T>,List<T>>(){
+    public LiveData<Resource<List<T>>> load(boolean shouldFetch, Predicate<T> predicate) {
+        return new NetworkBoundResource<List<T>, List<T>>() {
             @Override
             protected void saveCallResult(@NonNull List<T> items) {
                 saveCallResults(items);
@@ -138,22 +144,22 @@ public abstract class GenericRepository<T,K> {
                 try {
 
                     MutableLiveData<List<T>> mutableLiveData = new MutableLiveData<>();
-                    if(mainService!=null) {
+                    if (mainService != null) {
                         executorService.execute(() -> {
 
                             try {
                                 List<T> items = mainService.fetch();
                                 mutableLiveData.postValue(items);
                             } catch (Exception ex) {
-                                Log.e(TAG, "createCall: ",ex );
-                                
+                                Log.e(TAG, "createCall: ", ex);
+
                                 ex.printStackTrace();
-                                boolean b=true;
+                                boolean b = true;
                             }
 
 
                         });
-                    }else {
+                    } else {
                         return null;
                     }
 

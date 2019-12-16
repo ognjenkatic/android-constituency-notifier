@@ -1,24 +1,16 @@
 package org.ccomp.ui.home;
 
-import android.content.ClipData;
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import org.ccomp.data.domain.incident.reporting.EmailReporting;
 import org.ccomp.data.domain.lang.Language;
 import org.ccomp.data.domain.settings.AppSettings;
-import org.ccomp.data.domain.settings.AppSettingsProperty;
-import org.ccomp.data.domain.settings.AppSettingsXMLParser;
 import org.ccomp.data.network.Resource;
 import org.ccomp.data.repository.AppSettingsRepository;
 import org.ccomp.data.repository.EmailReportingRepository;
 import org.ccomp.data.repository.LanguageRepository;
-
-import java.util.List;
 
 import javax.inject.Inject;
 

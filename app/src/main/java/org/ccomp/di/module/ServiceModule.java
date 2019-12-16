@@ -11,7 +11,6 @@ import org.ccomp.service.appsettings.AppSettingService;
 import org.ccomp.service.feed.FeedParserService;
 import org.jetbrains.annotations.NotNull;
 
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,25 +25,25 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    FeedParserService provideFeedParserService(){
+    FeedParserService provideFeedParserService() {
         return new FeedParserService();
     }
 
     @Provides
     @Singleton
-    ExecutorService provideExecutorService(){
-        return  Executors.newFixedThreadPool(5);
+    ExecutorService provideExecutorService() {
+        return Executors.newFixedThreadPool(5);
     }
 
     @Provides
     @Singleton
-    public NetworkAvailabilityService provideNetworkAvailabilityService(@NonNull Application app){
-        return  new NetworkAvailabilityService(app.getApplicationContext());
+    public NetworkAvailabilityService provideNetworkAvailabilityService(@NonNull Application app) {
+        return new NetworkAvailabilityService(app.getApplicationContext());
     }
 
     @Provides
     @Singleton
-    public XMLValidatorService provideXmlValidatorService(){
+    public XMLValidatorService provideXmlValidatorService() {
         SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
         return new XMLValidatorService(schemaFactory);
@@ -52,7 +51,7 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public AppSettingService provideAppSettingService(  @NotNull NetworkAvailabilityService networkAvailabilityService, @NotNull AppSettingsXMLParser xmlParser){
-        return new AppSettingService(networkAvailabilityService,xmlParser);
+    public AppSettingService provideAppSettingService(@NotNull NetworkAvailabilityService networkAvailabilityService, @NotNull AppSettingsXMLParser xmlParser) {
+        return new AppSettingService(networkAvailabilityService, xmlParser);
     }
 }

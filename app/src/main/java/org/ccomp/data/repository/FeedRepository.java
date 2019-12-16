@@ -1,12 +1,10 @@
 package org.ccomp.data.repository;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 
 import org.ccomp.data.database.dao.FeedItemDAO;
 import org.ccomp.data.domain.feed.FeedItem;
@@ -40,23 +38,21 @@ public class FeedRepository {
     }
 
 
-
-    public LiveData<Resource<List<FeedItem>>> loadFeedItems(String feedURL){
+    public LiveData<Resource<List<FeedItem>>> loadFeedItems(String feedURL) {
 
         return new NetworkBoundResource<List<FeedItem>, List<FeedItem>>() {
 
             @Override
             protected void saveCallResult(@NonNull List<FeedItem> items) {
 
-                executorService.execute(()->{
+                executorService.execute(() -> {
 
                     if (items != null)
-                        for(FeedItem item: items) {
+                        for (FeedItem item : items) {
                             if (feedItemDAO.selectCountByTitle(item.getTitle()) == 0)
                                 feedItemDAO.insert(item);
                         }
                 });
-
 
 
             }
@@ -79,21 +75,21 @@ public class FeedRepository {
 
                     MutableLiveData<List<FeedItem>> ld = new MutableLiveData<>();
 
-                    executorService.execute(()->{
+                    executorService.execute(() -> {
                         try {
                             List<FeedItem> feedItems = feedParserService.parseStream(new URL(feedURL));
                             ld.postValue(feedItems);
                         } catch (MalformedURLException e) {
-                            Log.d(TAG, "createCall: "+e.getMessage());
+                            Log.d(TAG, "createCall: " + e.getMessage());
                             e.printStackTrace();
                         }
                     });
 
                     return Resource.success(ld);
 
-                } catch(Exception mex){
+                } catch (Exception mex) {
 
-                    Log.d(TAG, "createCall: "+mex.getMessage());
+                    Log.d(TAG, "createCall: " + mex.getMessage());
                     return null;
                 }
 
@@ -102,9 +98,6 @@ public class FeedRepository {
 
         }.getAsLiveData();
     }
-
-
-
 
 
 }

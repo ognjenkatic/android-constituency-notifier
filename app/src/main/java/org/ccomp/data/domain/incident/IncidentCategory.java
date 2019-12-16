@@ -13,7 +13,7 @@ public class IncidentCategory {
     @PrimaryKey
     @NotNull
     private String id;
-    @ColumnInfo(name="type_name")
+    @ColumnInfo(name = "type_name")
     private String typeName;
     @ColumnInfo(name = "type_description")
     private String typeDescription;

@@ -3,11 +3,10 @@ package org.ccomp;
 import android.app.Activity;
 import android.app.Application;
 
-
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 
-
+import org.ccomp.data.database.AppDatabase;
 import org.ccomp.data.domain.lang.Restring;
 import org.ccomp.data.domain.settings.AppSettings;
 import org.ccomp.data.network.Resource;
@@ -38,6 +37,8 @@ public class AppController extends Application implements HasActivityInjector, H
 
     LiveData<Resource<AppSettings>> appSettings;
 
+    @Inject
+    AppDatabase appDatabase;
 
 
     @Override
@@ -51,13 +52,11 @@ public class AppController extends Application implements HasActivityInjector, H
         super.onCreate();
 
 
-
         DaggerAppComponent.builder()
                 .application(this)
                 .build()
                 .inject(this);
-
-        appSettings=appSettingsRepository.load(true);
+        appSettings = appSettingsRepository.load(true);
 
 
     }

@@ -29,9 +29,11 @@ public class DatabaseModule {
     @Provides
     @Singleton
     AppDatabase provideAppDatabase(@NonNull Application application, @Named("db name") String databaseName) {
-        return Room.databaseBuilder(application, AppDatabase.class, databaseName)
+        AppDatabase build = Room.databaseBuilder(application, AppDatabase.class, databaseName)
                 .fallbackToDestructiveMigration()
                 .build();
+
+        return build;
     }
 
     @Provides
@@ -67,25 +69,25 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    public LangDAO provideLangDAO(@NotNull AppDatabase appDatabase){
+    public LangDAO provideLangDAO(@NotNull AppDatabase appDatabase) {
         return appDatabase.langDAO();
     }
 
     @Provides
     @Singleton
-    public WordDAO provideWordDAO(@NotNull AppDatabase appDatabase){
+    public WordDAO provideWordDAO(@NotNull AppDatabase appDatabase) {
         return appDatabase.wordDAO();
     }
 
     @Provides
     @Singleton
-    public TranslationDAO provideTranslationDAO(@NotNull AppDatabase appDatabase){
+    public TranslationDAO provideTranslationDAO(@NotNull AppDatabase appDatabase) {
         return appDatabase.translationDAO();
     }
 
     @Provides
     @Singleton
-    public AppSettingsPropertyDAO provideAppSettingsPropertyDAO(@NotNull AppDatabase appDatabase){
+    public AppSettingsPropertyDAO provideAppSettingsPropertyDAO(@NotNull AppDatabase appDatabase) {
         return appDatabase.appSettingsPropertyDAO();
     }
 

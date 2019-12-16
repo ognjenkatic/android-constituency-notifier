@@ -2,15 +2,15 @@ package org.ccomp.di.module;
 
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
 
 import org.apache.xerces.jaxp.SAXParserFactoryImpl;
 import org.ccomp.data.domain.lang.Restring;
+import org.ccomp.data.domain.settings.AppSettingsHandler;
 import org.ccomp.data.domain.settings.AppSettingsXMLParser;
-import org.ccomp.data.domain.settings.TLP;
+import org.ccomp.ui.ViewTranslator;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -39,8 +39,8 @@ public class MiscModule {
 
     @Provides
     @Singleton
-    public AppSettingsXMLParser provideAppSettingsXMLParser(@NotNull SAXParser parser, @NotNull TLP.AppSettingsHandler handler) {
-        return new AppSettingsXMLParser(parser,handler);
+    public AppSettingsXMLParser provideAppSettingsXMLParser(@NotNull SAXParser parser, @NotNull AppSettingsHandler handler) {
+        return new AppSettingsXMLParser(parser, handler);
     }
 
     @Provides
@@ -50,9 +50,8 @@ public class MiscModule {
     }
 
 
-
     @Provides
-    public ErrorHandler provideXMLErrorHandler(){
+    public ErrorHandler provideXMLErrorHandler() {
         return new ErrorHandler() {
             private final String TAG = "XML Error Handler";
 
@@ -63,13 +62,13 @@ public class MiscModule {
 
             @Override
             public void error(SAXParseException exception) throws SAXException {
-                Log.e(TAG, "error: ", exception );
+                Log.e(TAG, "error: ", exception);
                 throw exception;
             }
 
             @Override
             public void fatalError(SAXParseException exception) throws SAXException {
-                Log.e(TAG, "fatalError: ", exception );
+                Log.e(TAG, "fatalError: ", exception);
                 throw exception;
             }
         };
@@ -81,32 +80,37 @@ public class MiscModule {
         SAXParserFactory factory = new SAXParserFactoryImpl();
         factory.setValidating(true);
         factory.setNamespaceAware(true);
-        SAXParser parser=null;
-        //factory.setNamespaceAware(true);
+        SAXParser parser = null;
         try {
 
-            parser= factory.newSAXParser();
+            parser = factory.newSAXParser();
             parser.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
                     "http://www.w3.org/2001/XMLSchema");
-            parser.setProperty("http://apache.org/xml/properties/input-buffer-size",new Integer(8192));
+            parser.setProperty("http://apache.org/xml/properties/input-buffer-size", new Integer(8192));
             parser.getXMLReader().setErrorHandler(errorHandler);
         } catch (ParserConfigurationException | SAXException e) {
             Log.e(TAG, "provideSAXParser: ", e);
-        }finally {
+        } finally {
             return parser;
         }
     }
 
     @Provides
     @Singleton
-    public TLP.AppSettingsHandler provideAppSettingsHandler() {
-        return new TLP.AppSettingsHandler();
+    public AppSettingsHandler provideAppSettingsHandler() {
+        return new AppSettingsHandler();
     }
 
     @Provides
     @Singleton
-    public Restring provideRestring(@NotNull Application application){
+    public Restring provideRestring(@NotNull Application application) {
         return new Restring(application.getApplicationContext());
+    }
+
+    @Provides
+    @Singleton
+    public ViewTranslator provideViewTranslator(@NotNull Restring restring){
+        return new ViewTranslator(restring);
     }
 
 

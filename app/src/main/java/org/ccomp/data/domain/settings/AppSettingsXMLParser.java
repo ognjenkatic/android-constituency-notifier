@@ -16,11 +16,11 @@ public class AppSettingsXMLParser {
 
 
     SAXParser parser;
-    TLP.AppSettingsHandler handler;
+    AppSettingsHandler handler;
 
 
     @Inject
-    public AppSettingsXMLParser(SAXParser parser, TLP.AppSettingsHandler handler) {
+    public AppSettingsXMLParser(SAXParser parser, AppSettingsHandler handler) {
         this.parser = parser;
         this.handler = handler;
     }
@@ -46,7 +46,7 @@ public class AppSettingsXMLParser {
 
         } catch (Exception ex) {
             Log.e(TAG, "parse: ", ex);
-            boolean b=true;
+            boolean b = true;
         }
         return appSettings;
     }
@@ -59,11 +59,11 @@ public class AppSettingsXMLParser {
         this.parser = parser;
     }
 
-    public TLP.AppSettingsHandler getHandler() {
+    public AppSettingsHandler getHandler() {
         return handler;
     }
 
-    public void setHandler(TLP.AppSettingsHandler handler) {
+    public void setHandler(AppSettingsHandler handler) {
         this.handler = handler;
     }
 }

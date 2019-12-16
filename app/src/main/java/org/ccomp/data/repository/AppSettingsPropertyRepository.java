@@ -10,14 +10,13 @@ import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
-public class AppSettingsPropertyRepository extends GenericRepository <AppSettingsProperty, AppSettingsOption >{
-
+public class AppSettingsPropertyRepository extends GenericRepository<AppSettingsProperty, AppSettingsOption> {
 
 
     @Inject
-    public  AppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService){
-        this.mainDAO=appSettingsPropertyDAO;
-        this.executorService=executorService;
+    public AppSettingsPropertyRepository(AppSettingsPropertyDAO appSettingsPropertyDAO, ExecutorService executorService) {
+        this.mainDAO = appSettingsPropertyDAO;
+        this.executorService = executorService;
     }
 
     @Override
@@ -37,6 +36,6 @@ public class AppSettingsPropertyRepository extends GenericRepository <AppSetting
 
     @Override
     public void save(@NotNull AppSettingsProperty... args) {
-        save(false,args);
+        save(false, args);
     }
 }

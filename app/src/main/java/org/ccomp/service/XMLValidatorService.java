@@ -9,7 +9,6 @@ import java.io.StringReader;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -21,8 +20,6 @@ import javax.xml.validation.Validator;
 public class XMLValidatorService {
 
 
-
-
     SchemaFactory factory;
     private static final String TAG = "XMLValidatorService";
 
@@ -31,31 +28,28 @@ public class XMLValidatorService {
         this.factory = factory;
     }
 
-    public boolean validate(String xmlFile , String xmlSchema){
+    public boolean validate(String xmlFile, String xmlSchema) {
 
 
-
-        Source fileSource=new StreamSource(new StringReader(xmlFile));
-        Source schemaSource=new StreamSource(new StringReader(xmlSchema));
-        boolean val=true;
-        Schema schema= null;
+        Source fileSource = new StreamSource(new StringReader(xmlFile));
+        Source schemaSource = new StreamSource(new StringReader(xmlSchema));
+        boolean val = true;
+        Schema schema = null;
         try {
             schema = factory.newSchema(schemaSource);
 
-        Validator xmlValidator=schema.newValidator();
+            Validator xmlValidator = schema.newValidator();
 
-        xmlValidator.validate(fileSource);
+            xmlValidator.validate(fileSource);
         } catch (SAXException | IOException e) {
-            Log.e(TAG, "validate: ",e );
-            val=false;
-        }finally {
+            Log.e(TAG, "validate: ", e);
+            val = false;
+        } finally {
             return val;
         }
 
 
     }
-
-
 
 
 }
