@@ -19,4 +19,5 @@
     <string name="title_feeditem_detail">FeedItem Detail</string>
     <string name="menu_label">Settings</string>
     <string name="home_button">Button</string>
+    <string name="menu_reporting">Reporting</string>
 </resources>

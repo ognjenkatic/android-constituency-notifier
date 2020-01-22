@@ -33,9 +33,6 @@ public class HomeFragment extends DaggerFragment {
     ViewModelFactory viewModelFactory;
 
     private HomeViewModel homeViewModel;
-    private TextView textHome;
-    private ImageView imageView;
-    private Button homeButton;
     @Inject
     Gson gson;
 
@@ -47,52 +44,14 @@ public class HomeFragment extends DaggerFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        textHome = root.findViewById(R.id.text_home);
-        imageView = root.findViewById(R.id.image_home);
-        homeButton = root.findViewById(R.id.button_home);
         homeViewModel =
                 ViewModelProviders.of(this, viewModelFactory).get(HomeViewModel.class);
-        init();
+
         return root;
     }
 
-    public void init() {
 
-        homeViewModel.getAppSettings().observe(this, (value) -> {
-            if (value != null && value.data != null && value.status == Status.SUCCESS) {
-                Map<AppSettingsOption, AppSettingsProperty> properties = value.data.getProperties();
-                String s = gson.toJson(homeViewModel.getAppSettings().getValue().data.getProperties());
-                if (s != null && s.length() > 101) {
-                    s = s.substring(0, 100);
-                }
-                textHome.setText(s);
-                if(value.data.getDefaultLang()!=null) {
-                    viewTranslator.getRestring().setLanguage(value.data.getDefaultLang());
-                    viewTranslator.translate(getView());
-                }
-            }
-
-
-        });
-
-
-        homeViewModel.getmText().observe(this, (value) -> {
-            textHome.setText(value);
-        });
-
-
-        homeButton.setOnClickListener(this::buttonOnClick);
-
-    }
-
-
-    public void buttonOnClick(View view) {
-        Toast.makeText(view.getContext(), "Bla bla bla", Toast.LENGTH_LONG).show();
-
-
-    }
 
 
 }

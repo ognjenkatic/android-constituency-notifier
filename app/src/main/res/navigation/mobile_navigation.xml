@@ -49,6 +49,12 @@
         tools:layout="@layout/fragment_category" />
 
     <fragment
+        android:id="@+id/nav_reporting"
+        android:name="org.ccomp.ui.reporting.ReportingFragment"
+        android:label="@string/menu_reporting"
+        tools:layout="@layout/fragment_reporting" />
+
+    <fragment
         android:id="@+id/nav_feed_item"
         android:name="org.ccomp.ui.feed.item.FeedItemFragment"
         android:label="fragment_feed_item"
