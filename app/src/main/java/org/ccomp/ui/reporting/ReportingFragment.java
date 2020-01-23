@@ -2,6 +2,8 @@ package org.ccomp.ui.reporting;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,7 +53,8 @@ public class ReportingFragment extends Fragment {
 
         View root=inflater.inflate(R.layout.fragment_reporting, container, false);
         reportingButton=root.findViewById(R.id.reporting_button);
-        reportingButton.setOnClickListener(this::buttonOnClick);
+      //  reportingButton.setOnClickListener(this::buttonOnClick);
+        reportingButton.setOnClickListener(this::buttonSend);
         reportingText=root.findViewById(R.id.reporting_text);
         reportingViewModel= ViewModelProviders.of(this, viewModelFactory).get(ReportingViewModel.class);
         init();
@@ -97,6 +100,15 @@ public class ReportingFragment extends Fragment {
     public void buttonOnClick(View view) {
         Toast.makeText(view.getContext(), "Bla bla bla", Toast.LENGTH_LONG).show();
 
+
+    }
+
+    public void buttonSend(View view){
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto","D.Kukic@mnrvoid.vladars.net", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
 
     }
 
