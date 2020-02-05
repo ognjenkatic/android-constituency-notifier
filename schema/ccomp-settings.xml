@@ -42,46 +42,46 @@
 				<incident_class_description>Opis klase 5</incident_class_description>
 				<incident_description>Opis5</incident_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="malware-infection"
 				incident_type="infection" incident_class="malware">
 				<incident_type_description>Malware detected in a system.</incident_type_description>
 				<incident_class_description>Infection of one or various systems with a specific type of malware / Connection performed by/from/to (a) suspicious system(s)</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="malware-distribution"
 				incident_type="distribution" incident_class="malware">
 				<incident_type_description>Malware attached to a message or email message containing link to malicious URL or IP.</incident_type_description>
 				<incident_class_description>Infection of one or various systems with a specific type of malware / Connection performed by/from/to (a) suspicious system(s)</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="malware-command-and-control"
 				incident_type="command-and-control" incident_class="malware">
 				<incident_type_description>System used as a command-and-control point by a botnet. Also included in this field are systems serving as a point for gathering information stolen by botnets.</incident_type_description>
 				<incident_class_description>Infection of one or various systems with a specific type of malware / Connection performed by/from/to (a) suspicious system(s)</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="malware-malicious-connection"
 				incident_type="malicious-connection" incident_class="malware">
 				<incident_type_description>System attempting to gain access to a port normally linked to a specific type of malware / System attempting to gain access to an IP address or URL normally linked to a specific type of malware, e.g. C2 or a distribution page for components linked to a specific botnet.</incident_type_description>
 				<incident_class_description>Infection of one or various systems with a specific type of malware / Connection performed by/from/to (a) suspicious system(s)</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="availability-dos-ddos"
 				incident_type="dos-ddos" incident_class="availability">
 				<incident_type_description>Single source using specially designed software to affect the normal functioning of a specific service, by exploiting vulnerability / Mass mailing of requests (network packets, emails, etc.) from one single source to a specific service, aimed at affecting its normal functioning.</incident_type_description>
 				<incident_class_description>Disruption of the processing and response capacity of systems and networks in order to render them inoperative / Premeditated action to damage a system, interrupt a process, change or delete information, etc.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="availability-sabotage"
 				incident_type="sabotage" incident_class="availability">
 				<incident_type_description>Logical and physical activities which – although they are not aimed at causing damage to information or at preventing its transmission among systems – have this effect.</incident_type_description>
 				<incident_class_description>Disruption of the processing and response capacity of systems and networks in order to render them inoperative / Premeditated action to damage a system, interrupt a process, change or delete information, etc.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="information-gathering-scanning"
 				incident_type="scanning" incident_class="information-gathering">
 				<incident_type_description>Single system scan searching for open ports or services using these ports for responding / Scanning a network aimed at identifying systems which are active in the same network / Transfer of a specific DNS zone.
 </incident_type_description>
 				<incident_class_description>Active and passive gathering of information on systems or networks / Unauthorised monitoring and reading of network traffic / Attempt to gather information on a user or a system through phishing methods.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="information-gathering-sniffing"
 				incident_type="sniffing" incident_class="information-gathering">
 				<incident_type_description>Logical or physical interception of communications.</incident_type_description>
 				<incident_class_description>
@@ -90,17 +90,14 @@
 					to gather information on a user or a system through phishing
 					methods.
 				</incident_class_description>
-				<incident_description>
-					Opis5
-				</incident_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="information-gathering-phishing"
 				incident_type="phishing" incident_class="information-gathering">
 				<incident_type_description>Mass emailing aimed at collecting data for phishing purposes with regard to the victims / Hosting web sites for phishing purposes.</incident_type_description>
 				<incident_class_description>Active and passive gathering of information on systems or networks / Unauthorised monitoring and reading of network traffic / Attempt to gather information on a user or a system through phishing methods.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="intrusion-attempt-vulnerability-exploitation-attempt"
 				incident_type="vulnerability-exploitation-attempt"
 				incident_class="intrusion-attempt">
 				<incident_type_description>Unsuccessful use of a tool exploiting a specific vulnerability of the system / Unsuccessful attempt to manipulate or read the information of a database by using the SQL injection technique / Unsuccessful attempts to perform attacks by using cross-site scripting techniques / Unsuccessful attempt to include files in the system under attack by using file inclusion techniques / Unauthorised access to a system or component by bypassing an access control system in place.
@@ -108,14 +105,14 @@
 				<incident_class_description>Attempt to intrude by exploiting vulnerability in a system, component or network / Attempt to log in to services or authentication/access control mechanisms.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="intrusion-attempt-login-attempt"
 				incident_type="login-attempt" incident_class="intrusion-attempt">
 				<incident_type_description>Unsuccessful login by using sequential credentials for gaining access to the system / Unsuccessful acquisition of access credentials by breaking the protective cryptographic keys / Unsuccessful login by using system access credentials previously loaded into a dictionary.
 </incident_type_description>
 				<incident_class_description>Attempt to intrude by exploiting vulnerability in a system, component or network / Attempt to log in to services or authentication/access control mechanisms.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="intrusion-vulnerability-exploitation"
 				incident_type="vulnerability-exploitation"
 				incident_class="intrusion">
 				<incident_type_description>Unauthorised use of a tool exploiting a specific vulnerability of the system / Unauthorised manipulation or reading of information contained in a database by using the SQL injection technique / Attack performed with the use of cross-site scripting techniques / Unauthorised inclusion of files into a system under attack with the use of file inclusion techniques / Unauthorised access to a system or component by bypassing an access control system in place.
@@ -123,48 +120,48 @@
 				<incident_class_description>Actual intrusion by exploiting vulnerability in the system, component or network / Actual intrusion in a system, component or network by compromising a user or administrator account.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="intrusion-account-compromise"
 				incident_type="account-compromise" incident_class="intrusion">
 				<incident_type_description>Unauthorised access to a system or component by using stolen access credentials.
 </incident_type_description>
 				<incident_class_description>Actual intrusion by exploiting vulnerability in the system, component or network / Actual intrusion in a system, component or network by compromising a user or administrator account.
 </incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="information-security-unauthorised-access"
 				incident_type="unauthorised-access"
 				incident_class="information-security">
 				<incident_type_description>Unauthorised access to a system or component / Unauthorised access to a set of information / Unauthorised access to and sharing of a specific set of information.
 </incident_type_description>
 				<incident_class_description>Unauthorised access to a particular set of information / Unauthorised change or elimination of a particular set of information.</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="information-security-unauthorised-modification-or-deletion"
 				incident_type="unauthorised-modification-or-deletion"
 				incident_class="information-security">
 				<incident_type_description>Unauthorised changes to a specific set of information / Unauthorised deleting of a specific set of information.
 </incident_type_description>
 				<incident_class_description>Unauthorised access to a particular set of information / Unauthorised change or elimination of a particular set of information.</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="fraud-resources-misuse"
 				incident_type="resources-misuse" incident_class="fraud">
 				<incident_type_description>Use of institutional resources for purposes other than those intended.</incident_type_description>
 				<incident_class_description>Loss of property caused with fraudulent or dishonest intent of procuring, without right, an economic benefit for oneself or for another person.</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="fraud-false-representation"
 				incident_type="false-representation" incident_class="fraud">
 				<incident_type_description>Unauthorised use of the name of an institution.</incident_type_description>
 				<incident_class_description>Loss of property caused with fraudulent or dishonest intent of procuring, without right, an economic benefit for oneself or for another person.</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="abusive-content-spam"
 				incident_type="spam" incident_class="abusive-content">
 				<incident_type_description>Sending an unusually large quantity of email messages / Unsolicited or unwanted email message sent to the recipient.</incident_type_description>
 				<incident_class_description>Sending SPAM messages / Distribution and sharing of copyright protected content / Dissemination of content forbidden by law.</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="abusive-content-copyright"
 				incident_type="copyright" incident_class="abusive-content">
 				<incident_type_description>Unauthorised distribution or sharing of content protected by Copyright and related rights.</incident_type_description>
 				<incident_class_description>Sending SPAM messages / Distribution and sharing of copyright protected content / Dissemination of content forbidden by law.</incident_class_description>
 			</incident_category>
-			<incident_category incident_category_id="ID5"
+			<incident_category incident_category_id="abusive-content-cse-racism-violence-incitement"
 				incident_type="cse-racism-violence-incitement"
 				incident_class="abusive-content">
 				<incident_type_description>Distribution or sharing of illegal content such as child sexual exploitation material, racism, xenophobia, etc.</incident_type_description>
