@@ -29,8 +29,8 @@ public class AppSettingService {
 
     public AppSettings fetch() {
         Map<String, Object> params = new HashMap<>();
-        params.put("app.settings.url.config", "https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/dev/schema/ccomp-settings.xml");
-        params.put("app.settings.url.schema", "https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/dev/schema/ccomp.xsd");
+        params.put("app.settings.url.config", "https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/reporting/schema/ccomp-settings.xml");
+        params.put("app.settings.url.schema", "https://raw.githubusercontent.com/ognjenkatic/android-constituency-notifier/reporting/schema/ccomp.xsd");
 
         return fetch(params);
     }
